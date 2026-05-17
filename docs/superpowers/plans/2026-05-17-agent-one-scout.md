@@ -104,37 +104,23 @@ agents/scout/
 
 ---
 
-## APIs, Data Sources, and Why Each Is Needed
+## APIs and Data Sources (locked: 4 integrations + chain RPC)
 
-Every entry below is locked in by name; the plan does not assume capabilities beyond what these provide.
+Strata's entire external API surface is four services. Anything not on this list does not get added — full stop.
 
 | Source | Purpose | Auth | Cost | First-principles justification |
 |---|---|---|---|---|
-| **Mantle RPC** (alchemy.com or mantle.publicgoods.network) | Direct on-chain reads (reserve data, exchange rates, vault NAV) | API key for Alchemy, free public fallback | Free tier OK | Ground truth. Every other API is downstream of this — we use it as the authoritative tie-breaker when a third-party API conflicts with chain state. |
-| **DefiLlama Yields API** (`yields.llama.fi/pools`) | Cross-protocol APY/TVL discovery and sanity-check | None | Free | Canonical aggregator with broad Mantle coverage. We use it for *discovery* and *sanity bounds*, never as primary truth for a specific protocol — direct on-chain reads override. |
-| **Mantlescan API** (api.mantlescan.xyz) | Contract deployment block/timestamp, verified-source status, ABI fetch | API key | Free | Smart-contract age and verification status are the cheapest, most defensible inputs to `p_exploit`. |
-| **Ondo API** (api.ondo.finance) | USDY supply, NAV, attestation cadence | None | Free | USDY's yield comes from off-chain T-bills; we need Ondo's published NAV cadence and attestation freshness as risk inputs that aren't on-chain. |
-| **Ethena API** (app.ethena.fi/api) | sUSDe APY decomposition (funding rate vs. staking), reserve fund size | None | Free | sUSDe yield is funding-rate driven and can invert; we need the live decomposition to estimate variance, not just APY. |
-| **Mantle staking contract (mETH)** | mETH/ETH exchange rate, accrual rate | None (on-chain) | Free | Direct on-chain read; no API needed. |
-| **CIAN API** (app.cian.app/api) | Strategy NAV, leverage, underlying composition | API key (request from CIAN) | Free for read | CIAN strategies are opaque from chain alone — composition matters for correlation risk in the basket. |
-| **Aave V3 UI Data Provider** (on-chain) | Reserve APYs, utilization, liquidity index | None (on-chain) | Free | Aave's canonical pattern; use their `IUiPoolDataProviderV3` contract on Mantle. |
-| **Agni subgraph** (thegraph.com/.../agni-v3) | LP pool fees-per-tick, TVL by tick range | None | Free | V3-style concentrated liquidity yield depends on tick distribution; the subgraph is the canonical way to estimate post-fee yield without simulating every swap. |
-| **Merchant Moe subgraph** | LP pool TVL, fees, bin distribution | None | Free | Same reason as Agni. |
-| **CoinGecko API** | Historical price for depeg analysis (2y daily) | API key (Demo tier OK) | Free Demo tier | Need ≥12mo daily price history per stable asset for `p_depeg` estimation. CoinGecko has the longest, cleanest cross-source history. |
-| **Pyth / Redstone / Chainlink price feeds** (on-chain) | Oracle quality scoring, fallback price source | None | Free | Each asset's *production* oracle is what protocols actually accept losses against — we score oracle type directly, not in the abstract. |
-| **1inch Quote API** (api.1inch.dev) on Mantle | Slippage curve for `p_illiquid` and unwind sizing | API key (free tier) | Free | Aggregator slippage at multiple notional sizes is the cleanest practical proxy for exit liquidity. |
-| **Odos Quote API** (api.odos.xyz) | Backup slippage source / cross-check | API key (free) | Free | Second slippage source prevents single-aggregator manipulation/outage. |
-| **Nansen API** (api.nansen.ai) | Smart-money holder concentration, fresh-wallet inflows, wash-trade flags on new tokens | API key (paid tier — confirm budget) | Paid | The single highest-signal source for *novel* yield sources where contract age and audit status are weak signals. Specifically used in `enrichment/smartMoneyFlow.ts` to flag suspicious inflow patterns (sybil farming, sandwich-MEV-as-yield) before they enter the Yield Map. **Required**, with graceful degradation if quota exhausted. |
-| **Allora Network** (per product.md §Tech architecture) | Risk/pricing inference feeds | API key | TBD | Listed in product.md as risk/pricing source; integrated as a tertiary signal into oracle quality scoring. |
-| **OraKle** (per product.md §Tech architecture) | Risk/pricing inference feeds | API key | TBD | Same as Allora — listed in product.md, used as a tertiary cross-check. |
-| **Pinata** (api.pinata.cloud) | Primary IPFS pin | JWT | Free tier (100GB) | Production-grade IPFS pin with SLA. |
-| **web3.storage** | Mirror IPFS pin | API token | Free | Redundancy; we pin to both so a single provider outage doesn't blackhole the Yield Map. |
-| **Etherscan API multichain (Mantle)** | Backup for Mantlescan if rate-limited | API key | Free | Single-vendor risk on Mantlescan; Etherscan multichain covers Mantle as fallback. |
+| **DefiLlama Yields API** (`yields.llama.fi/pools`) | All Mantle yield discovery — APY, TVL, protocol, asset symbol, pool id, every protocol the plan touches (Aave, Ondo, Ethena, mETH, Mantle Vault, CIAN, Agni, Merchant Moe, fBTC, and any new ones) | None | Free | One source for the entire pool universe on Mantle. Maintained, broad, comparable across protocols. Demo-grade accuracy. |
+| **CoinGecko API** (`api.coingecko.com`) | 365d daily price history per stable asset, used to compute `p_depeg` | API key (Demo tier OK) | Free Demo tier | Longest, cleanest cross-source price history. Depeg counts and severities come from this stream. |
+| **Nansen API** (`api.nansen.ai`) | Smart-money holder concentration, fresh-wallet inflow %, wash-trade flag per asset | API key (paid) | Paid | The single non-DefiLlama enrichment. Used to bump `p_exploit` for sybil-farmed yields and to drop confidence on wash-traded tokens. Graceful 429 handling required. |
+| **Lighthouse** (`api.lighthouse.storage`) | IPFS pin of every Yield Map, strategy doc, methodology doc, reasoning-hash blob | API key | Free tier | Single IPFS provider — no Pinata, no web3.storage. Lighthouse is Filecoin-backed, sufficient SLA for hackathon. |
 
-**Sources explicitly *not* used and why (so a reviewer doesn't add them):**
-- Subgraph hosted service for protocols other than Agni/Merchant Moe — we read directly from contracts for those.
-- Centralized price APIs as primary yield source — only as historical depeg input.
-- Twitter/social sentiment — out of scope for Scout; that's a future "Narrative" agent.
+**Plus chain access** (not an "API integration"):
+- **Mantle RPC** via Alchemy (Mantle endpoint) or `mantle.publicgoods.network` fallback — used solely for emitting `AgentEventBus.publishYieldMap(ipfsHash)` and reading the ERC-8004 identity contract. No per-protocol on-chain fetchers in MVP.
+
+**Sources explicitly *not* used (locked out — don't add them):** Mantlescan, Ondo API, Ethena API, CIAN API, Pinata, web3.storage, 1inch, Odos, Allora, OraKle, Agni/Merchant Moe subgraph hosted services, Pyth/Redstone/Chainlink as APIs (on-chain feeds via RPC are fine if needed; their APIs are not). Every additional integration is API-key bloat that's been pushed back on.
+
+**Why minimal:** Hackathon scope (6 weeks). Fewer keys = fewer rate limits, fewer outages, faster spin-up, simpler ops story for the demo. DefiLlama gives the full yield universe; Nansen gives the smart-money edge; CoinGecko gives depeg history; Lighthouse gives IPFS. That's the entire integration set across all five agents.
 
 ---
 
@@ -742,43 +728,92 @@ git commit -m "scout: config loader + viem mantle clients with RPC fallback"
 
 ---
 
-### Task 4: `SourceFetcher` interface + DefiLlama discovery fetcher
+### Task 4: `SourceFetcher` interface + canonical DefiLlama fetcher
 
 **Files:**
 - Create: `agents/scout/src/pipeline/ingestion/sourceFetcher.ts`
-- Create: `agents/scout/src/pipeline/ingestion/sources/defiLlamaDiscovery.ts`
+- Create: `agents/scout/src/pipeline/ingestion/sources/defiLlama.ts`
 - Test: `agents/scout/tests/unit/sourceFetcher.test.ts`
 
-DefiLlama is used as a *discovery* layer only — it tells us which pools exist on Mantle and gives sanity-check APY/TVL we'll override with on-chain reads. This task establishes the interface every per-protocol fetcher will implement.
+**DefiLlama is *the* fetcher** — not a discovery layer. It returns every Mantle pool we care about (Aave, Ondo, Ethena, mETH, Mantle Vault, CIAN, Agni, Merchant Moe, fBTC, simulated mortgage). The fetcher maps DefiLlama's `project` field to our `SourceProtocol` enum and skips pools whose project we don't recognize. There are no per-protocol on-chain fetchers in MVP — the per-protocol fetcher fleet (former Tasks 5–14) is dropped in favor of this single integration.
+
+**Project → SourceProtocol map** (this is the canonical list; DefiLlama uses these `project` slugs for Mantle pools):
+
+```ts
+const PROJECT_TO_SOURCE: Record<string, SourceProtocol> = {
+  'aave-v3': 'aave',
+  'ondo-finance': 'ondo',
+  'ethena': 'ethena',
+  'ethena-usde': 'ethena',
+  'mantle-staked-ether': 'meth',
+  'mantle-meth': 'meth',
+  'mantle-mi4': 'mantleVault',
+  'cian-protocol': 'cian',
+  'agni-finance': 'agni',
+  'merchant-moe': 'merchantMoe',
+  'fbtc': 'fbtc'
+  // 'mortgageDemo' has no DefiLlama project — it's added separately by a tiny in-house fetcher (Task 14 below)
+};
+```
 
 - [ ] **Step 1: Write failing test**
 
 `agents/scout/tests/unit/sourceFetcher.test.ts`:
 
 ```ts
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { setupServer } from 'msw/node';
 import { http, HttpResponse } from 'msw';
-import { DefiLlamaDiscoveryFetcher } from '../../src/pipeline/ingestion/sources/defiLlamaDiscovery.js';
+import { DefiLlamaFetcher } from '../../src/pipeline/ingestion/sources/defiLlama.js';
 
 const server = setupServer(
   http.get('https://yields.llama.fi/pools', () => HttpResponse.json({
     data: [
-      { chain: 'Mantle', project: 'aave-v3', symbol: 'USDC', apy: 4.2, tvlUsd: 12_000_000, pool: 'p1' },
+      { chain: 'Mantle', project: 'aave-v3', symbol: 'USDC', underlyingTokens: ['0x' + 'a'.repeat(40)],
+        apy: 4.2, tvlUsd: 12_000_000, pool: 'p1' },
       { chain: 'Ethereum', project: 'aave-v3', symbol: 'USDC', apy: 5.0, tvlUsd: 1, pool: 'p2' },
-      { chain: 'Mantle', project: 'agni', symbol: 'USDC-MNT', apy: 18.0, tvlUsd: 3_000_000, pool: 'p3' }
+      { chain: 'Mantle', project: 'agni-finance', symbol: 'USDC-MNT', underlyingTokens: ['0x' + 'b'.repeat(40)],
+        apy: 18.0, tvlUsd: 3_000_000, pool: 'p3' },
+      { chain: 'Mantle', project: 'unknown-protocol', symbol: 'X', apy: 99, tvlUsd: 1, pool: 'p4' }
     ]
   }))
 );
 
-describe('DefiLlamaDiscoveryFetcher', () => {
-  it('returns only Mantle pools', async () => {
-    server.listen();
-    const f = new DefiLlamaDiscoveryFetcher();
+beforeAll(() => server.listen());
+afterAll(() => server.close());
+
+describe('DefiLlamaFetcher', () => {
+  it('returns only Mantle pools whose project maps to a SourceProtocol', async () => {
+    const f = new DefiLlamaFetcher();
     const out = await f.fetch();
-    server.close();
     expect(out.length).toBe(2);
-    expect(out.every(o => o.id.startsWith('llama:'))).toBe(true);
+    expect(out.map(o => o.source).sort()).toEqual(['aave', 'agni']);
+  });
+
+  it('drops Ethereum pools', async () => {
+    const f = new DefiLlamaFetcher();
+    const out = await f.fetch();
+    expect(out.every(o => (o.raw as any).chain === 'Mantle')).toBe(true);
+  });
+
+  it('drops pools with unrecognized projects', async () => {
+    const f = new DefiLlamaFetcher();
+    const out = await f.fetch();
+    expect(out.find(o => (o.raw as any).project === 'unknown-protocol')).toBeUndefined();
+  });
+
+  it('converts apy from percent to fraction', async () => {
+    const f = new DefiLlamaFetcher();
+    const out = await f.fetch();
+    const aave = out.find(o => o.source === 'aave')!;
+    expect(aave.apy).toBeCloseTo(0.042, 5);
+  });
+
+  it('uses underlyingTokens[0] as asset', async () => {
+    const f = new DefiLlamaFetcher();
+    const out = await f.fetch();
+    const aave = out.find(o => o.source === 'aave')!;
+    expect(aave.asset).toBe('0x' + 'a'.repeat(40));
   });
 });
 ```
@@ -792,41 +827,50 @@ describe('DefiLlamaDiscoveryFetcher', () => {
 ```ts
 import type { YieldOpportunity, SourceProtocol } from '../../types.js';
 
-export interface FetcherResult {
-  source: SourceProtocol | 'llama-discovery';
-  opportunities: YieldOpportunity[];
-  fetchedAtMs: number;
-  errors: string[];
-}
-
 export interface SourceFetcher {
-  readonly source: FetcherResult['source'];
+  readonly source: SourceProtocol | 'defillama';
   fetch(): Promise<YieldOpportunity[]>;
 }
 ```
 
-`agents/scout/src/pipeline/ingestion/sources/defiLlamaDiscovery.ts`:
+`agents/scout/src/pipeline/ingestion/sources/defiLlama.ts`:
 
 ```ts
 import { request } from 'undici';
 import { z } from 'zod';
 import type { SourceFetcher } from '../sourceFetcher.js';
-import type { YieldOpportunity } from '../../../types.js';
+import type { YieldOpportunity, SourceProtocol } from '../../../types.js';
 
 const LlamaPool = z.object({
   chain: z.string(),
   project: z.string(),
   symbol: z.string(),
+  underlyingTokens: z.array(z.string()).nullish(),
   apy: z.number().nullable(),
   tvlUsd: z.number().nullable(),
   pool: z.string()
 });
 const LlamaResponse = z.object({ data: z.array(LlamaPool) });
 
-const PLACEHOLDER_ASSET = '0x0000000000000000000000000000000000000000';
+const PROJECT_TO_SOURCE: Record<string, SourceProtocol> = {
+  'aave-v3': 'aave',
+  'ondo-finance': 'ondo',
+  'ethena': 'ethena',
+  'ethena-usde': 'ethena',
+  'mantle-staked-ether': 'meth',
+  'mantle-meth': 'meth',
+  'mantle-mi4': 'mantleVault',
+  'cian-protocol': 'cian',
+  'agni-finance': 'agni',
+  'merchant-moe': 'merchantMoe',
+  'fbtc': 'fbtc'
+};
 
-export class DefiLlamaDiscoveryFetcher implements SourceFetcher {
-  readonly source = 'llama-discovery' as const;
+const PLACEHOLDER_ASSET = '0x0000000000000000000000000000000000000000';
+const ADDRESS_RE = /^0x[a-fA-F0-9]{40}$/;
+
+export class DefiLlamaFetcher implements SourceFetcher {
+  readonly source = 'defillama' as const;
 
   async fetch(): Promise<YieldOpportunity[]> {
     const res = await request('https://yields.llama.fi/pools');
@@ -834,474 +878,49 @@ export class DefiLlamaDiscoveryFetcher implements SourceFetcher {
     const parsed = LlamaResponse.parse(body);
     const now = Date.now();
     return parsed.data
-      .filter(p => p.chain === 'Mantle' && p.apy !== null && p.tvlUsd !== null && p.apy > 0)
-      .map(p => ({
-        id: `llama:${p.pool}`,
-        source: 'aave' as const,    // overridden by canonical per-protocol fetchers
-        asset: PLACEHOLDER_ASSET,
-        apy: (p.apy ?? 0) / 100,
-        apyType: 'variable' as const,
-        tvlUsd: p.tvlUsd ?? 0,
-        lastUpdatedMs: now,
-        raw: p
-      }));
-  }
-}
-```
-
-- [ ] **Step 4: Add msw to package**
-
-```bash
-pnpm --filter @strata/scout add -D msw
-```
-
-- [ ] **Step 5: Run — expect PASS**
-
-- [ ] **Step 6: Commit**
-
-```bash
-git add -A
-git commit -m "scout: SourceFetcher interface + DefiLlama discovery fetcher"
-```
-
----
-
-### Task 5: Aave V3 reserve fetcher (on-chain canonical)
-
-**Files:**
-- Create: `agents/scout/src/pipeline/ingestion/sources/aaveMantle.ts`
-- Create: `agents/scout/src/pipeline/ingestion/abi/aaveUiDataProvider.ts`
-- Test: `agents/scout/tests/unit/aaveMantle.test.ts`
-
-Aave publishes a canonical `IUiPoolDataProviderV3` on every deployment. Reading `getReservesData` yields current supply/borrow APYs, total liquidity, and configuration. This is our pattern for "use the protocol's own data provider, not a third-party API."
-
-- [ ] **Step 1: Write the failing test using viem mocked transport**
-
-`agents/scout/tests/unit/aaveMantle.test.ts`:
-
-```ts
-import { describe, it, expect, vi } from 'vitest';
-import { AaveMantleFetcher } from '../../src/pipeline/ingestion/sources/aaveMantle.js';
-
-describe('AaveMantleFetcher', () => {
-  it('converts ray APY to fraction APY', async () => {
-    const RAY = 10n ** 27n;
-    const reserve = {
-      underlyingAsset: '0x' + 'a'.repeat(40),
-      symbol: 'USDC',
-      liquidityRate: (RAY * 5n) / 100n,      // 5% in ray
-      totalLiquidity: 12_000_000n * 10n ** 6n,
-      decimals: 6n,
-      priceInMarketReferenceCurrency: 10n ** 8n,  // $1
-      marketReferenceCurrencyUnit: 10n ** 8n
-    };
-    const mockPublicClient = {
-      readContract: vi.fn().mockResolvedValue([[reserve], { networkBaseTokenPriceInUsd: 10n ** 8n }])
-    } as any;
-    const f = new AaveMantleFetcher(mockPublicClient, '0x' + '1'.repeat(40), '0x' + '2'.repeat(40));
-    const out = await f.fetch();
-    expect(out.length).toBe(1);
-    expect(out[0]!.apy).toBeCloseTo(0.05, 3);
-    expect(out[0]!.source).toBe('aave');
-    expect(out[0]!.tvlUsd).toBeCloseTo(12_000_000, -3);
-  });
-});
-```
-
-- [ ] **Step 2: Run — expect FAIL**
-
-- [ ] **Step 3: Write the ABI**
-
-`agents/scout/src/pipeline/ingestion/abi/aaveUiDataProvider.ts`:
-
-```ts
-export const aaveUiPoolDataProviderAbi = [
-  {
-    type: 'function',
-    name: 'getReservesData',
-    stateMutability: 'view',
-    inputs: [{ name: 'provider', type: 'address' }],
-    outputs: [
-      {
-        components: [
-          { name: 'underlyingAsset', type: 'address' },
-          { name: 'symbol', type: 'string' },
-          { name: 'liquidityRate', type: 'uint256' },
-          { name: 'totalLiquidity', type: 'uint256' },
-          { name: 'decimals', type: 'uint256' },
-          { name: 'priceInMarketReferenceCurrency', type: 'uint256' },
-          { name: 'marketReferenceCurrencyUnit', type: 'uint256' }
-        ],
-        type: 'tuple[]'
-      },
-      {
-        components: [{ name: 'networkBaseTokenPriceInUsd', type: 'int256' }],
-        type: 'tuple'
-      }
-    ]
-  }
-] as const;
-```
-
-(Trimmed to the fields we actually use. Add more later only if scoring needs them.)
-
-- [ ] **Step 4: Implement `agents/scout/src/pipeline/ingestion/sources/aaveMantle.ts`**
-
-```ts
-import type { PublicClient } from 'viem';
-import type { SourceFetcher } from '../sourceFetcher.js';
-import type { YieldOpportunity } from '../../../types.js';
-import { aaveUiPoolDataProviderAbi } from '../abi/aaveUiDataProvider.js';
-
-const RAY = 10n ** 27n;
-const SECONDS_PER_YEAR = 31_536_000n;
-
-function rayToApy(rate: bigint): number {
-  // Aave's liquidityRate is the APR in ray (per-second compounded conceptually).
-  // For Yield Map purposes APR ≈ APY at these scales; we treat as APR-to-APY conversion
-  // only if the value is large. Keep it linear here; document in scoring-methodology.md.
-  return Number(rate) / Number(RAY);
-}
-
-export class AaveMantleFetcher implements SourceFetcher {
-  readonly source = 'aave' as const;
-  constructor(
-    private client: Pick<PublicClient, 'readContract'>,
-    private uiPoolDataProvider: `0x${string}`,
-    private poolAddressesProvider: `0x${string}`
-  ) {}
-
-  async fetch(): Promise<YieldOpportunity[]> {
-    const [reserves] = await this.client.readContract({
-      address: this.uiPoolDataProvider,
-      abi: aaveUiPoolDataProviderAbi,
-      functionName: 'getReservesData',
-      args: [this.poolAddressesProvider]
-    }) as readonly [readonly any[], { networkBaseTokenPriceInUsd: bigint }];
-
-    const now = Date.now();
-    return reserves
-      .filter(r => r.liquidityRate > 0n && r.totalLiquidity > 0n)
-      .map(r => {
-        const apy = rayToApy(r.liquidityRate);
-        const priceUsd = Number(r.priceInMarketReferenceCurrency) / Number(r.marketReferenceCurrencyUnit);
-        const tvlUsd = (Number(r.totalLiquidity) / 10 ** Number(r.decimals)) * priceUsd;
+      .filter(p => p.chain === 'Mantle')
+      .filter(p => p.apy !== null && p.tvlUsd !== null && p.apy > 0)
+      .filter(p => PROJECT_TO_SOURCE[p.project] !== undefined)
+      .map(p => {
+        const source = PROJECT_TO_SOURCE[p.project]!;
+        const underlying = p.underlyingTokens?.[0];
+        const asset = underlying && ADDRESS_RE.test(underlying)
+          ? underlying.toLowerCase() as `0x${string}`
+          : PLACEHOLDER_ASSET as `0x${string}`;
         return {
-          id: `aave:${r.underlyingAsset.toLowerCase()}`,
-          source: 'aave' as const,
-          asset: r.underlyingAsset.toLowerCase() as `0x${string}`,
-          apy,
+          id: `${source}:${p.pool}`,
+          source,
+          asset,
+          apy: (p.apy ?? 0) / 100,
           apyType: 'variable' as const,
-          tvlUsd,
+          tvlUsd: p.tvlUsd ?? 0,
           lastUpdatedMs: now,
-          raw: { symbol: r.symbol, liquidityRate: r.liquidityRate.toString() }
+          raw: p
         };
       });
   }
 }
 ```
 
-- [ ] **Step 5: Run — expect PASS**
-
-- [ ] **Step 6: Commit**
-
-```bash
-git add -A
-git commit -m "scout: aave v3 mantle reserve fetcher via UiPoolDataProvider"
-```
-
----
-
-### Task 6: Ondo USDY fetcher
-
-**Files:**
-- Create: `agents/scout/src/pipeline/ingestion/sources/ondoUsdy.ts`
-- Test: `agents/scout/tests/unit/ondoUsdy.test.ts`
-
-USDY publishes a price-per-share that grows. APY = `(rate_t / rate_{t-Δ})^(year/Δ) − 1`. We compute over a 30-day window using on-chain history; Ondo's API gives us the attestation cadence.
-
-- [ ] **Step 1: Write the failing test**
-
-```ts
-import { describe, it, expect, vi } from 'vitest';
-import { OndoUsdyFetcher } from '../../src/pipeline/ingestion/sources/ondoUsdy.js';
-
-describe('OndoUsdyFetcher', () => {
-  it('computes APY from 30d rate change', async () => {
-    // rate went from 1.00 to 1.0044 over 30 days → ~5.5% APY
-    const client = {
-      readContract: vi.fn()
-        .mockResolvedValueOnce(10044n * 10n ** 14n)   // current
-        .mockResolvedValueOnce(10000n * 10n ** 14n),  // 30d ago
-      getBlockNumber: vi.fn().mockResolvedValue(100_000n)
-    } as any;
-    const f = new OndoUsdyFetcher(client, '0xusdy', 1.0);
-    const out = await f.fetch();
-    expect(out[0]!.apy).toBeGreaterThan(0.04);
-    expect(out[0]!.apy).toBeLessThan(0.07);
-  });
-});
-```
-
-- [ ] **Step 2: Run — expect FAIL**
-
-- [ ] **Step 3: Implement**
-
-```ts
-import type { PublicClient } from 'viem';
-import type { SourceFetcher } from '../sourceFetcher.js';
-import type { YieldOpportunity } from '../../../types.js';
-
-const erc20PricePerShareAbi = [
-  { type: 'function', name: 'pricePerShare', stateMutability: 'view', inputs: [], outputs: [{ type: 'uint256' }] },
-  { type: 'function', name: 'totalSupply', stateMutability: 'view', inputs: [], outputs: [{ type: 'uint256' }] }
-] as const;
-
-const BLOCKS_PER_DAY_MANTLE = 86400n / 2n;  // ~2s blocktime; tune from config later
-
-export class OndoUsdyFetcher implements SourceFetcher {
-  readonly source = 'ondo' as const;
-  constructor(
-    private client: Pick<PublicClient, 'readContract' | 'getBlockNumber'>,
-    private usdyAddress: `0x${string}`,
-    private usdyPriceUsd: number
-  ) {}
-
-  async fetch(): Promise<YieldOpportunity[]> {
-    const blockNow = await this.client.getBlockNumber();
-    const block30d = blockNow - 30n * BLOCKS_PER_DAY_MANTLE;
-    const [rateNow, ratePast] = await Promise.all([
-      this.client.readContract({ address: this.usdyAddress, abi: erc20PricePerShareAbi, functionName: 'pricePerShare' }),
-      this.client.readContract({ address: this.usdyAddress, abi: erc20PricePerShareAbi, functionName: 'pricePerShare', blockNumber: block30d })
-    ]) as [bigint, bigint];
-    const growth = Number(rateNow) / Number(ratePast);
-    const apy = Math.pow(growth, 365 / 30) - 1;
-
-    const supplyRaw = await this.client.readContract({
-      address: this.usdyAddress, abi: erc20PricePerShareAbi, functionName: 'totalSupply'
-    }) as bigint;
-    const supplyUsd = (Number(supplyRaw) / 1e18) * this.usdyPriceUsd;
-
-    return [{
-      id: `ondo:usdy`,
-      source: 'ondo',
-      asset: this.usdyAddress,
-      apy,
-      apyType: 'variable',
-      tvlUsd: supplyUsd,
-      lastUpdatedMs: Date.now(),
-      raw: { rateNow: rateNow.toString(), ratePast: ratePast.toString() }
-    }];
-  }
-}
-```
-
 - [ ] **Step 4: Run — expect PASS**
 
 - [ ] **Step 5: Commit**
 
 ```bash
 git add -A
-git commit -m "scout: ondo USDY fetcher (30d rate-change APY)"
+git commit -m "scout: SourceFetcher interface + canonical DefiLlama fetcher with project→source map"
 ```
 
 ---
 
-### Task 7: Ethena sUSDe fetcher
+### Tasks 5–14: DROPPED — per-protocol fetchers replaced by canonical DefiLlama (Task 4)
 
-**Files:**
-- Create: `agents/scout/src/pipeline/ingestion/sources/ethenaSusde.ts`
-- Test: `agents/scout/tests/unit/ethenaSusde.test.ts`
+Per-protocol on-chain fetchers (Aave V3, Ondo USDY, Ethena sUSDe, mETH, Mantle Vault/MI4, CIAN, Agni LP, Merchant Moe LP, fBTC, simulated mortgage) were originally planned to give canonical truth for each integration. They're dropped for MVP — DefiLlama covers every protocol's APY + TVL in one integration, which is sufficient for the hackathon demo. If a specific protocol later proves materially inaccurate via DefiLlama, an on-chain *override* for that one protocol can be added; it won't change the rest of the pipeline.
 
-sUSDe is the staked vault on top of USDe. APY can be computed the same way (rate growth) but the *decomposition* (funding rate vs. staking) comes from Ethena's API and is stored in `raw` for downstream Sentinel use.
-
-- [ ] **Step 1: Write the failing test mirroring Task 6 structure with `source: 'ethena'`**
-
-(Same shape as Task 6 — see that task. Replace `OndoUsdyFetcher` with `EthenaSusdeFetcher`, hit `https://app.ethena.fi/api/yields/protocol-and-staking-yield` via msw, assert `apy > 0` and `raw.fundingRate` is preserved.)
-
-- [ ] **Step 2: Run — expect FAIL**
-
-- [ ] **Step 3: Implement**
-
-```ts
-import { request } from 'undici';
-import { z } from 'zod';
-import type { PublicClient } from 'viem';
-import type { SourceFetcher } from '../sourceFetcher.js';
-import type { YieldOpportunity } from '../../../types.js';
-
-const EthenaApi = z.object({ stakingYield: z.number(), protocolYield: z.number() });
-
-const susdeAbi = [
-  { type: 'function', name: 'totalAssets', stateMutability: 'view', inputs: [], outputs: [{ type: 'uint256' }] }
-] as const;
-
-export class EthenaSusdeFetcher implements SourceFetcher {
-  readonly source = 'ethena' as const;
-  constructor(private client: Pick<PublicClient, 'readContract'>, private susdeAddr: `0x${string}`) {}
-
-  async fetch(): Promise<YieldOpportunity[]> {
-    const res = await request('https://app.ethena.fi/api/yields/protocol-and-staking-yield');
-    const parsed = EthenaApi.parse(await res.body.json());
-    const apy = (parsed.stakingYield + parsed.protocolYield) / 100;
-    const tvlRaw = await this.client.readContract({
-      address: this.susdeAddr, abi: susdeAbi, functionName: 'totalAssets'
-    }) as bigint;
-    const tvlUsd = Number(tvlRaw) / 1e18; // USDe ~ $1
-    return [{
-      id: 'ethena:susde',
-      source: 'ethena',
-      asset: this.susdeAddr,
-      apy,
-      apyType: 'variable',
-      tvlUsd,
-      lastUpdatedMs: Date.now(),
-      raw: { fundingRate: parsed.protocolYield, stakingYield: parsed.stakingYield }
-    }];
-  }
-}
-```
-
-- [ ] **Step 4: Run — expect PASS**
-
-- [ ] **Step 5: Commit**
-
-```bash
-git add -A
-git commit -m "scout: ethena sUSDe fetcher (api yield + on-chain TVL)"
-```
+The simulated mortgage demo sleeve (formerly Task 14) is internal to the protocol's basket — Architect manages its allocation directly, Scout does not need to surface it as an external opportunity. Deferred to Architect's plan.
 
 ---
 
-### Task 8: mETH staking fetcher
-
-**Files:**
-- Create: `agents/scout/src/pipeline/ingestion/sources/methStake.ts`
-- Test: `agents/scout/tests/unit/methStake.test.ts`
-
-mETH publishes `mETHToETH(uint256)` and we have ETH price from a Mantle oracle. APY from 30-day rate change, same pattern as USDY.
-
-- [ ] **Step 1: Write the failing test** — same shape as Task 6 with `source: 'meth'`.
-
-- [ ] **Step 2: Run — expect FAIL**
-
-- [ ] **Step 3: Implement** — copy `OndoUsdyFetcher` structure; call `mETHToETH(1e18)` instead of `pricePerShare()`; price ETH from on-chain oracle (use Redstone's `MainPriceFeedAdapter` on Mantle, address to be added to config).
-
-- [ ] **Step 4: Run — expect PASS**
-
-- [ ] **Step 5: Commit**
-
-```bash
-git add -A
-git commit -m "scout: mETH staking fetcher (mETHToETH rate change)"
-```
-
----
-
-### Task 9: Mantle Vault / MI4 fetcher
-
-**Files:**
-- Create: `agents/scout/src/pipeline/ingestion/sources/mantleVault.ts`
-- Test: `agents/scout/tests/unit/mantleVault.test.ts`
-
-MI4 is an institutional index fund; the NAV-per-share contract is the source of truth. Read `convertToAssets(1e18)` over the 30d window.
-
-- [ ] **Step 1: Failing test** — same shape; source `'mantleVault'`.
-
-- [ ] **Step 2: Run — expect FAIL**
-
-- [ ] **Step 3: Implement** — ERC-4626 `convertToAssets` rate-change pattern.
-
-- [ ] **Step 4: Run — expect PASS**
-
-- [ ] **Step 5: Commit**
-
-```bash
-git add -A
-git commit -m "scout: mantle vault / MI4 fetcher (erc-4626 nav-per-share)"
-```
-
----
-
-### Task 10: CIAN strategies fetcher
-
-**Files:**
-- Create: `agents/scout/src/pipeline/ingestion/sources/cianStrategies.ts`
-- Test: `agents/scout/tests/unit/cianStrategies.test.ts`
-
-CIAN exposes strategy metadata via API. Each strategy has a vault contract; we read live NAV-per-share on-chain and overlay API metadata (leverage, composition).
-
-- [ ] **Step 1: Failing test** mocking `https://app.cian.app/api/strategies?chain=mantle` returning a list of `{ vaultAddress, leverage, composition }`.
-
-- [ ] **Step 2: Run — expect FAIL**
-
-- [ ] **Step 3: Implement** — fetch API list, then for each, read on-chain `convertToAssets` 30d rate.
-
-- [ ] **Step 4: Run — expect PASS**
-
-- [ ] **Step 5: Commit**
-
-```bash
-git add -A
-git commit -m "scout: cian strategies fetcher"
-```
-
----
-
-### Task 11: Agni LP fetcher
-
-**Files:**
-- Create: `agents/scout/src/pipeline/ingestion/sources/agniLp.ts`
-- Test: `agents/scout/tests/unit/agniLp.test.ts`
-
-Agni is V3-style concentrated liquidity. Yield depends on tick distribution and fee tier. We query their subgraph for top pools, compute `feeAPR = 24h_fees * 365 / TVL`, and tag pools where active TVL is at-tick (used in scoring as a confidence reducer for LP yield estimates).
-
-- [ ] **Step 1: Failing test** mocking subgraph response with two pools.
-
-- [ ] **Step 2: Run — expect FAIL**
-
-- [ ] **Step 3: Implement** — POST to subgraph endpoint, parse, project to `YieldOpportunity[]`.
-
-- [ ] **Step 4: Run — expect PASS**
-
-- [ ] **Step 5: Commit**
-
-```bash
-git add -A
-git commit -m "scout: agni lp fetcher (subgraph feeAPR)"
-```
-
----
-
-### Task 12: Merchant Moe LP fetcher
-
-**Files:** `agents/scout/src/pipeline/ingestion/sources/merchantMoeLp.ts` + test.
-
-Same pattern as Agni against Merchant Moe's subgraph. Their liquidity-book model means we project the same `feeAPR = 24h_fees * 365 / TVL` over the bin range; document the simplification in `raw`.
-
-- [ ] Steps 1–5: same as Task 11. Commit message: `scout: merchant moe lp fetcher`.
-
----
-
-### Task 13: fBTC strategy fetcher
-
-**Files:** `agents/scout/src/pipeline/ingestion/sources/fbtcStrategy.ts` + test.
-
-fBTC strategies on Mantle (e.g., bouncebit-style) expose vault contracts. Same ERC-4626 NAV-rate pattern as MI4.
-
-- [ ] Steps 1–5. Commit: `scout: fbtc strategy fetcher`.
-
----
-
-### Task 14: Simulated mortgage pool fetcher
-
-**Files:** `agents/scout/src/pipeline/ingestion/sources/mortgageDemo.ts` + test.
-
-The simulated CMO sleeve is a Solidity contract we control (built elsewhere in the project). Read its current APY and TVL directly. Tag `raw.demoMode = true` so the UI can clearly label it as the demo-mode sleeve referenced in product.md.
-
-- [ ] Steps 1–5. Commit: `scout: simulated mortgage demo fetcher (clearly demo-tagged)`.
-
----
 
 ### Task 15: Parallel ingestion orchestrator
 
@@ -1406,28 +1025,9 @@ git commit -m "scout: parallel ingestion orchestrator with per-source isolation"
 
 ---
 
-### Task 16: Enrichment — contract age (Mantlescan)
+### Task 16: DROPPED — contract age handled by static per-protocol config
 
-**Files:**
-- Create: `agents/scout/src/pipeline/enrichment/contractAge.ts`
-- Test: `agents/scout/tests/unit/contractAge.test.ts`
-
-Uses Mantlescan's `?module=contract&action=getcontractcreation&contractaddresses=...&apikey=...` endpoint to get the deploy tx timestamp; compute `age_days = (now - deploy_time)/86400`. Cache results forever (contract age doesn't decrease).
-
-- [ ] **Step 1: Failing test** mocking the API response for one contract.
-
-- [ ] **Step 2: Run — expect FAIL**
-
-- [ ] **Step 3: Implement** — single HTTP call, batched up to 5 contracts per call as the API allows; cache via `lru-cache`. If API fails, return `null` (must not invent a value — Rule 3).
-
-- [ ] **Step 4: Run — expect PASS**
-
-- [ ] **Step 5: Commit**
-
-```bash
-git add -A
-git commit -m "scout: contract-age enricher (mantlescan, cached)"
-```
+Mantlescan integration dropped (not in the locked four). Per-protocol `contractAgeDays` lives as a static map in `agents/scout/src/pipeline/enrichment/protocolConfig.ts` alongside `auditFactor` / `counterpartyClass` / `oracleType`. The age values are seeded from public deployment records and revised by hand when a new protocol is added — that's fine for MVP. The orchestrator (Task 27) reads from this config map directly; there's no dedicated enricher class.
 
 ---
 
@@ -1465,11 +1065,7 @@ For each protocol we know (config-driven map: `protocol -> oracleType`) we assig
 - Create: `agents/scout/src/pipeline/enrichment/liquidityDepth.ts`
 - Test: `agents/scout/tests/unit/liquidityDepth.test.ts`
 
-For each opportunity, quote unwind of `{0.1, 0.5, 1, 5}%` of TVL via 1inch and Odos (both on Mantle). Take the median slippage as the canonical value; flag if 1inch and Odos differ by >50bps (suspicious — possible routing manipulation).
-
-- [ ] Standard 5-step pattern.
-
-- [ ] Commit: `scout: liquidity depth enricher (1inch+odos, 4-point slippage curve)`.
+DROPPED — 1inch and Odos are not in the locked four. `p_illiquid` is computed in scoring from TVL alone using a simple proxy: `p_illiquid = clamp(0.10 - log10(tvlUsd)/10, 0.001, 0.20)` — higher TVL ⇒ lower implied slippage. This is less accurate than aggregator quotes but defensible (the formula is documented in the methodology doc) and free.
 
 ---
 
@@ -2069,13 +1665,15 @@ git commit -m "contracts: IAgentEventBus + AgentEventBus (role-gated emit-only, 
 
 ---
 
-### Task 24: IPFS publication (Pinata + web3.storage redundancy)
+### Task 24: IPFS publication (Lighthouse)
 
 **Files:**
 - Create: `agents/scout/src/publication/ipfs.ts`
 - Test: `agents/scout/tests/unit/ipfs.test.ts`
 
-- [ ] **Step 1: Failing test** mocks Pinata returning 200 and web3.storage returning 500; asserts `pinYieldMap` succeeds with one provider and warns about the other.
+Single provider: Lighthouse (`api.lighthouse.storage`). No Pinata, no web3.storage. Lighthouse's JSON upload endpoint returns a CID; retry up to 2 times on transient failures; surface a clean error on final failure.
+
+- [ ] **Step 1: Failing test** mocks `https://node.lighthouse.storage/api/v0/add` returning `{ Hash: 'bafkrei...', Name: 'data', Size: '...' }`; asserts `pinYieldMap` returns the CID. Also test 500-then-200 retry path.
 
 - [ ] **Step 2: Run — expect FAIL**
 
@@ -2084,45 +1682,36 @@ git commit -m "contracts: IAgentEventBus + AgentEventBus (role-gated emit-only, 
 ```ts
 import { request } from 'undici';
 import pRetry from 'p-retry';
+import { z } from 'zod';
 
-export interface PinResult { cid: string; providers: string[]; failed: string[]; }
+const LighthouseResponse = z.object({ Hash: z.string().min(1) });
 
-async function pinPinata(json: unknown, jwt: string): Promise<string> {
-  const res = await request('https://api.pinata.cloud/pinning/pinJSONToIPFS', {
+export interface PinResult { cid: string; }
+
+async function pinLighthouseOnce(json: unknown, apiKey: string): Promise<string> {
+  const boundary = `----strata${Date.now()}`;
+  const body =
+    `--${boundary}\r\n` +
+    `Content-Disposition: form-data; name="file"; filename="yield-map.json"\r\n` +
+    `Content-Type: application/json\r\n\r\n` +
+    JSON.stringify(json) + `\r\n` +
+    `--${boundary}--\r\n`;
+  const res = await request('https://node.lighthouse.storage/api/v0/add', {
     method: 'POST',
-    headers: { 'Authorization': `Bearer ${jwt}`, 'content-type': 'application/json' },
-    body: JSON.stringify({ pinataContent: json })
+    headers: {
+      'Authorization': `Bearer ${apiKey}`,
+      'Content-Type': `multipart/form-data; boundary=${boundary}`
+    },
+    body
   });
-  if (res.statusCode >= 300) throw new Error(`pinata ${res.statusCode}`);
-  const body = await res.body.json() as { IpfsHash: string };
-  return body.IpfsHash;
+  if (res.statusCode >= 300) throw new Error(`lighthouse ${res.statusCode}`);
+  const parsed = LighthouseResponse.parse(await res.body.json());
+  return parsed.Hash;
 }
 
-async function pinWeb3Storage(json: unknown, token: string): Promise<string> {
-  const res = await request('https://api.web3.storage/upload', {
-    method: 'POST',
-    headers: { 'Authorization': `Bearer ${token}`, 'content-type': 'application/json' },
-    body: JSON.stringify(json)
-  });
-  if (res.statusCode >= 300) throw new Error(`web3storage ${res.statusCode}`);
-  const body = await res.body.json() as { cid: string };
-  return body.cid;
-}
-
-export async function pinYieldMap(json: unknown, cfg: { pinataJwt: string; web3StorageToken: string }): Promise<PinResult> {
-  const tasks: Array<Promise<{ provider: string; cid: string }>> = [
-    pRetry(() => pinPinata(json, cfg.pinataJwt), { retries: 2 }).then(cid => ({ provider: 'pinata', cid })),
-    pRetry(() => pinWeb3Storage(json, cfg.web3StorageToken), { retries: 2 }).then(cid => ({ provider: 'web3.storage', cid }))
-  ];
-  const settled = await Promise.allSettled(tasks);
-  const succeeded = settled.filter((s): s is PromiseFulfilledResult<{ provider: string; cid: string }> => s.status === 'fulfilled');
-  const failed = settled.map((s, i) => s.status === 'rejected' ? ['pinata', 'web3.storage'][i]! : null).filter((x): x is string => x !== null);
-
-  if (succeeded.length === 0) throw new Error(`all ipfs providers failed: ${settled.map(s => (s as PromiseRejectedResult).reason?.message).join('; ')}`);
-  // Both providers should return same CID for same bytes (deterministic). Sanity-check:
-  const cids = new Set(succeeded.map(s => s.value.cid));
-  if (cids.size > 1) throw new Error(`ipfs cid mismatch across providers: ${[...cids].join(' vs ')}`);
-  return { cid: succeeded[0]!.value.cid, providers: succeeded.map(s => s.value.provider), failed };
+export async function pinYieldMap(json: unknown, cfg: { lighthouseApiKey: string }): Promise<PinResult> {
+  const cid = await pRetry(() => pinLighthouseOnce(json, cfg.lighthouseApiKey), { retries: 2, minTimeout: 1000 });
+  return { cid };
 }
 ```
 
@@ -2132,7 +1721,7 @@ export async function pinYieldMap(json: unknown, cfg: { pinataJwt: string; web3S
 
 ```bash
 git add -A
-git commit -m "scout: ipfs pin with pinata+web3.storage redundancy + cid agreement check"
+git commit -m "scout: lighthouse ipfs pin with retry"
 ```
 
 ---
