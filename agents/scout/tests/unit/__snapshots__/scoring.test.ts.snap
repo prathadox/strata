@@ -1,0 +1,35 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`scoreOpportunity > constants snapshot is stable 1`] = `
+{
+  "alphas": {
+    "counterparty": 0.5,
+    "depeg": 0.2,
+    "exploit": 0.85,
+    "illiquid": 0.05,
+    "oracle": 0.4,
+  },
+  "baseExploit": 0.3,
+  "counterpartyP": {
+    "attested_centralized": 0.03,
+    "custodial": 0.08,
+    "permissionless": 0.005,
+  },
+  "enrichmentFields": 8,
+  "exploitHalfLifeDays": 180,
+  "freshnessHalfLifeMs": 300000,
+  "illiquid": {
+    "base": 0.1,
+    "max": 0.2,
+    "min": 0.001,
+    "slope": 0.01,
+  },
+  "oracleP": {
+    "chainlink_dec": 0.002,
+    "custom_multi": 0.02,
+    "pyth": 0.005,
+    "redstone": 0.007,
+    "single": 0.1,
+  },
+}
+`;
