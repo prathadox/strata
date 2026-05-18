@@ -2,28 +2,12 @@
 // CSS-rendered (uses .mark / .pill in globals.css) so the metallic
 // edge-light and ambient glow stay sharp at any size.
 
-interface MarkProps {
-  withLabels?: boolean;
-}
-
-export function Mark({ withLabels = true }: MarkProps) {
+export function Mark() {
   return (
     <div className="mark" aria-label="Strata mark">
-      <div className="pill">
-        {withLabels && (
-          <span className="pill-label"><b>Senior</b> &nbsp;·&nbsp; capital preservation</span>
-        )}
-      </div>
-      <div className="pill">
-        {withLabels && (
-          <span className="pill-label"><b>Mezzanine</b> &nbsp;·&nbsp; balanced</span>
-        )}
-      </div>
-      <div className="pill">
-        {withLabels && (
-          <span className="pill-label"><b>Junior</b> &nbsp;·&nbsp; residual upside</span>
-        )}
-      </div>
+      <div className="pill" />
+      <div className="pill" />
+      <div className="pill" />
     </div>
   );
 }
