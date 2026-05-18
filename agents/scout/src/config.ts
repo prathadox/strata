@@ -7,7 +7,6 @@ const Env = z.object({
   // Optional when SCOUT_DRY_RUN is true (contracts not deployed yet).
   AGENT_EVENT_BUS_ADDRESS: z.string().regex(/^0x[a-fA-F0-9]{40}$/).optional(),
   LIGHTHOUSE_API_KEY: z.string().min(1),
-  COINGECKO_API_KEY: z.string().min(1),
   NANSEN_API_KEY: z.string().min(1),
   CYCLE_INTERVAL_MS: z.coerce.number().int().min(15_000).default(60_000),
   LOG_LEVEL: z.enum(['debug', 'info', 'warn', 'error']).default('info'),
@@ -38,7 +37,6 @@ export function loadConfig() {
     },
     ipfs: { lighthouseApiKey: env.LIGHTHOUSE_API_KEY },
     apis: {
-      coingecko: env.COINGECKO_API_KEY,
       nansen: env.NANSEN_API_KEY
     },
     cycleIntervalMs: env.CYCLE_INTERVAL_MS,

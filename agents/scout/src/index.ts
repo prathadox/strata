@@ -50,7 +50,7 @@ async function main(): Promise<void> {
   const fetchers = [new DefiLlamaFetcher()];
 
   const enrichers = {
-    depegHistory: (asset: `0x${string}`) => fetchDepegHistory(asset, cfg.apis.coingecko),
+    depegHistory: (asset: `0x${string}`) => fetchDepegHistory(asset),
     smartMoneyFlow: (asset: `0x${string}`) => fetchSmartMoneyFlow(asset, cfg.apis.nansen)
   };
 

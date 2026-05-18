@@ -1,3 +1,9 @@
+// Depeg history is fetched from DefiLlama's coins API (coins.llama.fi).
+// Same vendor as the yield fetcher, no API key needed, generous public rate limit.
+// We use coingecko slugs as the coin id (e.g. "coingecko:tether") because the
+// stables we care about all have well-known coingecko entries and the price is
+// universal, not chain-specific.
+
 import { z } from 'zod';
 import type { z as zType } from 'zod';
 import { DepegEventSchema } from '../../types.js';
@@ -20,37 +26,40 @@ const STABLE_TO_COINGECKO_ID: Record<string, string> = {
 const DEVIATION_THRESHOLD = 0.02;
 const RECOVERY_THRESHOLD = 0.005;
 
-const ChartResponse = z.object({
-  prices: z.array(z.tuple([z.number(), z.number()]))
+const LlamaChartResponse = z.object({
+  coins: z.record(
+    z.string(),
+    z.object({
+      prices: z.array(z.object({ timestamp: z.number(), price: z.number() }))
+    })
+  )
 });
 
-export async function fetchDepegHistory(
-  assetAddress: string,
-  coingeckoApiKey: string
-): Promise<DepegEvent[]> {
-  const id = STABLE_TO_COINGECKO_ID[assetAddress.toLowerCase()];
-  if (!id) return [];
+export async function fetchDepegHistory(assetAddress: string): Promise<DepegEvent[]> {
+  const slug = STABLE_TO_COINGECKO_ID[assetAddress.toLowerCase()];
+  if (!slug) return [];
 
-  const url = new URL(`https://api.coingecko.com/api/v3/coins/${id}/market_chart`);
-  url.searchParams.set('vs_currency', 'usd');
-  url.searchParams.set('days', '365');
-  url.searchParams.set('interval', 'daily');
+  const coinId = `coingecko:${slug}`;
+  const url = new URL(`https://coins.llama.fi/chart/${encodeURIComponent(coinId)}`);
+  url.searchParams.set('period', '1d');
+  url.searchParams.set('span', '365');
 
-  const res = await globalThis.fetch(url.toString(), {
-    headers: { 'x-cg-demo-api-key': coingeckoApiKey }
-  });
+  const res = await globalThis.fetch(url.toString());
   if (!res.ok) return [];
   const body = await res.json();
-  const parsed = ChartResponse.safeParse(body);
+  const parsed = LlamaChartResponse.safeParse(body);
   if (!parsed.success) return [];
+
+  const entry = parsed.data.coins[coinId];
+  if (!entry) return [];
 
   const events: DepegEvent[] = [];
   let currentStart: number | null = null;
   let currentMax = 0;
 
-  for (const point of parsed.data.prices) {
-    const ms = point[0];
-    const price = point[1];
+  for (const point of entry.prices) {
+    const ms = point.timestamp * 1000;
+    const price = point.price;
     const dev = Math.abs(price - 1);
     if (currentStart === null) {
       if (dev > DEVIATION_THRESHOLD) {

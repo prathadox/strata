@@ -10,7 +10,7 @@ You can run the full Scout pipeline today, off-chain only, with one env flag:
 
 ```bash
 cp agents/scout/.env.example agents/scout/.env
-# edit .env: fill in LIGHTHOUSE_API_KEY, COINGECKO_API_KEY, NANSEN_API_KEY,
+# edit .env: fill in LIGHTHOUSE_API_KEY, NANSEN_API_KEY,
 #            MANTLE_RPC_URL, SCOUT_PRIVATE_KEY, and set SCOUT_DRY_RUN=true
 pnpm install
 pnpm --filter @strata/scout dev
@@ -40,7 +40,7 @@ You should see all 64 unit tests pass across 16 test files and a clean TypeScrip
 
 ## API keys you need
 
-Scout uses four external services. Three need keys; one is open. **No LLM key (OpenAI, Anthropic, etc.) is needed.** Scout's scoring is deterministic arithmetic; no model calls anywhere in the pipeline. The "no LLM" guarantee is what makes the integrity checks reproducible.
+Scout uses three external services. One needs a paid key, one needs a free key, one is open. **No LLM key (OpenAI, Anthropic, etc.) is needed.** Scout's scoring is deterministic arithmetic; no model calls anywhere in the pipeline. The "no LLM" guarantee is what makes the integrity checks reproducible.
 
 ### 1. Lighthouse (IPFS pin)
 
@@ -52,28 +52,18 @@ Used for: pinning every Yield Map, strategy doc, and methodology doc.
 
 Env var: `LIGHTHOUSE_API_KEY`
 
-### 2. CoinGecko (depeg history)
-
-Used for: 365 days of daily price data on stable underlyings (USDY, sUSDe, USDe, USDC.e, USDT) to estimate `p_depeg`.
-
-- Sign up at https://www.coingecko.com/en/api
-- Pick the Demo plan, it is free
-- Generate a Demo API key
-
-Env var: `COINGECKO_API_KEY`
-
-### 3. Nansen (smart-money signals)
+### 2. Nansen (smart-money signals)
 
 Used for: smart-money holder share, fresh-wallet inflow percent, wash-trade flag per asset. The one paid integration we accept.
 
 - Apply at https://www.nansen.ai/
 - Request API access (Pro or higher tier)
 - Generate an API key from the team dashboard
-- If you do not have a Nansen key yet, Scout still runs. The smart-money enricher returns `null` on 401 or 429 and the confidence on those opportunities drops accordingly. The cycle does not crash.
+- If you do not have a Nansen key yet, Scout still runs in dev. The smart-money enricher returns `null` on 401 or 429 and the confidence on those opportunities drops accordingly. The cycle does not crash. Use any non-empty placeholder string for now if you don't have the real key.
 
 Env var: `NANSEN_API_KEY`
 
-### 4. Mantle RPC
+### 3. Mantle RPC
 
 Used for: emitting `publishYieldMap` events on `AgentEventBus`, reading the ERC-8004 identity contract.
 
@@ -82,9 +72,13 @@ Used for: emitting `publishYieldMap` events on `AgentEventBus`, reading the ERC-
 
 Env vars: `MANTLE_RPC_URL` for primary, optional `MANTLE_RPC_URL_FALLBACK` (defaults to the public endpoint)
 
-### 5. DefiLlama (yield universe)
+### 4. DefiLlama (yield universe + price history)
 
-No key. `https://yields.llama.fi/pools` is open. Nothing to do.
+No key needed. Two endpoints:
+- `https://yields.llama.fi/pools` for the full Mantle pool universe (the canonical fetcher)
+- `https://coins.llama.fi/chart/...` for 365 daily prices per stable, used to compute depeg history
+
+Both are open and rate-limited per IP. Nothing to configure.
 
 ## Scout keypair
 
@@ -150,7 +144,6 @@ SCOUT_PRIVATE_KEY=0x<your-private-key>
 SCOUT_DRY_RUN=false
 AGENT_EVENT_BUS_ADDRESS=0x<deployed-bus-address>
 LIGHTHOUSE_API_KEY=<your-lighthouse-key>
-COINGECKO_API_KEY=<your-coingecko-demo-key>
 NANSEN_API_KEY=<your-nansen-key>
 CYCLE_INTERVAL_MS=60000
 LOG_LEVEL=info
@@ -174,7 +167,7 @@ pnpm --filter @strata/scout test
 - Canonical schemas (zod boundaries)
 - DefiLlama fetcher with project-to-source mapping (msw-mocked HTTP)
 - Ingestion orchestrator (timeout isolation, failure isolation, invalid-opportunity drop)
-- CoinGecko depeg history (deviation compression into events)
+- Depeg history via DefiLlama coins API (deviation compression into events)
 - Nansen smart-money enricher (happy path, 429, 500, bad shape all return null)
 - Static protocol config map (every SourceProtocol has an entry)
 - Scoring (senior-grade math, exploit elevation, missing-enrichment confidence drop, TVL-proxy illiquidity, frozen constants snapshot)
@@ -359,7 +352,7 @@ Old CIDs remain readable from IPFS forever. The on-chain log of `updateStrategyC
 | `lighthouse 401` during pin | bad API key | regenerate key in Lighthouse dashboard, paste into `.env` |
 | `lighthouse 413` during pin | payload too large | should not happen for normal maps; if it does, investigate why opportunities ballooned |
 | Nansen returns null repeatedly | rate limit or unfunded key | check quota in Nansen dashboard, confidence drops but Scout keeps cycling |
-| CoinGecko returns `429` | rate limit on Demo tier | wait a minute, or upgrade plan. Depeg fields go null, confidence drops |
+| DefiLlama coins API returns `429` | per-IP rate limit | wait a minute. Depeg fields go null, confidence drops accordingly |
 | `NotAuthorized` revert on `publishYieldMap` | role not granted | run ERC-8004 step 3 above to grant `Role.Scout` |
 | `tx reverted` from `publishOnChain` | revert reason missing | check that `bus.roleOf(scoutAddress) == 1`, then re-emit |
 | Tests hang on `ipfs.test.ts` retry case | network blip making real call | rerun, tests use msw and should not hit the network |
