@@ -19,6 +19,40 @@ pnpm --filter @strata/scout test
 
 That gets you a clean build and the test suite. To run a live cycle you need API keys and a Mantle RPC. See **Environment** below.
 
+## The cycle, end to end
+
+Every `CYCLE_INTERVAL_MS` (default 60s), Scout runs the same nine-stage pipeline. Errors at any stage are isolated and metered; the loop never crashes.
+
+```mermaid
+flowchart TD
+  T([Timer tick]) --> ING[1. Ingest from DefiLlama]
+  ING --> Z{any opportunities ?}
+  Z -->|no| SKIP[Skip publish, sources_degraded recorded]
+  Z -->|yes| EN[2. Enrich, CoinGecko + Nansen + static config]
+  EN --> SC[3. Score each, RAAPY + confidence]
+  SC --> AG[4. Aggregate, tag tranche eligibility + rank by score]
+  AG --> SIG[5. Sign, canonical JSON + EIP-191]
+  SIG --> PIN[6. Pin to Lighthouse]
+  PIN --> DEDUP{cid == lastPublished ?}
+  DEDUP -->|yes| HOLD[Skip on-chain emit, same content]
+  DEDUP -->|no| EMIT[7. publishYieldMap on AgentEventBus]
+  EMIT --> WAIT[8. Wait for receipt]
+  WAIT --> REC[9. Record cid in memory]
+  REC --> HEALTHY[Update health, metrics]
+  HOLD --> HEALTHY
+  SKIP --> HEALTHY
+  HEALTHY --> NEXT([Wait CYCLE_INTERVAL_MS])
+  NEXT --> T
+
+  ING -.error.-> ERR[Increment cycles_failed, continue]
+  EN -.error.-> ERR
+  SC -.error.-> ERR
+  SIG -.error.-> ERR
+  PIN -.retry x2, then.-> ERR
+  EMIT -.retry x2, then.-> ERR
+  ERR --> NEXT
+```
+
 ## What Scout does, in order
 
 1. **Ingest.** Pull every Mantle pool from DefiLlama (`yields.llama.fi/pools`). Filter to pools whose `project` maps to a known `SourceProtocol`. Today that's `aave-v3`, `ondo-finance`, `ethena`, `mantle-staked-ether`, `mantle-mi4`, `cian-protocol`, `agni-finance`, `merchant-moe`, `fbtc`. Unknown projects are dropped.
@@ -41,6 +75,60 @@ That gets you a clean build and the test suite. To run a live cycle you need API
 7. **Publish.** Call `AgentEventBus.publishYieldMap(ipfsHash)` from the Scout-roled account. Wait for receipt. Record the CID in memory so the next cycle skips re-publishing if nothing changed.
 
 8. **Loop.** `setInterval`-style wait for `CYCLE_INTERVAL_MS`, then start again. Errors in any step increment `scout_cycles_failed` and the loop keeps going.
+
+## How an opportunity becomes a score
+
+The scoring math is the heart of Scout. Each opportunity flows through five independent failure-mode probabilities and one confidence multiplier. The full derivation lives in [`docs/scoring-methodology.md`](docs/scoring-methodology.md); the picture below shows which inputs feed which probability.
+
+```mermaid
+flowchart LR
+  subgraph SRC[Per-opportunity inputs]
+    APY[APY, DefiLlama]
+    TVL[TVL, DefiLlama]
+    AGE[contractAgeDays, static config]
+    AUD[auditFactor, static config]
+    ORC[oracleType, static config]
+    CP[counterpartyClass, static config]
+    DPG[depegEvents, CoinGecko]
+    SM[smartMoneySignal, Nansen]
+  end
+
+  AGE --> PE[p_exploit]
+  AUD --> PE
+  TVL --> PE
+  SM -.sybil bump.-> PE
+
+  DPG --> PD[p_depeg]
+  ORC --> PO[p_oracle]
+  TVL --> PI[p_illiquid, TVL proxy]
+  CP --> PC[p_counterparty]
+
+  PE --> EL[ExpectedLoss = sum of p_i * alpha_i]
+  PD --> EL
+  PO --> EL
+  PI --> EL
+  PC --> EL
+
+  APY --> RA[RAAPY = APY - ExpectedLoss]
+  EL --> RA
+
+  subgraph CONF[Confidence multiplier]
+    FR[freshness, exp decay over staleness]
+    COMP[completeness, non-null risk fields]
+  end
+  FR --> CF[confidence]
+  COMP --> CF
+
+  RA --> SCO[score = RAAPY * confidence]
+  CF --> SCO
+
+  SCO --> TAG[Tranche tagging, Aggregation step]
+  TAG --> SEN[senior, if ExpectedLoss <= 0.01 + caps]
+  TAG --> MEZ[mezzanine, if ExpectedLoss <= 0.04 + caps]
+  TAG --> JR[junior, if ExpectedLoss <= 0.15 + caps]
+```
+
+Constants (`SCORING_CONSTANTS` in `src/pipeline/scoring.ts`) are frozen at module load. Their hash is part of `methodologyHash` on every published map, so any change to the math invalidates downstream consumers' cached interpretation of "what Scout meant by score = X."
 
 ## External integrations (locked at four)
 
