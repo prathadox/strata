@@ -7,6 +7,7 @@
   "scripts": {
     "build": "tsc -p .",
     "dev": "tsx src/index.ts",
+    "inspect": "tsx scripts/inspect-cycle.ts",
     "test": "vitest run",
     "test:watch": "vitest"
   },
