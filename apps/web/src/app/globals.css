@@ -706,18 +706,40 @@ button { font: inherit; cursor: pointer; }
 /* ───────── close CTA ───────── */
 .close {
   position: relative;
-  padding: clamp(80px, 14vh, 140px) 0;
+  padding: clamp(120px, 18vh, 180px) 0 clamp(80px, 14vh, 140px);
   text-align: center;
-  border-top: 1px solid var(--line);
   overflow: hidden;
+  isolation: isolate;
 }
+/* Soft pink bloom centered on the headline, bleeds upward into the previous section. */
 .close::before {
   content: "";
-  position: absolute; inset: -20% 10% auto 10%; height: 120%;
+  position: absolute;
+  inset: -45% -15% auto -15%;
+  height: 180%;
   background:
-    radial-gradient(50% 60% at 50% 30%, color-mix(in srgb, var(--accent, var(--pink)) 25%, transparent), transparent 70%);
-  filter: blur(40px);
+    radial-gradient(55% 60% at 50% 42%,
+      color-mix(in srgb, var(--accent, var(--pink)) 28%, transparent),
+      transparent 72%),
+    radial-gradient(90% 45% at 50% 18%,
+      color-mix(in srgb, var(--accent, var(--pink)) 10%, transparent),
+      transparent 70%);
+  filter: blur(60px);
   pointer-events: none;
+  z-index: -1;
+}
+/* Vertical fade at the very top so the page background transitions into the bloom without a hard line. */
+.close::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; top: 0;
+  height: 220px;
+  background: linear-gradient(180deg,
+    rgba(8, 3, 8, 0.6) 0%,
+    rgba(8, 3, 8, 0.2) 45%,
+    transparent 100%);
+  pointer-events: none;
+  z-index: -1;
 }
 .close .inner { position: relative; z-index: 1; }
 .close h2 {
