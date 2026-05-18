@@ -5,9 +5,9 @@ import { DepegEventSchema } from '../../types.js';
 type DepegEvent = zType.infer<typeof DepegEventSchema>;
 
 const STABLE_TO_COINGECKO_ID: Record<string, string> = {
-  // USDY (Ondo) on Mantle — replace with real address
+  // USDY (Ondo) on Mantle, replace with real address
   '0x5be26527e817998a7206475496fde1e68957c5a6': 'ondo-us-dollar-yield',
-  // sUSDe (Ethena) on Mantle — replace with real address
+  // sUSDe (Ethena) on Mantle, replace with real address
   '0x211cc4dd073734da055fbf44a2b4667d5e5fe5d2': 'ethena-staked-usde',
   // USDe (Ethena) on Mantle
   '0x5d3a1ff2b6bab83b63cd9ad0787074081a52ef34': 'ethena-usde',

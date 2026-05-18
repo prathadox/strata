@@ -1051,11 +1051,47 @@ Fetch 365d daily price for each underlying stable asset; count days where `|pric
 - Create: `agents/scout/src/pipeline/enrichment/oracleQuality.ts`
 - Test: `agents/scout/tests/unit/oracleQuality.test.ts`
 
-For each protocol we know (config-driven map: `protocol -> oracleType`) we assign `oracleType ∈ {chainlink_dec, pyth, redstone, custom_multi, single}`. The map is small (~10 entries) and lives in `agents/scout/src/pipeline/enrichment/oracleConfig.ts`.
+Consolidated static metadata per protocol — `PROTOCOL_CONFIG` map keyed by `SourceProtocol`, returning `{ auditFactor, oracleType, counterpartyClass, contractAgeDays }`. This file replaces the dropped Task 16 (contract age via Mantlescan) and the inline orchestrator maps for audit/counterparty class. Static values are seeded from public deployment records + audit reports and revised by hand when a new protocol is added. Unknown protocols return `null` per dimension; the scoring step lets `confidence` drop accordingly.
 
-- [ ] Standard 5-step pattern. The "test" is verifying the map returns the right type for known protocols and `null` for unknown.
+**Files:**
+- Create: `agents/scout/src/pipeline/enrichment/protocolConfig.ts`
+- Test: `agents/scout/tests/unit/protocolConfig.test.ts`
 
-- [ ] Commit: `scout: oracle quality enricher (config-driven type mapping)`.
+```ts
+// agents/scout/src/pipeline/enrichment/protocolConfig.ts
+import type { SourceProtocol, RiskFactors } from '../../types.js';
+
+export interface ProtocolMeta {
+  auditFactor: number;                              // 0.30 top-tier, 0.60 reputable, 1.00 unaudited
+  oracleType: NonNullable<RiskFactors['oracleType']>;
+  counterpartyClass: NonNullable<RiskFactors['counterpartyClass']>;
+  contractAgeDays: number;                          // Mantle deployment age, hand-maintained
+}
+
+// As of plan date 2026-05-17. Update when new protocols added or audits change.
+export const PROTOCOL_CONFIG: Record<SourceProtocol, ProtocolMeta> = {
+  aave:         { auditFactor: 0.30, oracleType: 'chainlink_dec', counterpartyClass: 'permissionless',      contractAgeDays: 700 },
+  ondo:         { auditFactor: 0.30, oracleType: 'chainlink_dec', counterpartyClass: 'custodial',           contractAgeDays: 730 },
+  ethena:       { auditFactor: 0.30, oracleType: 'chainlink_dec', counterpartyClass: 'attested_centralized', contractAgeDays: 600 },
+  meth:         { auditFactor: 0.30, oracleType: 'redstone',      counterpartyClass: 'permissionless',      contractAgeDays: 730 },
+  mantleVault:  { auditFactor: 0.60, oracleType: 'redstone',      counterpartyClass: 'attested_centralized', contractAgeDays: 365 },
+  cian:         { auditFactor: 0.60, oracleType: 'custom_multi',  counterpartyClass: 'permissionless',      contractAgeDays: 300 },
+  agni:         { auditFactor: 0.60, oracleType: 'redstone',      counterpartyClass: 'permissionless',      contractAgeDays: 540 },
+  merchantMoe:  { auditFactor: 0.60, oracleType: 'redstone',      counterpartyClass: 'permissionless',      contractAgeDays: 540 },
+  fbtc:         { auditFactor: 0.60, oracleType: 'custom_multi',  counterpartyClass: 'custodial',           contractAgeDays: 365 },
+  mortgageDemo: { auditFactor: 1.00, oracleType: 'single',        counterpartyClass: 'attested_centralized', contractAgeDays: 30  }
+};
+
+export function metaFor(source: SourceProtocol): ProtocolMeta {
+  return PROTOCOL_CONFIG[source];
+}
+```
+
+- [ ] **Step 1: Write failing test** asserting `metaFor('aave')` returns expected `{ auditFactor: 0.30, oracleType: 'chainlink_dec', counterpartyClass: 'permissionless', contractAgeDays: 700 }`, and that every `SourceProtocol` enum value has an entry (TypeScript will enforce structurally; the test asserts at runtime that no value is undefined).
+- [ ] **Step 2: Run — expect FAIL**
+- [ ] **Step 3: Implement** the module above.
+- [ ] **Step 4: Run — expect PASS**
+- [ ] **Step 5: Commit:** `scout: static per-protocol config (audit/oracle/counterparty/age)`.
 
 ---
 
