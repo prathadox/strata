@@ -115,6 +115,24 @@ LOG_LEVEL=info
 
 `AGENT_EVENT_BUS_ADDRESS` comes from the contracts engineer. Until those contracts are deployed, you can use a placeholder (any valid 40-hex address) and rely on the unit tests for verification. The on-chain emit path is fully covered by `tests/unit/onchain.test.ts` using mocked clients.
 
+### Dry-run mode (no contracts yet)
+
+If `AgentEventBus` is not deployed yet, run Scout off-chain only by setting:
+
+```
+SCOUT_DRY_RUN=true
+```
+
+This skips the on-chain `publishYieldMap` step. The full off-chain pipeline still runs: DefiLlama ingest, CoinGecko + Nansen enrichment, scoring, aggregation, EIP-191 signing, Lighthouse pin. You'll see one cycle per `CYCLE_INTERVAL_MS` with a log line like:
+
+```
+{"level":"warn","ipfsHash":"bafkrei...","msg":"DRY RUN: skipping on-chain publishYieldMap, would have emitted this CID"}
+```
+
+Take that CID and fetch the JSON from `https://gateway.lighthouse.storage/ipfs/<cid>` to inspect a real signed Yield Map. When the contracts ship, set `SCOUT_DRY_RUN=false`, fill in `AGENT_EVENT_BUS_ADDRESS`, and the same loop emits live events.
+
+When `SCOUT_DRY_RUN=true`, `AGENT_EVENT_BUS_ADDRESS` can be left blank.
+
 ## Testing
 
 Three layers.

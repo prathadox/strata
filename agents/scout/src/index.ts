@@ -44,7 +44,7 @@ async function main(): Promise<void> {
   const cfg = loadConfig();
   const log = pino({ level: cfg.logLevel });
 
-  log.info({ version: VERSION, chain: cfg.chain.id }, 'scout starting');
+  log.info({ version: VERSION, chain: cfg.chain.id, dryRun: cfg.scout.dryRun }, 'scout starting');
 
   const clients = makeClients(cfg);
   const fetchers = [new DefiLlamaFetcher()];
@@ -54,19 +54,26 @@ async function main(): Promise<void> {
     smartMoneyFlow: (asset: `0x${string}`) => fetchSmartMoneyFlow(asset, cfg.apis.nansen)
   };
 
+  const liveOnChain = ({ ipfsHash }: { ipfsHash: string }) =>
+    publishOnChain({
+      wallet: clients.walletClient,
+      publicClient: clients.publicClient,
+      account: clients.account,
+      eventBus: cfg.scout.eventBus,
+      ipfsHash
+    });
+
+  const dryOnChain = async ({ ipfsHash }: { ipfsHash: string }): Promise<`0x${string}`> => {
+    log.warn({ ipfsHash }, 'DRY RUN: skipping on-chain publishYieldMap, would have emitted this CID');
+    return '0xdryRunSkipped' as `0x${string}`;
+  };
+
   const publisher = makePublisher({
     wallet: clients.walletClient,
     publicClient: clients.publicClient,
     account: clients.account,
     lighthouseApiKey: cfg.ipfs.lighthouseApiKey,
-    publishOnChain: ({ ipfsHash }) =>
-      publishOnChain({
-        wallet: clients.walletClient,
-        publicClient: clients.publicClient,
-        account: clients.account,
-        eventBus: cfg.scout.eventBus,
-        ipfsHash
-      })
+    publishOnChain: cfg.scout.dryRun ? dryOnChain : liveOnChain
   });
 
   const lastPublished = new LastPublished();
