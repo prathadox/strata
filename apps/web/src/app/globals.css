@@ -217,6 +217,16 @@ button { font: inherit; cursor: pointer; }
 }
 @media (max-width: 880px) {
   .hero-grid { grid-template-columns: 1fr; }
+  /* Center the hero content once it stacks. */
+  .hero .wrap { text-align: center; }
+  .hero-grid > div:first-child {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .sub { margin-left: auto; margin-right: auto; }
+  .hero-cta { justify-content: center; align-items: center; flex-wrap: wrap; }
+  .mark-stage { margin: 0 auto; max-width: 360px; }
 }
 
 .headline {
@@ -344,6 +354,9 @@ button { font: inherit; cursor: pointer; }
 }
 .pill .pill-label b { color: var(--paper); font-weight: 500; }
 .mark:hover .pill .pill-label { opacity: 1; transform: translateY(-50%) translateX(0); }
+
+/* Hide pill labels below 980px: they sit outside the pill and would overflow the viewport. */
+@media (max-width: 980px) { .pill .pill-label { display: none; } }
 
 /* Small inline mark (used in nav) */
 .mark-mini { display: inline-flex; flex-direction: column; justify-content: center; gap: 1.5px; }
@@ -820,10 +833,10 @@ button { font: inherit; cursor: pointer; }
   }
   .headline { font-size: clamp(36px, 11vw, 56px); }
   .sub { font-size: 15px; }
-  .hero-cta { flex-direction: column; align-items: stretch; gap: 14px; }
-  .hero-cta .btn-cta { justify-content: center; }
+  .hero-cta { flex-direction: column; align-items: center; gap: 14px; width: 100%; }
+  .hero-cta .btn-cta { justify-content: center; width: 100%; max-width: 320px; }
   .cta-meta { text-align: center; }
-  .mark-stage { max-width: 320px; margin: 0 auto; }
+  .mark-stage { max-width: 280px; margin: 0 auto; }
 
   /* tranches: one column, lighter padding */
   .tranche-grid { grid-template-columns: 1fr; gap: 12px; }
