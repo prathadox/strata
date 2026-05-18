@@ -3,15 +3,20 @@ import type { ScoredOpportunity, Tranche } from '../types.js';
 // Mandate floors are calibrated to current Mantle TVL reality (May 2026: largest single
 // Mantle pool is around $90M; Ondo USDY on Mantle is ~$29M). As the ecosystem grows,
 // senior min-TVL should rise back toward 50M and mezz toward 5M.
+//
+// maxApy is a structural sanity cap, not a risk-math output: in DeFi, headline APY
+// above 20% almost always reflects ephemeral incentives or hidden risk (IL, basis flip,
+// exotic collateral) that our 5 failure-mode probabilities can't fully see. We force
+// those into junior regardless of what the per-failure-mode math says.
 export const MANDATES = {
-  senior:    { maxExpectedLoss: 0.02, maxPExploit: 0.05, maxPDepeg: 0.01, minTvlUsd: 25_000_000 },
-  mezzanine: { maxExpectedLoss: 0.04, maxPExploit: 0.15, maxPDepeg: 0.05, minTvlUsd:  1_000_000 },
-  junior:    { maxExpectedLoss: 0.15, maxPExploit: 1.00, maxPDepeg: 1.00, minTvlUsd:    100_000 }
+  senior:    { maxExpectedLoss: 0.02, maxPExploit: 0.05, maxPDepeg: 0.01, minTvlUsd: 25_000_000, maxApy: 0.08 },
+  mezzanine: { maxExpectedLoss: 0.04, maxPExploit: 0.15, maxPDepeg: 0.05, minTvlUsd:  1_000_000, maxApy: 0.20 },
+  junior:    { maxExpectedLoss: 0.15, maxPExploit: 1.00, maxPDepeg: 1.00, minTvlUsd:    100_000, maxApy: Infinity }
 } as const;
 
 const TRANCHE_ORDER: Tranche[] = ['senior', 'mezzanine', 'junior'];
 
-type Mandate = { maxExpectedLoss: number; maxPExploit: number; maxPDepeg: number; minTvlUsd: number };
+type Mandate = { maxExpectedLoss: number; maxPExploit: number; maxPDepeg: number; minTvlUsd: number; maxApy: number };
 
 function reasonsFailing(o: ScoredOpportunity, m: Mandate): string[] {
   const r: string[] = [];
@@ -19,6 +24,7 @@ function reasonsFailing(o: ScoredOpportunity, m: Mandate): string[] {
   if (o.probabilities.exploit > m.maxPExploit)    r.push(`pExploit ${o.probabilities.exploit.toFixed(4)} > ${m.maxPExploit}`);
   if (o.probabilities.depeg > m.maxPDepeg)        r.push(`pDepeg ${o.probabilities.depeg.toFixed(4)} > ${m.maxPDepeg}`);
   if (o.tvlUsd < m.minTvlUsd)                     r.push(`tvlUsd ${o.tvlUsd.toFixed(0)} < ${m.minTvlUsd}`);
+  if (o.apy > m.maxApy)                           r.push(`apy ${(o.apy * 100).toFixed(2)}% > ${(m.maxApy * 100).toFixed(0)}% (too-good-to-be-true gate)`);
   return r;
 }
 

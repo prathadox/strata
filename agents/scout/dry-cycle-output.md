@@ -1,8 +1,8 @@
 # Scout dry-cycle inspection
 
-Generated: 2026-05-18T17:54:20.606Z
-Ephemeral signer: `0x6d4EB47bd2b23d2E37a0bfB0Bd2abf63C5F6b95e`
-Map hash: `0x796d8abf52912bea7524eab8ba10a8078e855b0e9ee4baab3cf184ca12ea61cd`
+Generated: 2026-05-18T18:01:45.585Z
+Ephemeral signer: `0xEcDd83eDF6C5DC8402c0CbF822542dA28370F1F4`
+Map hash: `0x74d73542021501a983d74b2cb9583531249c065513b0a557e92ec20370982ec6`
 
 This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to end, fetching real data from DefiLlama (yields + price history). Nansen and Lighthouse are skipped; the signature is over an ephemeral keypair generated at run time.
 
@@ -11,7 +11,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
 - Opportunities ingested: **48**
 - Opportunities scored: **48**
 - Senior-eligible: **2**
-- Mezzanine-eligible: **6**
+- Mezzanine-eligible: **5**
 - Junior-eligible: **23**
 
 ## Per-tranche rankings
@@ -23,16 +23,15 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
 | 1 | aave | `aave:a4e37545-203b-4412-9acd-3e8b1aa4d744` | 4.00% | 3.47% | 0.0217 | $64,261,826 |
 | 2 | ondo | `ondo:b5d7a190-38d2-4fdd-8c14-1fd00c11bce1` | 3.55% | 1.76% | 0.0110 | $29,438,688 |
 
-### Mezzanine (6)
+### Mezzanine (5)
 
 | Rank | Source | Pool id | APY | RAAPY | Score | TVL |
 |---|---|---|---|---|---|---|
-| 1 | agni | `agni:35f2103d-231b-443b-952e-d2cd118d8f29` | 43.31% | 41.91% | 0.2619 | $1,002,542 |
-| 2 | aave | `aave:32cb38a5-b9b9-441a-bf07-8fab47b999d3` | 5.76% | 5.06% | 0.0316 | $5,505,919 |
-| 3 | aave | `aave:47da0cdd-7b1d-4927-9545-20b53b73afa8` | 5.38% | 4.73% | 0.0296 | $24,552,530 |
-| 4 | aave | `aave:a4e37545-203b-4412-9acd-3e8b1aa4d744` | 4.00% | 3.47% | 0.0217 | $64,261,826 |
-| 5 | aave | `aave:76b70b33-d8a4-4e61-8092-9bd1f2be2fc9` | 4.04% | 3.36% | 0.0210 | $9,772,423 |
-| 6 | ondo | `ondo:b5d7a190-38d2-4fdd-8c14-1fd00c11bce1` | 3.55% | 1.76% | 0.0110 | $29,438,688 |
+| 1 | aave | `aave:32cb38a5-b9b9-441a-bf07-8fab47b999d3` | 5.76% | 5.06% | 0.0316 | $5,505,919 |
+| 2 | aave | `aave:47da0cdd-7b1d-4927-9545-20b53b73afa8` | 5.38% | 4.73% | 0.0296 | $24,552,530 |
+| 3 | aave | `aave:a4e37545-203b-4412-9acd-3e8b1aa4d744` | 4.00% | 3.47% | 0.0217 | $64,261,826 |
+| 4 | aave | `aave:76b70b33-d8a4-4e61-8092-9bd1f2be2fc9` | 4.04% | 3.36% | 0.0210 | $9,772,423 |
+| 5 | ondo | `ondo:b5d7a190-38d2-4fdd-8c14-1fd00c11bce1` | 3.55% | 1.76% | 0.0110 | $29,438,688 |
 
 ### Junior (23)
 
@@ -151,10 +150,11 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
 - **RAAPY**: 41.91%
 - **Confidence**: 0.625
 - **Score**: 0.2619
-- **Eligible tranches**: mezzanine, junior
-- **Primary tranche**: mezzanine
+- **Eligible tranches**: junior
+- **Primary tranche**: junior
 - **Rejection reasons**:
-  - senior: tvlUsd 1002542 < 25000000
+  - senior: tvlUsd 1002542 < 25000000; apy 43.31% > 8% (too-good-to-be-true gate)
+  - mezzanine: apy 43.31% > 20% (too-good-to-be-true gate)
 
 ### agni:85407ecd-f711-4fa6-9328-3078aebfaa95
 
@@ -170,7 +170,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
 - **Eligible tranches**: junior
 - **Primary tranche**: junior
 - **Rejection reasons**:
-  - senior: tvlUsd 971781 < 25000000
+  - senior: tvlUsd 971781 < 25000000; apy 10.72% > 8% (too-good-to-be-true gate)
   - mezzanine: tvlUsd 971781 < 1000000
 
 ### agni:6d76a4e2-57f2-4190-a882-bd69f6ea32fb
@@ -603,7 +603,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
 - **Eligible tranches**: _none_
 - **Primary tranche**: _none_
 - **Rejection reasons**:
-  - senior: expectedLoss 0.0716 > 0.02; tvlUsd 14713 < 25000000
+  - senior: expectedLoss 0.0716 > 0.02; tvlUsd 14713 < 25000000; apy 12.72% > 8% (too-good-to-be-true gate)
   - mezzanine: expectedLoss 0.0716 > 0.04; tvlUsd 14713 < 1000000
   - junior: tvlUsd 14713 < 100000
 
@@ -707,12 +707,12 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
 - **Expected loss**: 3.093% /yr
 - **RAAPY**: 46.28%
 - **Confidence**: 0.625
-- **Score**: 0.2891
+- **Score**: 0.2892
 - **Eligible tranches**: _none_
 - **Primary tranche**: _none_
 - **Rejection reasons**:
-  - senior: expectedLoss 0.0309 > 0.02; tvlUsd 3206 < 25000000
-  - mezzanine: tvlUsd 3206 < 1000000
+  - senior: expectedLoss 0.0309 > 0.02; tvlUsd 3206 < 25000000; apy 49.38% > 8% (too-good-to-be-true gate)
+  - mezzanine: tvlUsd 3206 < 1000000; apy 49.38% > 20% (too-good-to-be-true gate)
   - junior: tvlUsd 3206 < 100000
 
 ### mantleVault:a5a47cdc-2ca5-4348-ade9-4adddb1d12d5
@@ -747,8 +747,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
 - **Eligible tranches**: _none_
 - **Primary tranche**: _none_
 - **Rejection reasons**:
-  - senior: expectedLoss 0.0314 > 0.02; tvlUsd 2246 < 25000000
-  - mezzanine: tvlUsd 2246 < 1000000
+  - senior: expectedLoss 0.0314 > 0.02; tvlUsd 2246 < 25000000; apy 51.27% > 8% (too-good-to-be-true gate)
+  - mezzanine: tvlUsd 2246 < 1000000; apy 51.27% > 20% (too-good-to-be-true gate)
   - junior: tvlUsd 2246 < 100000
 
 ### mantleVault:1362a09f-4853-492b-8083-34e0df20e17b
@@ -783,8 +783,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
 - **Eligible tranches**: _none_
 - **Primary tranche**: _none_
 - **Rejection reasons**:
-  - senior: expectedLoss 0.0326 > 0.02; tvlUsd 863 < 25000000
-  - mezzanine: tvlUsd 863 < 1000000
+  - senior: expectedLoss 0.0326 > 0.02; tvlUsd 863 < 25000000; apy 425.73% > 8% (too-good-to-be-true gate)
+  - mezzanine: tvlUsd 863 < 1000000; apy 425.73% > 20% (too-good-to-be-true gate)
   - junior: tvlUsd 863 < 100000
 
 ### mantleVault:46cbb5d7-5462-443b-886a-f371349a5d8c
@@ -819,8 +819,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
 - **Eligible tranches**: _none_
 - **Primary tranche**: _none_
 - **Rejection reasons**:
-  - senior: expectedLoss 0.0344 > 0.02; tvlUsd 229 < 25000000
-  - mezzanine: tvlUsd 229 < 1000000
+  - senior: expectedLoss 0.0344 > 0.02; tvlUsd 229 < 25000000; apy 81.96% > 8% (too-good-to-be-true gate)
+  - mezzanine: tvlUsd 229 < 1000000; apy 81.96% > 20% (too-good-to-be-true gate)
   - junior: tvlUsd 229 < 100000
 
 ### mantleVault:c91016e0-d075-4bb4-a1c7-465f1c11dc14
@@ -887,12 +887,12 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
 - **Expected loss**: 4.151% /yr
 - **RAAPY**: 67.46%
 - **Confidence**: 0.625
-- **Score**: 0.4214
+- **Score**: 0.4215
 - **Eligible tranches**: _none_
 - **Primary tranche**: _none_
 - **Rejection reasons**:
-  - senior: expectedLoss 0.0415 > 0.02; tvlUsd 0 < 25000000
-  - mezzanine: expectedLoss 0.0415 > 0.04; tvlUsd 0 < 1000000
+  - senior: expectedLoss 0.0415 > 0.02; tvlUsd 0 < 25000000; apy 71.61% > 8% (too-good-to-be-true gate)
+  - mezzanine: expectedLoss 0.0415 > 0.04; tvlUsd 0 < 1000000; apy 71.61% > 20% (too-good-to-be-true gate)
   - junior: tvlUsd 0 < 100000
 
 ## Signed canonical Yield Map
@@ -900,9 +900,9 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
 ```json
 {
   "version": "1.0",
-  "publishedAtMs": 1779126860599,
+  "publishedAtMs": 1779127305578,
   "publisher": {
-    "address": "0x6d4EB47bd2b23d2E37a0bfB0Bd2abf63C5F6b95e",
+    "address": "0xEcDd83eDF6C5DC8402c0CbF822542dA28370F1F4",
     "identityNFT": "dry-run"
   },
   "methodologyHash": "0xdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
@@ -917,7 +917,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apy": 0.04,
       "apyType": "variable",
       "tvlUsd": 64261826,
-      "lastUpdatedMs": 1779126860451,
+      "lastUpdatedMs": 1779127305482,
       "raw": {
         "chain": "Mantle",
         "project": "aave-v3",
@@ -962,8 +962,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       },
       "expectedLoss": 0.005343051026495517,
       "raapy": 0.034656948973504485,
-      "confidence": 0.624745885006884,
-      "score": 0.02165178625809048,
+      "confidence": 0.6248250244977135,
+      "score": 0.021654528991385945,
       "eligibleTranches": [
         "senior",
         "mezzanine",
@@ -979,7 +979,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apy": 0.0355,
       "apyType": "variable",
       "tvlUsd": 29438688,
-      "lastUpdatedMs": 1779126860451,
+      "lastUpdatedMs": 1779127305482,
       "raw": {
         "chain": "Mantle",
         "project": "ondo-yield-assets",
@@ -1024,8 +1024,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       },
       "expectedLoss": 0.017899879575194774,
       "raapy": 0.017600120424805223,
-      "confidence": 0.6248187762787096,
-      "score": 0.010996885706184721,
+      "confidence": 0.6248291900117618,
+      "score": 0.010997068989140513,
       "eligibleTranches": [
         "senior",
         "mezzanine",
@@ -1041,7 +1041,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apy": 0.0538373,
       "apyType": "variable",
       "tvlUsd": 24552530,
-      "lastUpdatedMs": 1779126860451,
+      "lastUpdatedMs": 1779127305482,
       "raw": {
         "chain": "Mantle",
         "project": "aave-v3",
@@ -1102,7 +1102,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apy": 0.0404303,
       "apyType": "variable",
       "tvlUsd": 9772423,
-      "lastUpdatedMs": 1779126860451,
+      "lastUpdatedMs": 1779127305482,
       "raw": {
         "chain": "Mantle",
         "project": "aave-v3",
@@ -1140,8 +1140,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       },
       "expectedLoss": 0.0067855855594575,
       "raapy": 0.033644714440542504,
-      "confidence": 0.6247438025240715,
-      "score": 0.02101932683442106,
+      "confidence": 0.6248271072512664,
+      "score": 0.021022129598179083,
       "eligibleTranches": [
         "mezzanine",
         "junior"
@@ -1163,7 +1163,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apy": 0.0575728,
       "apyType": "variable",
       "tvlUsd": 5505919,
-      "lastUpdatedMs": 1779126860451,
+      "lastUpdatedMs": 1779127305482,
       "raw": {
         "chain": "Mantle",
         "project": "aave-v3",
@@ -1201,8 +1201,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       },
       "expectedLoss": 0.0069589412973961075,
       "raapy": 0.05061385870260389,
-      "confidence": 0.6247417200482005,
-      "score": 0.031620589144141335,
+      "confidence": 0.6248271072512664,
+      "score": 0.03162491091997233,
       "eligibleTranches": [
         "mezzanine",
         "junior"
@@ -1224,7 +1224,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apy": 0.43312530000000005,
       "apyType": "variable",
       "tvlUsd": 1002542,
-      "lastUpdatedMs": 1779126860451,
+      "lastUpdatedMs": 1779127305482,
       "raw": {
         "chain": "Mantle",
         "project": "fluxion-network",
@@ -1266,15 +1266,21 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "confidence": 0.6249875001249992,
       "score": 0.2619409080299173,
       "eligibleTranches": [
-        "mezzanine",
         "junior"
       ],
-      "primaryTranche": "mezzanine",
+      "primaryTranche": "junior",
       "rejectionReasons": [
         {
           "tranche": "senior",
           "reasons": [
-            "tvlUsd 1002542 < 25000000"
+            "tvlUsd 1002542 < 25000000",
+            "apy 43.31% > 8% (too-good-to-be-true gate)"
+          ]
+        },
+        {
+          "tranche": "mezzanine",
+          "reasons": [
+            "apy 43.31% > 20% (too-good-to-be-true gate)"
           ]
         }
       ]
@@ -1286,7 +1292,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apy": 0.10722820000000001,
       "apyType": "variable",
       "tvlUsd": 971781,
-      "lastUpdatedMs": 1779126860451,
+      "lastUpdatedMs": 1779127305482,
       "raw": {
         "chain": "Mantle",
         "project": "fluxion-network",
@@ -1335,7 +1341,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         {
           "tranche": "senior",
           "reasons": [
-            "tvlUsd 971781 < 25000000"
+            "tvlUsd 971781 < 25000000",
+            "apy 10.72% > 8% (too-good-to-be-true gate)"
           ]
         },
         {
@@ -1353,7 +1360,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apy": 0.0693526,
       "apyType": "variable",
       "tvlUsd": 437653,
-      "lastUpdatedMs": 1779126860451,
+      "lastUpdatedMs": 1779127305482,
       "raw": {
         "chain": "Mantle",
         "project": "fluxion-network",
@@ -1420,7 +1427,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apy": 0.0034200999999999997,
       "apyType": "variable",
       "tvlUsd": 268015,
-      "lastUpdatedMs": 1779126860451,
+      "lastUpdatedMs": 1779127305482,
       "raw": {
         "chain": "Mantle",
         "project": "lendle-pooled-markets",
@@ -1487,7 +1494,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apy": 0.0005197,
       "apyType": "variable",
       "tvlUsd": 190221,
-      "lastUpdatedMs": 1779126860451,
+      "lastUpdatedMs": 1779127305482,
       "raw": {
         "chain": "Mantle",
         "project": "lendle-pooled-markets",
@@ -1554,7 +1561,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apy": 0.0188819,
       "apyType": "variable",
       "tvlUsd": 129854,
-      "lastUpdatedMs": 1779126860451,
+      "lastUpdatedMs": 1779127305482,
       "raw": {
         "chain": "Mantle",
         "project": "fluxion-network",
@@ -1621,7 +1628,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apy": 0.0131928,
       "apyType": "variable",
       "tvlUsd": 118242,
-      "lastUpdatedMs": 1779126860451,
+      "lastUpdatedMs": 1779127305482,
       "raw": {
         "chain": "Mantle",
         "project": "fluxion-network",
@@ -1660,8 +1667,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       },
       "expectedLoss": 0.01535956624183374,
       "raapy": -0.002166766241833741,
-      "confidence": 0.6247438025240715,
-      "score": -0.0013536737811040032,
+      "confidence": 0.6248271072512664,
+      "score": -0.0013538542829746745,
       "eligibleTranches": [
         "junior"
       ],
@@ -1688,7 +1695,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apy": 0.027457,
       "apyType": "variable",
       "tvlUsd": 111933,
-      "lastUpdatedMs": 1779126860451,
+      "lastUpdatedMs": 1779127305482,
       "raw": {
         "chain": "Mantle",
         "project": "fluxion-network",
@@ -1727,8 +1734,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       },
       "expectedLoss": 0.015394147853990249,
       "raapy": 0.01206285214600975,
-      "confidence": 0.6247417200482005,
-      "score": 0.007536166998385258,
+      "confidence": 0.6248291900117618,
+      "score": 0.007537222135622915,
       "eligibleTranches": [
         "junior"
       ],
@@ -1755,7 +1762,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apy": 0.0406398,
       "apyType": "variable",
       "tvlUsd": 110338,
-      "lastUpdatedMs": 1779126860451,
+      "lastUpdatedMs": 1779127305482,
       "raw": {
         "chain": "Mantle",
         "project": "fluxion-network",
@@ -1794,8 +1801,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       },
       "expectedLoss": 0.015403199329980284,
       "raapy": 0.02523660067001971,
-      "confidence": 0.6247438025240715,
-      "score": 0.015766409865369643,
+      "confidence": 0.624814610834086,
+      "score": 0.0157681968264136,
       "eligibleTranches": [
         "junior"
       ],
@@ -1822,7 +1829,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apy": 0.0057916,
       "apyType": "variable",
       "tvlUsd": 109127,
-      "lastUpdatedMs": 1779126860451,
+      "lastUpdatedMs": 1779127305482,
       "raw": {
         "chain": "Mantle",
         "project": "fluxion-network",
@@ -1861,8 +1868,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       },
       "expectedLoss": 0.015410159459905709,
       "raapy": -0.00961855945990571,
-      "confidence": 0.6247396375792711,
-      "score": -0.006009095351016162,
+      "confidence": 0.6248166935529266,
+      "score": -0.006009836518480509,
       "eligibleTranches": [
         "junior"
       ],
@@ -1889,7 +1896,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apy": 0.0047957,
       "apyType": "variable",
       "tvlUsd": 108809,
-      "lastUpdatedMs": 1779126860451,
+      "lastUpdatedMs": 1779127305482,
       "raw": {
         "chain": "Mantle",
         "project": "fluxion-network",
@@ -1928,8 +1935,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       },
       "expectedLoss": 0.01541199994590335,
       "raapy": -0.01061629994590335,
-      "confidence": 0.6247417200482005,
-      "score": -0.006632445488751276,
+      "confidence": 0.6248271072512664,
+      "score": -0.006633351984910566,
       "eligibleTranches": [
         "junior"
       ],
@@ -1956,7 +1963,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apy": 0.0004992,
       "apyType": "variable",
       "tvlUsd": 108309,
-      "lastUpdatedMs": 1779126860451,
+      "lastUpdatedMs": 1779127305482,
       "raw": {
         "chain": "Mantle",
         "project": "fluxion-network",
@@ -2023,7 +2030,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apy": 0.0006805,
       "apyType": "variable",
       "tvlUsd": 106877,
-      "lastUpdatedMs": 1779126860451,
+      "lastUpdatedMs": 1779127305482,
       "raw": {
         "chain": "Mantle",
         "project": "fluxion-network",
@@ -2062,8 +2069,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       },
       "expectedLoss": 0.015423298707538382,
       "raapy": -0.014742798707538382,
-      "confidence": 0.6247438025240715,
-      "score": -0.009210472124394496,
+      "confidence": 0.6248250244977135,
+      "score": -0.009211669563602528,
       "eligibleTranches": [
         "junior"
       ],
@@ -2090,7 +2097,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apy": 0.0241074,
       "apyType": "variable",
       "tvlUsd": 106833,
-      "lastUpdatedMs": 1779126860451,
+      "lastUpdatedMs": 1779127305482,
       "raw": {
         "chain": "Mantle",
         "project": "fluxion-network",
@@ -2129,8 +2136,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       },
       "expectedLoss": 0.01542355840153099,
       "raapy": 0.008683841598469012,
-      "confidence": 0.6247417200482005,
-      "score": 0.005425158136853645,
+      "confidence": 0.6248271072512664,
+      "score": 0.005425899625799606,
       "eligibleTranches": [
         "junior"
       ],
@@ -2157,7 +2164,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apy": 0.026137999999999998,
       "apyType": "variable",
       "tvlUsd": 105728,
-      "lastUpdatedMs": 1779126860451,
+      "lastUpdatedMs": 1779127305482,
       "raw": {
         "chain": "Mantle",
         "project": "fluxion-network",
@@ -2196,8 +2203,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       },
       "expectedLoss": 0.015430115574966341,
       "raapy": 0.010707884425033657,
-      "confidence": 0.6246979896583786,
-      "score": 0.006689193873812789,
+      "confidence": 0.6248166935529266,
+      "score": 0.00669046494139641,
       "eligibleTranches": [
         "junior"
       ],
@@ -2224,7 +2231,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apy": 0.0025407000000000003,
       "apyType": "variable",
       "tvlUsd": 104209,
-      "lastUpdatedMs": 1779126860451,
+      "lastUpdatedMs": 1779127305482,
       "raw": {
         "chain": "Mantle",
         "project": "fluxion-network",
@@ -2291,7 +2298,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apy": 0.0026538,
       "apyType": "variable",
       "tvlUsd": 103942,
-      "lastUpdatedMs": 1779126860451,
+      "lastUpdatedMs": 1779127305482,
       "raw": {
         "chain": "Mantle",
         "project": "fluxion-network",
@@ -2330,8 +2337,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       },
       "expectedLoss": 0.015440860162015395,
       "raapy": -0.012787060162015395,
-      "confidence": 0.6246979896583786,
-      "score": -0.007988050776851758,
+      "confidence": 0.6248125281221877,
+      "score": -0.00798951538707935,
       "eligibleTranches": [
         "junior"
       ],
@@ -2358,7 +2365,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apy": 0.0105925,
       "apyType": "variable",
       "tvlUsd": 103889,
-      "lastUpdatedMs": 1779126860451,
+      "lastUpdatedMs": 1779127305482,
       "raw": {
         "chain": "Mantle",
         "project": "fluxion-network",
@@ -2397,8 +2404,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       },
       "expectedLoss": 0.015441181823910886,
       "raapy": -0.004848681823910886,
-      "confidence": 0.6246917427097168,
-      "score": -0.00302893149842382,
+      "confidence": 0.6248250244977135,
+      "score": -0.0030295777394067375,
       "eligibleTranches": [
         "junior"
       ],
@@ -2425,7 +2432,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apy": 0.0043244,
       "apyType": "variable",
       "tvlUsd": 71999,
-      "lastUpdatedMs": 1779126860451,
+      "lastUpdatedMs": 1779127305482,
       "raw": {
         "chain": "Mantle",
         "project": "lendle-pooled-markets",
@@ -2496,7 +2503,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apy": 0.0275651,
       "apyType": "variable",
       "tvlUsd": 50855,
-      "lastUpdatedMs": 1779126860451,
+      "lastUpdatedMs": 1779127305482,
       "raw": {
         "chain": "Mantle",
         "project": "circuit-protocol",
@@ -2568,7 +2575,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apy": 0.0114509,
       "apyType": "variable",
       "tvlUsd": 47239,
-      "lastUpdatedMs": 1779126860451,
+      "lastUpdatedMs": 1779127305482,
       "raw": {
         "chain": "Mantle",
         "project": "fluxion-network",
@@ -2639,7 +2646,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apy": 0.0007723,
       "apyType": "variable",
       "tvlUsd": 44572,
-      "lastUpdatedMs": 1779126860451,
+      "lastUpdatedMs": 1779127305482,
       "raw": {
         "chain": "Mantle",
         "project": "fluxion-network",
@@ -2710,7 +2717,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apy": 0.0000072999999999999996,
       "apyType": "variable",
       "tvlUsd": 33505,
-      "lastUpdatedMs": 1779126860451,
+      "lastUpdatedMs": 1779127305482,
       "raw": {
         "chain": "Mantle",
         "project": "minterest",
@@ -2781,7 +2788,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apy": 0.0163832,
       "apyType": "variable",
       "tvlUsd": 28262,
-      "lastUpdatedMs": 1779126860451,
+      "lastUpdatedMs": 1779127305482,
       "raw": {
         "chain": "Mantle",
         "project": "lendle-pooled-markets",
@@ -2852,7 +2859,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apy": 0.0000011,
       "apyType": "variable",
       "tvlUsd": 21716,
-      "lastUpdatedMs": 1779126860451,
+      "lastUpdatedMs": 1779127305482,
       "raw": {
         "chain": "Mantle",
         "project": "minterest",
@@ -2923,7 +2930,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apy": 0.0044471,
       "apyType": "variable",
       "tvlUsd": 17235,
-      "lastUpdatedMs": 1779126860451,
+      "lastUpdatedMs": 1779127305482,
       "raw": {
         "chain": "Mantle",
         "project": "beefy",
@@ -2996,7 +3003,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apy": 0.1271997,
       "apyType": "variable",
       "tvlUsd": 14713,
-      "lastUpdatedMs": 1779126860451,
+      "lastUpdatedMs": 1779127305482,
       "raw": {
         "chain": "Mantle",
         "project": "clearpool-lending",
@@ -3034,8 +3041,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       },
       "expectedLoss": 0.071633020145117,
       "raapy": 0.055566679854883005,
-      "confidence": 0.6247417200482005,
-      "score": 0.0347148231499073,
+      "confidence": 0.6248021146668313,
+      "score": 0.03471817907834572,
       "eligibleTranches": [],
       "primaryTranche": null,
       "rejectionReasons": [
@@ -3043,7 +3050,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
           "tranche": "senior",
           "reasons": [
             "expectedLoss 0.0716 > 0.02",
-            "tvlUsd 14713 < 25000000"
+            "tvlUsd 14713 < 25000000",
+            "apy 12.72% > 8% (too-good-to-be-true gate)"
           ]
         },
         {
@@ -3068,7 +3076,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apy": 1.0000000000000001e-7,
       "apyType": "variable",
       "tvlUsd": 14497,
-      "lastUpdatedMs": 1779126860451,
+      "lastUpdatedMs": 1779127305482,
       "raw": {
         "chain": "Mantle",
         "project": "aurelius",
@@ -3139,7 +3147,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apy": 0.0002029,
       "apyType": "variable",
       "tvlUsd": 10314,
-      "lastUpdatedMs": 1779126860451,
+      "lastUpdatedMs": 1779127305482,
       "raw": {
         "chain": "Mantle",
         "project": "minterest",
@@ -3177,8 +3185,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       },
       "expectedLoss": 0.029398523723219213,
       "raapy": -0.029195623723219214,
-      "confidence": 0.6246979896583786,
-      "score": -0.01823844744671751,
+      "confidence": 0.624814610834086,
+      "score": -0.01824185227468162,
       "eligibleTranches": [],
       "primaryTranche": null,
       "rejectionReasons": [
@@ -3210,7 +3218,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apy": 0.000047600000000000005,
       "apyType": "variable",
       "tvlUsd": 10272,
-      "lastUpdatedMs": 1779126860451,
+      "lastUpdatedMs": 1779127305482,
       "raw": {
         "chain": "Mantle",
         "project": "minterest",
@@ -3281,7 +3289,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apy": 0.00042009999999999997,
       "apyType": "variable",
       "tvlUsd": 6326,
-      "lastUpdatedMs": 1779126860451,
+      "lastUpdatedMs": 1779127305482,
       "raw": {
         "chain": "Mantle",
         "project": "minterest",
@@ -3319,8 +3327,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       },
       "expectedLoss": 0.030039107239154473,
       "raapy": -0.029619007239154473,
-      "confidence": 0.6246979896583786,
-      "score": -0.018502934277976762,
+      "confidence": 0.624800031996587,
+      "score": -0.018505956670730857,
       "eligibleTranches": [],
       "primaryTranche": null,
       "rejectionReasons": [
@@ -3352,7 +3360,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apy": 0.0073364,
       "apyType": "variable",
       "tvlUsd": 5849,
-      "lastUpdatedMs": 1779126860451,
+      "lastUpdatedMs": 1779127305482,
       "raw": {
         "chain": "Mantle",
         "project": "lendle-pooled-markets",
@@ -3423,7 +3431,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apy": 0.4937539,
       "apyType": "variable",
       "tvlUsd": 3206,
-      "lastUpdatedMs": 1779126860451,
+      "lastUpdatedMs": 1779127305482,
       "raw": {
         "chain": "Mantle",
         "project": "lendle-pooled-markets",
@@ -3461,8 +3469,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       },
       "expectedLoss": 0.03092973417055323,
       "raapy": 0.4628241658294468,
-      "confidence": 0.624695907335217,
-      "score": 0.28912436220949117,
+      "confidence": 0.6248125281221877,
+      "score": 0.2891783371279393,
       "eligibleTranches": [],
       "primaryTranche": null,
       "rejectionReasons": [
@@ -3470,13 +3478,15 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
           "tranche": "senior",
           "reasons": [
             "expectedLoss 0.0309 > 0.02",
-            "tvlUsd 3206 < 25000000"
+            "tvlUsd 3206 < 25000000",
+            "apy 49.38% > 8% (too-good-to-be-true gate)"
           ]
         },
         {
           "tranche": "mezzanine",
           "reasons": [
-            "tvlUsd 3206 < 1000000"
+            "tvlUsd 3206 < 1000000",
+            "apy 49.38% > 20% (too-good-to-be-true gate)"
           ]
         },
         {
@@ -3494,7 +3504,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apy": 0.0002103,
       "apyType": "variable",
       "tvlUsd": 2269,
-      "lastUpdatedMs": 1779126860451,
+      "lastUpdatedMs": 1779127305482,
       "raw": {
         "chain": "Mantle",
         "project": "minterest",
@@ -3565,7 +3575,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apy": 0.5126761,
       "apyType": "variable",
       "tvlUsd": 2246,
-      "lastUpdatedMs": 1779126860451,
+      "lastUpdatedMs": 1779127305482,
       "raw": {
         "chain": "Mantle",
         "project": "lendle-pooled-markets",
@@ -3603,8 +3613,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       },
       "expectedLoss": 0.031396081583637235,
       "raapy": 0.48128001841636275,
-      "confidence": 0.624695907335217,
-      "score": 0.30065365778691966,
+      "confidence": 0.6248021146668313,
+      "score": 0.300704773253435,
       "eligibleTranches": [],
       "primaryTranche": null,
       "rejectionReasons": [
@@ -3612,13 +3622,15 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
           "tranche": "senior",
           "reasons": [
             "expectedLoss 0.0314 > 0.02",
-            "tvlUsd 2246 < 25000000"
+            "tvlUsd 2246 < 25000000",
+            "apy 51.27% > 8% (too-good-to-be-true gate)"
           ]
         },
         {
           "tranche": "mezzanine",
           "reasons": [
-            "tvlUsd 2246 < 1000000"
+            "tvlUsd 2246 < 1000000",
+            "apy 51.27% > 20% (too-good-to-be-true gate)"
           ]
         },
         {
@@ -3636,7 +3648,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apy": 0.0000064000000000000006,
       "apyType": "variable",
       "tvlUsd": 2068,
-      "lastUpdatedMs": 1779126860451,
+      "lastUpdatedMs": 1779127305482,
       "raw": {
         "chain": "Mantle",
         "project": "minterest",
@@ -3707,7 +3719,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apy": 4.2573235,
       "apyType": "variable",
       "tvlUsd": 863,
-      "lastUpdatedMs": 1779126860451,
+      "lastUpdatedMs": 1779127305482,
       "raw": {
         "chain": "Mantle",
         "project": "lendle-pooled-markets",
@@ -3754,13 +3766,15 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
           "tranche": "senior",
           "reasons": [
             "expectedLoss 0.0326 > 0.02",
-            "tvlUsd 863 < 25000000"
+            "tvlUsd 863 < 25000000",
+            "apy 425.73% > 8% (too-good-to-be-true gate)"
           ]
         },
         {
           "tranche": "mezzanine",
           "reasons": [
-            "tvlUsd 863 < 1000000"
+            "tvlUsd 863 < 1000000",
+            "apy 425.73% > 20% (too-good-to-be-true gate)"
           ]
         },
         {
@@ -3778,7 +3792,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apy": 0.011708799999999998,
       "apyType": "variable",
       "tvlUsd": 815,
-      "lastUpdatedMs": 1779126860451,
+      "lastUpdatedMs": 1779127305482,
       "raw": {
         "chain": "Mantle",
         "project": "minterest",
@@ -3823,8 +3837,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       },
       "expectedLoss": 0.03180812569795802,
       "raapy": -0.02009932569795802,
-      "confidence": 0.6246917427097168,
-      "score": -0.012555882797547591,
+      "confidence": 0.6248125281221877,
+      "score": -0.012558310502892404,
       "eligibleTranches": [],
       "primaryTranche": null,
       "rejectionReasons": [
@@ -3856,7 +3870,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apy": 0.8196487,
       "apyType": "variable",
       "tvlUsd": 229,
-      "lastUpdatedMs": 1779126860451,
+      "lastUpdatedMs": 1779127305482,
       "raw": {
         "chain": "Mantle",
         "project": "lendle-pooled-markets",
@@ -3903,13 +3917,15 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
           "tranche": "senior",
           "reasons": [
             "expectedLoss 0.0344 > 0.02",
-            "tvlUsd 229 < 25000000"
+            "tvlUsd 229 < 25000000",
+            "apy 81.96% > 8% (too-good-to-be-true gate)"
           ]
         },
         {
           "tranche": "mezzanine",
           "reasons": [
-            "tvlUsd 229 < 1000000"
+            "tvlUsd 229 < 1000000",
+            "apy 81.96% > 20% (too-good-to-be-true gate)"
           ]
         },
         {
@@ -3927,7 +3943,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apy": 0.0761987,
       "apyType": "variable",
       "tvlUsd": 26,
-      "lastUpdatedMs": 1779126860451,
+      "lastUpdatedMs": 1779127305482,
       "raw": {
         "chain": "Mantle",
         "project": "lendle-pooled-markets",
@@ -3972,8 +3988,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       },
       "expectedLoss": 0.03636558077606036,
       "raapy": 0.03983311922393963,
-      "confidence": 0.624695907335217,
-      "score": 0.02488358655559084,
+      "confidence": 0.6248021146668313,
+      "score": 0.024887817124893494,
       "eligibleTranches": [],
       "primaryTranche": null,
       "rejectionReasons": [
@@ -4005,7 +4021,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apy": 0.0255,
       "apyType": "variable",
       "tvlUsd": 0,
-      "lastUpdatedMs": 1779126860451,
+      "lastUpdatedMs": 1779127305482,
       "raw": {
         "chain": "Mantle",
         "project": "aave-v3",
@@ -4075,7 +4091,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apy": 0.0562368,
       "apyType": "variable",
       "tvlUsd": 0,
-      "lastUpdatedMs": 1779126860451,
+      "lastUpdatedMs": 1779127305482,
       "raw": {
         "chain": "Mantle",
         "project": "aave-v3",
@@ -4145,7 +4161,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apy": 0.7161308,
       "apyType": "variable",
       "tvlUsd": 0,
-      "lastUpdatedMs": 1779126860451,
+      "lastUpdatedMs": 1779127305482,
       "raw": {
         "chain": "Mantle",
         "project": "lendle-pooled-markets",
@@ -4183,8 +4199,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       },
       "expectedLoss": 0.04150855769798602,
       "raapy": 0.674622242302014,
-      "confidence": 0.6246979896583786,
-      "score": 0.4214351585448957,
+      "confidence": 0.6248021146668313,
+      "score": 0.4215054035915778,
       "eligibleTranches": [],
       "primaryTranche": null,
       "rejectionReasons": [
@@ -4192,14 +4208,16 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
           "tranche": "senior",
           "reasons": [
             "expectedLoss 0.0415 > 0.02",
-            "tvlUsd 0 < 25000000"
+            "tvlUsd 0 < 25000000",
+            "apy 71.61% > 8% (too-good-to-be-true gate)"
           ]
         },
         {
           "tranche": "mezzanine",
           "reasons": [
             "expectedLoss 0.0415 > 0.04",
-            "tvlUsd 0 < 1000000"
+            "tvlUsd 0 < 1000000",
+            "apy 71.61% > 20% (too-good-to-be-true gate)"
           ]
         },
         {
@@ -4217,7 +4235,6 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "ondo:b5d7a190-38d2-4fdd-8c14-1fd00c11bce1"
     ],
     "mezzanine": [
-      "agni:35f2103d-231b-443b-952e-d2cd118d8f29",
       "aave:32cb38a5-b9b9-441a-bf07-8fab47b999d3",
       "aave:47da0cdd-7b1d-4927-9545-20b53b73afa8",
       "aave:a4e37545-203b-4412-9acd-3e8b1aa4d744",
@@ -4250,6 +4267,6 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "mantleVault:b96d8236-36d4-4be4-92f7-422beeac7073"
     ]
   },
-  "signature": "0x3c7364b18d1171590b87ee8503f0468d1bc58112cc5698ee6dddea1da9b713a225003b2e41f5532d6a12b3d281653c5d96138ebea5ce9c880a567115b2bce2af1c"
+  "signature": "0x27af77e50fa57717d233227b1d11f5260448970f6d97b70a373170152359429254072d46f8708d3a6002cfa6ed690c2b1331d8aa199089c92a2ba9bc70c1e9c01c"
 }
 ```
