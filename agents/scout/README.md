@@ -130,6 +130,152 @@ flowchart LR
 
 Constants (`SCORING_CONSTANTS` in `src/pipeline/scoring.ts`) are frozen at module load. Their hash is part of `methodologyHash` on every published map, so any change to the math invalidates downstream consumers' cached interpretation of "what Scout meant by score = X."
 
+## Data integrity and verification
+
+Scout is only useful if the artifacts it publishes are byte-deterministic, signed, and verifiable against its declared rules. This section walks through how raw external data becomes a signed Yield Map, and how anyone can audit a published map end to end without trusting Scout.
+
+### Normalization, the first half of integrity
+
+Raw responses from DefiLlama, CoinGecko, and Nansen are unstructured by our standards. Before they touch any scoring logic, every external response passes through a zod schema. Anything that fails the schema is dropped and logged, never silently coerced.
+
+The contract is:
+
+| Stage | Schema | What's enforced |
+|---|---|---|
+| DefiLlama pool | `LlamaPool` (`sources/defiLlama.ts`) | required fields exist, `apy` is a number or null, `tvlUsd` is a number or null, `pool` is a string |
+| CoinGecko market chart | `ChartResponse` (`enrichment/depegHistory.ts`) | `prices` is an array of `[number, number]` tuples |
+| Nansen holders summary | `NansenResponse` (`enrichment/smartMoneyFlow.ts`) | three fields with bounded ranges (`smart_holder_pct`, `fresh_wallet_inflow_pct` in `[0,1]`, `wash_trade_flag` boolean) |
+| Canonical opportunity | `YieldOpportunitySchema` (`types.ts`) | id non-empty, source is a known `SourceProtocol`, asset is a valid 20-byte address, apy in `[0, 10]` (sanity-cap at 1000%), tvlUsd non-negative |
+| Risk factors | `RiskFactorsSchema` | every field nullable, no default fill-in |
+| Scored opportunity | `ScoredOpportunitySchema` | all probabilities, severities, raapy, confidence, score, and tranche tags present and well-typed |
+| Final Yield Map | `YieldMapSchema` | version literal, valid signer address, methodology hash, code commit, source lists, opportunities array, perTranche id lists, signature |
+
+The mapping from DefiLlama's shape to ours is explicit, not implicit:
+
+| Raw field | Canonical field | Transformation |
+|---|---|---|
+| `chain` | filter | drop unless `=== "Mantle"` |
+| `project` | `source` | lookup in `PROJECT_TO_SOURCE` map, drop pool if not present |
+| `apy` (percent) | `apy` (fraction) | divide by 100, drop if null or ≤ 0 |
+| `tvlUsd` | `tvlUsd` | keep as-is, drop if null |
+| `underlyingTokens[0]` | `asset` | lowercase, validate as 0x-prefixed 20-byte hex, else placeholder zero address |
+| `pool` | `id` | prefix with `${source}:` |
+| (now) | `lastUpdatedMs` | `Date.now()` |
+| (full raw) | `raw` | preserved as-is for audit replay |
+
+Failure rules (the same ones that protect the rest of the pipeline):
+
+1. **Zod boundary failures drop the row.** Never substitute defaults.
+2. **HTTP failures on enrichers return `null`.** The corresponding `RiskFactors` field is null, and `confidence` drops accordingly through the completeness denominator.
+3. **A whole source timing out marks it degraded.** It appears in `sourcesDegraded[]` on the published map metadata so consumers can see what Scout was missing.
+4. **A cycle producing zero valid opportunities does not publish.** An empty map would misrepresent Scout's view; we'd rather emit nothing.
+
+### The signing pair
+
+Scout has one cryptographic identity. It is used everywhere consistently:
+
+```
+SCOUT_PRIVATE_KEY ── viem.privateKeyToAccount() ──> scoutAddress
+                                                      │
+                                                      ├── owner of the ERC-8004 identity NFT (token N)
+                                                      │
+                                                      ├── holder of Role.Scout on AgentEventBus
+                                                      │
+                                                      └── EIP-191 signer of every Yield Map
+```
+
+The same address shows up in four places on chain (NFT owner, role-holder on the bus, `agent` field of every emitted event, recovered signer of the IPFS payload). Any reader can cross-check all four without trusting Scout's worker.
+
+### Canonical JSON and the map hash
+
+A Yield Map is signed over a deterministic representation of itself, not the loose JSON the runtime constructs. The canonicalisation rule lives in `publication/signer.ts` as `canonicalStringify`:
+
+1. At every level, object keys are sorted alphabetically.
+2. No whitespace anywhere (no indentation, no trailing newline).
+3. Arrays preserve their order (arrays are sequences, not bags).
+4. `null`, booleans, numbers, and strings serialize with standard `JSON.stringify` semantics.
+
+Two equivalent input objects with keys in different orders produce byte-identical canonical output. That gives us idempotency: same inputs, same cycle, same canonical bytes, same hash, same CID.
+
+The map hash is computed over the unsigned form:
+
+```
+unsignedCanonical = canonicalStringify({ ...map, signature: "" })
+mapHash           = keccak256(toBytes(unsignedCanonical))
+signature         = wallet.signMessage({ message: { raw: mapHash } })
+finalMap          = { ...map, signature }
+finalCanonical    = canonicalStringify(finalMap)
+```
+
+The `finalCanonical` bytes are what gets pinned to Lighthouse. The returned CID is the value Scout passes to `bus.publishYieldMap(ipfsHash)`.
+
+```mermaid
+sequenceDiagram
+  autonumber
+  participant R as Raw data
+  participant S as Scout worker
+  participant L as Lighthouse
+  participant B as AgentEventBus
+  participant V as Verifier (Architect, dashboard, anyone)
+  participant ID as ERC-8004 Identity Registry
+
+  R->>S: DefiLlama pools, CoinGecko prices, Nansen holders
+  S->>S: zod-validate at every boundary, drop invalid
+  S->>S: normalize to YieldOpportunity[]
+  S->>S: enrich, score, aggregate, tag tranches
+  S->>S: canonicalStringify({ ...map, signature: "" })
+  S->>S: mapHash = keccak256(unsignedBytes)
+  S->>S: signature = signMessage(mapHash)  [EIP-191]
+  S->>L: pin canonicalStringify({ ...map, signature })
+  L-->>S: ipfsCid
+  S->>B: publishYieldMap(ipfsCid)
+  B-->>V: YieldMapPublished(agent, ipfsCid, ts)
+
+  V->>L: fetch JSON by cid
+  L-->>V: signed map
+  V->>V: recompute canonical-unsigned bytes, keccak
+  V->>V: check 1: equals map.mapHash
+  V->>V: recover EIP-191 signer over mapHash
+  V->>V: check 2: equals agent address
+  V->>ID: tokenOf(agent) -> tokenId, strategyCidOf(tokenId)
+  ID-->>V: registered strategy CID
+  V->>L: fetch strategy doc by that CID
+  L-->>V: strategy + methodology references
+  V->>V: check 3: strategy CID on chain matches map.strategyCid
+  V->>V: check 4: methodologyHash equals sha256 of methodology doc
+  V->>V: check 5: opportunities respect declared rules (mandates, scoring)
+```
+
+### The five integrity checks (anyone can run them)
+
+For any `YieldMapPublished` event on `AgentEventBus`, a verifier with nothing more than the chain, an IPFS gateway, and a copy of viem can confirm or reject the map in five steps.
+
+| # | Check | What it proves |
+|---|---|---|
+| 1 | `keccak256(canonicalStringify({ ...map, signature: "" }))` equals `map.mapHash` | The canonical bytes match the hash, so the map's content is exactly what was signed. Any tampering with even one field changes the hash. |
+| 2 | `recoverMessageAddress({ message: { raw: map.mapHash }, signature: map.signature })` equals the `agent` in the event | The map was signed by the wallet that emitted the event, not by a third party who happened to publish a CID. |
+| 3 | `identity.strategyCidOf(identity.tokenOf(agent))` equals `map.publisher.strategyCid` | The agent's on-chain identity declares the same strategy that the map cites. No swap-in of a different rule set behind the reader's back. |
+| 4 | `sha256(methodologyDocBytes)` equals `map.methodologyHash` | The scoring algorithm version the map claims to use is the version the strategy doc currently links to. Math drift is detectable. |
+| 5 | Re-run scoring on `map.opportunities[].raw` with the constants from the methodology doc | Reproduce `expectedLoss`, `raapy`, `confidence`, `score`, and tranche tags. They must match what the map asserts. |
+
+If all five pass, the map is genuine: signed by the registered Scout, produced under the strategy currently linked from its identity NFT, computed with the methodology that strategy points at, and the published numbers are recomputable from the raw inputs the map carries.
+
+If any check fails, the artifact is rejected. The chain log retains the rejected event but downstream agents and dashboards refuse to act on it.
+
+### Where to break things and what happens
+
+Worth knowing what each compromise looks like:
+
+| If someone has | They can | They cannot |
+|---|---|---|
+| Read access to the bus log | replay any past map, cite hashes, build their own dashboard | forge maps that pass checks 1 or 2 |
+| Read access to IPFS | fetch any past or current map and strategy doc | tamper with content (CIDs are content-addressed) |
+| Write access to Lighthouse with our API key | pin garbage at new CIDs | get those CIDs into a YieldMapPublished event (requires the bus role + Scout key) |
+| The Scout private key | sign any map and emit through the bus | claim a different agent's identity (the identity NFT is bound to Scout's address) |
+| The Identity Registry owner key | rotate Scout's strategy CID | rewrite past events or past map content (history is immutable) |
+
+The combination an attacker needs is "Scout private key + Identity Registry owner key + a way to backdate strategy docs," and there is no such backdating because IPFS CIDs are content-hashes and the registry's `updateStrategyCid` calls are themselves on-chain events.
+
 ## External integrations (locked at four)
 
 | Source | Purpose | Auth |
