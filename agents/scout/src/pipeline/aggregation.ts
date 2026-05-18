@@ -1,8 +1,11 @@
 import type { ScoredOpportunity, Tranche } from '../types.js';
 
+// Mandate floors are calibrated to current Mantle TVL reality (May 2026: largest single
+// Mantle pool is around $90M; Ondo USDY on Mantle is ~$29M). As the ecosystem grows,
+// senior min-TVL should rise back toward 50M and mezz toward 5M.
 export const MANDATES = {
-  senior:    { maxExpectedLoss: 0.01, maxPExploit: 0.05, maxPDepeg: 0.01, minTvlUsd: 50_000_000 },
-  mezzanine: { maxExpectedLoss: 0.04, maxPExploit: 0.15, maxPDepeg: 0.05, minTvlUsd:  5_000_000 },
+  senior:    { maxExpectedLoss: 0.02, maxPExploit: 0.05, maxPDepeg: 0.01, minTvlUsd: 25_000_000 },
+  mezzanine: { maxExpectedLoss: 0.04, maxPExploit: 0.15, maxPDepeg: 0.05, minTvlUsd:  1_000_000 },
   junior:    { maxExpectedLoss: 0.15, maxPExploit: 1.00, maxPDepeg: 1.00, minTvlUsd:    100_000 }
 } as const;
 

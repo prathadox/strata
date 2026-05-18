@@ -9,7 +9,7 @@ const server = setupServer(
       { chain: 'Mantle', project: 'aave-v3', symbol: 'USDC', underlyingTokens: ['0x' + 'a'.repeat(40)],
         apy: 4.2, tvlUsd: 12_000_000, pool: 'p1' },
       { chain: 'Ethereum', project: 'aave-v3', symbol: 'USDC', apy: 5.0, tvlUsd: 1, pool: 'p2' },
-      { chain: 'Mantle', project: 'agni-finance', symbol: 'USDC-MNT', underlyingTokens: ['0x' + 'b'.repeat(40)],
+      { chain: 'Mantle', project: 'fluxion-network', symbol: 'USDC-MNT', underlyingTokens: ['0x' + 'b'.repeat(40)],
         apy: 18.0, tvlUsd: 3_000_000, pool: 'p3' },
       { chain: 'Mantle', project: 'unknown-protocol', symbol: 'X', apy: 99, tvlUsd: 1, pool: 'p4' }
     ]

@@ -9,10 +9,14 @@ export interface ProtocolMeta {
 
 export const PROTOCOL_CONFIG: Record<SourceProtocol, ProtocolMeta> = {
   aave:         { auditFactor: 0.30, oracleType: 'chainlink_dec', counterpartyClass: 'permissionless',       contractAgeDays: 700 },
-  ondo:         { auditFactor: 0.30, oracleType: 'chainlink_dec', counterpartyClass: 'custodial',            contractAgeDays: 730 },
+  // Ondo USDY: bankruptcy-remote SPV holds US T-bills with monthly on-chain attestations.
+  // Closer to "attested centralized" than plain custodial.
+  ondo:         { auditFactor: 0.30, oracleType: 'chainlink_dec', counterpartyClass: 'attested_centralized', contractAgeDays: 730 },
   ethena:       { auditFactor: 0.30, oracleType: 'chainlink_dec', counterpartyClass: 'attested_centralized', contractAgeDays: 600 },
   meth:         { auditFactor: 0.30, oracleType: 'redstone',      counterpartyClass: 'permissionless',       contractAgeDays: 730 },
-  mantleVault:  { auditFactor: 0.60, oracleType: 'redstone',      counterpartyClass: 'attested_centralized', contractAgeDays: 365 },
+  // The mantleVault bucket also covers Mantle-native lending markets like Lendle, Minterest, and Aurelius.
+  // These are permissionless lending protocols, not custodial.
+  mantleVault:  { auditFactor: 0.60, oracleType: 'redstone',      counterpartyClass: 'permissionless',       contractAgeDays: 365 },
   cian:         { auditFactor: 0.60, oracleType: 'custom_multi',  counterpartyClass: 'permissionless',       contractAgeDays: 300 },
   agni:         { auditFactor: 0.60, oracleType: 'redstone',      counterpartyClass: 'permissionless',       contractAgeDays: 540 },
   merchantMoe:  { auditFactor: 0.60, oracleType: 'redstone',      counterpartyClass: 'permissionless',       contractAgeDays: 540 },

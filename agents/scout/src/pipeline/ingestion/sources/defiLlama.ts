@@ -16,15 +16,22 @@ const LlamaResponse = z.object({ data: z.array(LlamaPool) });
 const PROJECT_TO_SOURCE: Record<string, SourceProtocol> = {
   'aave-v3': 'aave',
   'ondo-finance': 'ondo',
-  'ethena': 'ethena',
+  // Mapped from the actual DefiLlama project slugs returned for chain=Mantle.
+  // Tier mapping below is by *risk class*, not vendor name. See protocolConfig.ts
+  // for the meta each bucket carries.
+  'ondo-yield-assets': 'ondo',          // RWA, tokenized T-bill yield, custodial
+  'ethena': 'ethena',                   // synthetic dollar staking (if/when listed standalone)
   'ethena-usde': 'ethena',
-  'mantle-staked-ether': 'meth',
-  'mantle-meth': 'meth',
-  'mantle-mi4': 'mantleVault',
-  'cian-protocol': 'cian',
-  'agni-finance': 'agni',
-  'merchant-moe': 'merchantMoe',
-  'fbtc': 'fbtc'
+  'lendle-pooled-markets': 'mantleVault', // Mantle-native lending, attested
+  'minterest': 'mantleVault',           // Mantle-native lending
+  'aurelius': 'mantleVault',            // Mantle-native lending/yield
+  'woofi-earn': 'cian',                 // strategy aggregator
+  'beefy': 'cian',                      // strategy aggregator
+  'circuit-protocol': 'cian',           // strategy/aggregator
+  'fluxion-network': 'agni',            // Mantle DEX LP
+  'merchant-moe': 'merchantMoe',        // Mantle liquidity book LP
+  'solv-basis-trading': 'fbtc',         // BTC basis strategy
+  'clearpool-lending': 'fbtc'           // institutional pool
 };
 
 const PLACEHOLDER_ASSET = '0x0000000000000000000000000000000000000000';
