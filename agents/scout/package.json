@@ -8,6 +8,7 @@
     "build": "tsc -p .",
     "dev": "tsx src/index.ts",
     "inspect": "tsx scripts/inspect-cycle.ts",
+    "tranches": "tsx scripts/tranches-report.ts",
     "test": "vitest run",
     "test:watch": "vitest"
   },
