@@ -893,7 +893,7 @@ The run loop is event-driven, not timer-driven (Architect doesn't poll, it react
 - Modify: `agents/architect/src/publication/publish.ts`
 - Modify: `agents/architect/src/types.ts`
 
-**This task is fully optional.** Skip it and Architect ships without any LLM dependency. The deterministic proposal at Task 15 already satisfies product.md's "every decision has a reasoning hash on chain" commitment — the reasoning is the algorithm itself, fetchable from IPFS, replayable in code.
+**This task is fully optional.** Skip it and Architect ships without any LLM dependency. The deterministic proposal at Task 15 already satisfies product.md's "every decision has a reasoning hash on chain" commitment, since the reasoning *is* the algorithm itself, fetchable from IPFS, replayable in code.
 
 Wire this in only if you want the dashboard to render a paragraph of plain-language rationale beside the bps numbers.
 
