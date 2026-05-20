@@ -14,6 +14,8 @@ import { mainnet } from 'viem/chains';
 import { DefiLlamaFetcher } from '../src/pipeline/ingestion/sources/defiLlama.js';
 import { runIngestion } from '../src/pipeline/ingestion/index.js';
 import { fetchDepegHistory } from '../src/pipeline/enrichment/depegHistory.js';
+import { fetchApyHistory } from '../src/pipeline/enrichment/apyHistory.js';
+import { fetchSmartMoneyFlow } from '../src/pipeline/enrichment/smartMoneyFlow.js';
 import { metaFor } from '../src/pipeline/enrichment/protocolConfig.js';
 import { scoreOpportunity } from '../src/pipeline/scoring.js';
 import { aggregate } from '../src/pipeline/aggregation.js';
@@ -41,9 +43,21 @@ async function main(): Promise<void> {
   }
 
   process.stderr.write('enriching + scoring...\n');
+  const nansenKey = process.env.NANSEN_API_KEY;
+  if (nansenKey) {
+    process.stderr.write('NANSEN_API_KEY found, enabling smart-money enrichment...\n');
+  } else {
+    process.stderr.write('NANSEN_API_KEY not set, smartMoneySignal will be null for every opp\n');
+  }
+
   const scored = await Promise.all(
     ingestion.opportunities.map(async (opp) => {
-      const depeg = await fetchDepegHistory(opp.asset).catch(() => null);
+      const poolId = opp.id.includes(':') ? opp.id.split(':').slice(1).join(':') : opp.id;
+      const [depeg, apyHist, smart] = await Promise.all([
+        fetchDepegHistory(opp.asset).catch(() => null),
+        fetchApyHistory(poolId).catch(() => null),
+        nansenKey ? fetchSmartMoneyFlow(opp.asset, nansenKey).catch(() => null) : Promise.resolve(null)
+      ]);
       const meta = metaFor(opp.source);
       const risk: RiskFactors = {
         contractAgeDays: meta?.contractAgeDays ?? null,
@@ -53,7 +67,9 @@ async function main(): Promise<void> {
         oracleType: meta?.oracleType ?? null,
         liquiditySlippageBps: null,
         counterpartyClass: meta?.counterpartyClass ?? null,
-        smartMoneySignal: null
+        smartMoneySignal: smart,
+        apyVolatility: apyHist?.volatility ?? null,
+        apyDrift: apyHist?.drift ?? null
       };
       return scoreOpportunity(opp, risk);
     })
@@ -134,8 +150,18 @@ async function main(): Promise<void> {
       lines.push('');
       lines.push(`- **Source**: ${o.source}`);
       lines.push(`- **Asset**: \`${o.asset}\``);
-      lines.push(`- **APY**: ${fmtPct(o.apy)}`);
+      lines.push(`- **APY (base)**: ${fmtPct(o.apy)}    **APY (reward)**: ${fmtPct(o.apyReward)}    **Total**: ${fmtPct(o.apy + o.apyReward)}`);
       lines.push(`- **TVL**: ${fmtUsd(o.tvlUsd)}`);
+      const ah = o.risk.apyVolatility !== null || o.risk.apyDrift !== null
+        ? `vol=${o.risk.apyVolatility !== null ? (o.risk.apyVolatility * 100).toFixed(2) + '%' : 'n/a'}, drift=${o.risk.apyDrift !== null ? o.risk.apyDrift.toFixed(2) + 'x' : 'n/a'}`
+        : 'no history available';
+      lines.push(`- **APY history**: ${ah}`);
+      const sm = o.risk.smartMoneySignal;
+      if (sm) {
+        lines.push(`- **Nansen signal**: smartHolderPct=${(sm.smartHolderPct * 100).toFixed(1)}%, freshWalletInflowPct=${(sm.freshWalletInflowPct * 100).toFixed(1)}%, washTrade=${sm.washTradeFlag}`);
+      } else {
+        lines.push(`- **Nansen signal**: _null_ (no key or asset not covered)`);
+      }
       lines.push(`- **Probabilities**: exploit=${o.probabilities.exploit.toFixed(5)}, depeg=${o.probabilities.depeg.toFixed(5)}, oracle=${o.probabilities.oracle.toFixed(5)}, illiquid=${o.probabilities.illiquid.toFixed(5)}, counterparty=${o.probabilities.counterparty.toFixed(5)}`);
       lines.push(`- **Expected loss**: ${fmtPct(o.expectedLoss, 3)} /yr`);
       lines.push(`- **RAAPY**: ${fmtPct(o.raapy)}`);

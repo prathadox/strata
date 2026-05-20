@@ -8,6 +8,10 @@ const LlamaPool = z.object({
   symbol: z.string(),
   underlyingTokens: z.array(z.string()).nullish(),
   apy: z.number().nullable(),
+  // DefiLlama splits APY into apyBase (real protocol yield) and apyReward (token emissions).
+  // Either may be null when the pool doesn't expose the split.
+  apyBase: z.number().nullable().optional(),
+  apyReward: z.number().nullable().optional(),
   tvlUsd: z.number().nullable(),
   pool: z.string()
 });
@@ -56,11 +60,17 @@ export class DefiLlamaFetcher implements SourceFetcher {
           underlying && ADDRESS_RE.test(underlying)
             ? (underlying.toLowerCase() as `0x${string}`)
             : (PLACEHOLDER_ASSET as `0x${string}`);
+        // If apyBase is published, use it as the canonical real yield.
+        // Otherwise fall back to total apy (apyBase missing tends to mean "lending pool
+        // where all of it is base"). apyReward stays separate either way.
+        const apyBasePct = p.apyBase ?? p.apy ?? 0;
+        const apyRewardPct = p.apyReward ?? 0;
         return {
           id: `${source}:${p.pool}`,
           source,
           asset,
-          apy: (p.apy ?? 0) / 100,
+          apy: apyBasePct / 100,
+          apyReward: apyRewardPct / 100,
           apyType: 'variable' as const,
           tvlUsd: p.tvlUsd ?? 0,
           lastUpdatedMs: now,

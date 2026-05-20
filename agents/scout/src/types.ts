@@ -12,7 +12,12 @@ export const YieldOpportunitySchema = z.object({
   id: z.string().min(1),
   source: SourceProtocol,
   asset: Address,
-  apy: z.number().min(0).max(10),       // 1000% cap as sanity guard
+  // `apy` is the *real* yield (apyBase from DefiLlama, excluding reward emissions).
+  // This is what tranche eligibility and scoring evaluate against.
+  apy: z.number().min(0).max(10),
+  // Reward-token emissions APY (sketchy, usually unsustainable). Surfaced separately so
+  // upper tranches can ignore it; junior can still benefit if it's real.
+  apyReward: z.number().min(0).max(50).default(0),
   apyType: z.enum(['fixed', 'variable']),
   tvlUsd: z.number().min(0),
   lastUpdatedMs: z.number().int().min(0),
@@ -39,7 +44,11 @@ export const RiskFactorsSchema = z.object({
     smartHolderPct: z.number(),
     freshWalletInflowPct: z.number(),
     washTradeFlag: z.boolean()
-  }).nullable()
+  }).nullable(),
+  // From historical APY series. Volatility is stddev over the window (fraction).
+  // Drift is recent-window mean / older-window mean. Both null when history unavailable.
+  apyVolatility: z.number().nullable().default(null),
+  apyDrift: z.number().nullable().default(null)
 });
 export type RiskFactors = z.infer<typeof RiskFactorsSchema>;
 

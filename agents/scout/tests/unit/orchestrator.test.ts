@@ -14,7 +14,8 @@ const oneOpp: SourceFetcher = {
 
 const noEnrichers = {
   depegHistory: async (): Promise<RiskFactors['depegEvents']> => [],
-  smartMoneyFlow: async (): Promise<RiskFactors['smartMoneySignal']> => null
+  smartMoneyFlow: async (): Promise<RiskFactors['smartMoneySignal']> => null,
+  apyHistory: async () => null
 };
 
 const stubPublisher = {

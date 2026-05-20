@@ -10,6 +10,7 @@ import type { LastPublished } from '../cache/lastPublished.js';
 export interface Enrichers {
   depegHistory(asset: `0x${string}`): Promise<RiskFactors['depegEvents']>;
   smartMoneyFlow(asset: `0x${string}`): Promise<RiskFactors['smartMoneySignal']>;
+  apyHistory(poolId: string): Promise<{ volatility: number; drift: number } | null>;
 }
 
 export interface RunCycleArgs {
@@ -29,9 +30,12 @@ export async function runCycle(args: RunCycleArgs): Promise<YieldMap | null> {
 
   const scored: ScoredOpportunity[] = await Promise.all(
     ingestion.opportunities.map(async (opp) => {
-      const [depeg, smart] = await Promise.all([
+      // Strip the "source:" prefix to recover DefiLlama's pool id for the chart endpoint.
+      const poolId = opp.id.includes(':') ? opp.id.split(':').slice(1).join(':') : opp.id;
+      const [depeg, smart, apyHist] = await Promise.all([
         args.enrichers.depegHistory(opp.asset as `0x${string}`).catch(() => null),
-        args.enrichers.smartMoneyFlow(opp.asset as `0x${string}`).catch(() => null)
+        args.enrichers.smartMoneyFlow(opp.asset as `0x${string}`).catch(() => null),
+        args.enrichers.apyHistory(poolId).catch(() => null)
       ]);
       const meta = metaFor(opp.source);
       const risk: RiskFactors = {
@@ -42,7 +46,9 @@ export async function runCycle(args: RunCycleArgs): Promise<YieldMap | null> {
         oracleType: meta.oracleType,
         liquiditySlippageBps: null,
         counterpartyClass: meta.counterpartyClass,
-        smartMoneySignal: smart
+        smartMoneySignal: smart,
+        apyVolatility: apyHist?.volatility ?? null,
+        apyDrift: apyHist?.drift ?? null
       };
       return scoreOpportunity(opp, risk);
     })

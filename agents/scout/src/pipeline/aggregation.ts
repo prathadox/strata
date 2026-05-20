@@ -8,15 +8,19 @@ import type { ScoredOpportunity, Tranche } from '../types.js';
 // above 20% almost always reflects ephemeral incentives or hidden risk (IL, basis flip,
 // exotic collateral) that our 5 failure-mode probabilities can't fully see. We force
 // those into junior regardless of what the per-failure-mode math says.
+// Mandate gates:
+// - senior must hold real yield (not just reward emissions)
+// - upper tranches reject the "too good to be true" headline APY range
+// - Nansen wash-trade flag is a hard reject from senior + mezz (organic positions only)
 export const MANDATES = {
-  senior:    { maxExpectedLoss: 0.02, maxPExploit: 0.05, maxPDepeg: 0.01, minTvlUsd: 25_000_000, maxApy: 0.08 },
-  mezzanine: { maxExpectedLoss: 0.04, maxPExploit: 0.15, maxPDepeg: 0.05, minTvlUsd:  1_000_000, maxApy: 0.20 },
-  junior:    { maxExpectedLoss: 0.15, maxPExploit: 1.00, maxPDepeg: 1.00, minTvlUsd:    100_000, maxApy: Infinity }
+  senior:    { maxExpectedLoss: 0.02, maxPExploit: 0.05, maxPDepeg: 0.01, minTvlUsd: 25_000_000, maxApy: 0.08,     minApy: 0.02, blockWashTraded: true },
+  mezzanine: { maxExpectedLoss: 0.04, maxPExploit: 0.15, maxPDepeg: 0.05, minTvlUsd:  1_000_000, maxApy: 0.20,     minApy: 0.01, blockWashTraded: true },
+  junior:    { maxExpectedLoss: 0.15, maxPExploit: 1.00, maxPDepeg: 1.00, minTvlUsd:    100_000, maxApy: Infinity, minApy: 0,    blockWashTraded: false }
 } as const;
 
 const TRANCHE_ORDER: Tranche[] = ['senior', 'mezzanine', 'junior'];
 
-type Mandate = { maxExpectedLoss: number; maxPExploit: number; maxPDepeg: number; minTvlUsd: number; maxApy: number };
+type Mandate = { maxExpectedLoss: number; maxPExploit: number; maxPDepeg: number; minTvlUsd: number; maxApy: number; minApy: number; blockWashTraded: boolean };
 
 function reasonsFailing(o: ScoredOpportunity, m: Mandate): string[] {
   const r: string[] = [];
@@ -25,6 +29,9 @@ function reasonsFailing(o: ScoredOpportunity, m: Mandate): string[] {
   if (o.probabilities.depeg > m.maxPDepeg)        r.push(`pDepeg ${o.probabilities.depeg.toFixed(4)} > ${m.maxPDepeg}`);
   if (o.tvlUsd < m.minTvlUsd)                     r.push(`tvlUsd ${o.tvlUsd.toFixed(0)} < ${m.minTvlUsd}`);
   if (o.apy > m.maxApy)                           r.push(`apy ${(o.apy * 100).toFixed(2)}% > ${(m.maxApy * 100).toFixed(0)}% (too-good-to-be-true gate)`);
+  if (o.apy < m.minApy)                           r.push(`apyBase ${(o.apy * 100).toFixed(2)}% < ${(m.minApy * 100).toFixed(0)}% (reward-only positions blocked)`);
+  if (m.blockWashTraded && o.risk.smartMoneySignal?.washTradeFlag)
+    r.push('Nansen washTradeFlag set (blocked from senior + mezz)');
   return r;
 }
 
