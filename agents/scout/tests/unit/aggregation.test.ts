@@ -62,7 +62,7 @@ describe('aggregate', () => {
 
   it('exports MANDATES with the senior/mezz/junior thresholds', () => {
     expect(MANDATES.senior.minTvlUsd).toBe(25_000_000);
-    expect(MANDATES.mezzanine.minTvlUsd).toBe(1_000_000);
+    expect(MANDATES.mezzanine.minTvlUsd).toBe(300_000);
     expect(MANDATES.mezzanine.maxExpectedLoss).toBe(0.04);
     expect(MANDATES.junior.maxExpectedLoss).toBe(0.15);
   });

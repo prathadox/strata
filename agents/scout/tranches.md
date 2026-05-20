@@ -1,7 +1,7 @@
 # Strata yield map, tranches
 
-Generated 2026-05-20T20:25:54.528Z from real DefiLlama data on Mantle.
-Total opportunities ingested: **57**. Senior **1**, Mezzanine **3**, Junior **24**, fully rejected **33**.
+Generated 2026-05-20T21:01:46.703Z from real DefiLlama data on Mantle.
+Total opportunities ingested: **57**. Senior **1**, Mezzanine **6**, Junior **24**, fully rejected **33**.
 
 Each tranche has its own mandate. An opportunity that passes the senior mandate also passes mezz and junior (nested), so the same opportunity can show up in multiple lists. The "primary tranche" for any opportunity is the most-senior one it qualifies for.
 
@@ -15,21 +15,24 @@ Per product.md: backed by **Ondo USDY** (tokenized T-bill yield) and **Ethena sU
 
 | Rank | Protocol | Asset symbol | APY (base) | APY (reward) | TVL | RAAPY | Score | Pool id |
 |---|---|---|---|---|---|---|---|---|
-| 1 | ondo | USDY | 3.55% | 0.00% | $29.44M | 1.76% | 0.0141 | `b5d7a190-38d2-4fdd-8c14-1fd00c11bce1` |
+| 1 | ondo | USDY | 3.55% | 0.00% | $29.44M | 1.76% | 0.0140 | `b5d7a190-38d2-4fdd-8c14-1fd00c11bce1` |
 
 ## Mezzanine, balanced
 
-**Mandate**: expected-loss ≤ 4.00%/yr · p_exploit ≤ 15.00% · p_depeg ≤ 5.00% · TVL ≥ $1.00M · APY ∈ [1.00%, 20.00%] · no wash-trade flag
+**Mandate**: expected-loss ≤ 4.00%/yr · p_exploit ≤ 15.00% · p_depeg ≤ 5.00% · TVL ≥ $300.0K · APY ∈ [1.00%, 20.00%] · no wash-trade flag
 
 Per product.md: **mETH + Mantle Vault + CIAN strategies**, plus select stablecoin lending. Second claim, balanced risk and yield.
 
-### Eligible positions (3)
+### Eligible positions (6)
 
 | Rank | Protocol | Asset symbol | APY (base) | APY (reward) | TVL | RAAPY | Score | Pool id |
 |---|---|---|---|---|---|---|---|---|
-| 1 | aave | USDT0 | 3.14% | 2.96% | $19.69M | 2.48% | 0.0198 | `47da0cdd-7b1d-4927-9545-20b53b73afa8` |
-| 2 | ondo | USDY | 3.55% | 0.00% | $29.44M | 1.76% | 0.0141 | `b5d7a190-38d2-4fdd-8c14-1fd00c11bce1` |
-| 3 | aave | USDC | 2.42% | 5.28% | $2.95M | 1.70% | 0.0095 | `32cb38a5-b9b9-441a-bf07-8fab47b999d3` |
+| 1 | agni | BILL-USDT0 | 12.77% | 0.00% | $789.6K | 11.36% | 0.0680 | `85407ecd-f711-4fa6-9328-3078aebfaa95` |
+| 2 | aave | WETH | 8.57% | 0.00% | $376.8K | 7.79% | 0.0434 | `4a0e9f84-09a0-491a-aa5e-269813d31a59` |
+| 3 | aave | USDT0 | 3.14% | 2.96% | $19.69M | 2.48% | 0.0198 | `47da0cdd-7b1d-4927-9545-20b53b73afa8` |
+| 4 | ondo | USDY | 3.55% | 0.00% | $29.44M | 1.76% | 0.0140 | `b5d7a190-38d2-4fdd-8c14-1fd00c11bce1` |
+| 5 | agni | OPG-USDT0 | 3.36% | 0.00% | $423.2K | 1.90% | 0.0106 | `6d76a4e2-57f2-4190-a882-bd69f6ea32fb` |
+| 6 | aave | USDC | 2.42% | 5.28% | $2.95M | 1.70% | 0.0095 | `32cb38a5-b9b9-441a-bf07-8fab47b999d3` |
 
 ## Junior, residual upside
 
@@ -41,11 +44,11 @@ Per product.md: **leveraged positions, LP rewards, perp basis, and the CMO sleev
 
 | Rank | Protocol | Asset symbol | APY (base) | APY (reward) | TVL | RAAPY | Score | Pool id |
 |---|---|---|---|---|---|---|---|---|
-| 1 | agni | USDT0-BSB | 89.79% | 0.00% | $1.49M | 88.42% | 0.4934 | `35f2103d-231b-443b-952e-d2cd118d8f29` |
-| 2 | agni | BILL-USDT0 | 12.77% | 0.00% | $789.6K | 11.36% | 0.0679 | `85407ecd-f711-4fa6-9328-3078aebfaa95` |
-| 3 | aave | WETH | 8.57% | 0.00% | $376.8K | 7.79% | 0.0435 | `4a0e9f84-09a0-491a-aa5e-269813d31a59` |
+| 1 | agni | USDT0-BSB | 89.79% | 0.00% | $1.49M | 88.42% | 0.4939 | `35f2103d-231b-443b-952e-d2cd118d8f29` |
+| 2 | agni | BILL-USDT0 | 12.77% | 0.00% | $789.6K | 11.36% | 0.0680 | `85407ecd-f711-4fa6-9328-3078aebfaa95` |
+| 3 | aave | WETH | 8.57% | 0.00% | $376.8K | 7.79% | 0.0434 | `4a0e9f84-09a0-491a-aa5e-269813d31a59` |
 | 4 | aave | USDT0 | 3.14% | 2.96% | $19.69M | 2.48% | 0.0198 | `47da0cdd-7b1d-4927-9545-20b53b73afa8` |
-| 5 | ondo | USDY | 3.55% | 0.00% | $29.44M | 1.76% | 0.0141 | `b5d7a190-38d2-4fdd-8c14-1fd00c11bce1` |
+| 5 | ondo | USDY | 3.55% | 0.00% | $29.44M | 1.76% | 0.0140 | `b5d7a190-38d2-4fdd-8c14-1fd00c11bce1` |
 | 6 | agni | OPG-USDT0 | 3.36% | 0.00% | $423.2K | 1.90% | 0.0106 | `6d76a4e2-57f2-4190-a882-bd69f6ea32fb` |
 | 7 | aave | USDC | 2.42% | 5.28% | $2.95M | 1.70% | 0.0095 | `32cb38a5-b9b9-441a-bf07-8fab47b999d3` |
 | 8 | agni | USDC-WMSTRX | 2.58% | 0.00% | $111.0K | 1.05% | 0.0083 | `ebec73de-fd1e-4f97-8287-d9cb01c7d352` |
@@ -63,8 +66,8 @@ Per product.md: **leveraged positions, LP rewards, perp basis, and the CMO sleev
 | 20 | agni | USDC-WMETAX | 0.31% | 0.00% | $103.7K | -1.24% | -0.0099 | `b8d50460-5237-4601-9250-4f2d3a6b569b` |
 | 21 | agni | USDC-WSPYX | 0.14% | 0.00% | $106.9K | -1.41% | -0.0112 | `913ce101-55b1-4230-93c7-d523f0d9ca03` |
 | 22 | agni | USDT0-VOOI | 0.13% | 0.00% | $101.8K | -1.42% | -0.0113 | `b5933580-18c1-43b6-aec3-2563cd30e3a2` |
-| 23 | mantleVault | METH | 0.31% | 0.03% | $269.9K | -2.20% | -0.0175 | `c87c5d7c-0285-47a9-8539-d335f05b9ba2` |
-| 24 | mantleVault | CMETH | 0.00% | 0.05% | $195.1K | -2.55% | -0.0203 | `b96d8236-36d4-4be4-92f7-422beeac7073` |
+| 23 | mantleVault | METH | 0.31% | 0.03% | $269.9K | -2.20% | -0.0176 | `c87c5d7c-0285-47a9-8539-d335f05b9ba2` |
+| 24 | mantleVault | CMETH | 0.00% | 0.05% | $195.1K | -2.55% | -0.0204 | `b96d8236-36d4-4be4-92f7-422beeac7073` |
 
 ## Fully rejected
 
@@ -114,4 +117,4 @@ Opportunities that failed every mandate. These get tracked in the published Yiel
 - Smart-money signal via Nansen: **disabled**, set NANSEN_API_KEY to activate.
 - APY split into `apy` (real protocol yield, apyBase) and `apyReward` (token emissions). Senior + mezz score against base only.
 
-This report is informational. The signed canonical Yield Map (with full per-opportunity scoring breakdown) is at `dry-cycle-output.md`. Both are generated from the same pipeline; this file just slices the data by tranche. Ephemeral run signer: `0xf72eF6069EA958bcA82C5263B56bcC7265aF4C35`.
+This report is informational. The signed canonical Yield Map (with full per-opportunity scoring breakdown) is at `dry-cycle-output.md`. Both are generated from the same pipeline; this file just slices the data by tranche. Ephemeral run signer: `0x275B6512Fd243e2473ce6C04958B657cfe1a1921`.

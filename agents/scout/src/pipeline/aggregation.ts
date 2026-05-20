@@ -14,7 +14,7 @@ import type { ScoredOpportunity, Tranche } from '../types.js';
 // - Nansen wash-trade flag is a hard reject from senior + mezz (organic positions only)
 export const MANDATES = {
   senior:    { maxExpectedLoss: 0.02, maxPExploit: 0.05, maxPDepeg: 0.01, minTvlUsd: 25_000_000, maxApy: 0.08,     minApy: 0.02, blockWashTraded: true },
-  mezzanine: { maxExpectedLoss: 0.04, maxPExploit: 0.15, maxPDepeg: 0.05, minTvlUsd:  1_000_000, maxApy: 0.20,     minApy: 0.01, blockWashTraded: true },
+  mezzanine: { maxExpectedLoss: 0.04, maxPExploit: 0.15, maxPDepeg: 0.05, minTvlUsd:    300_000, maxApy: 0.20,     minApy: 0.01, blockWashTraded: true },
   junior:    { maxExpectedLoss: 0.15, maxPExploit: 1.00, maxPDepeg: 1.00, minTvlUsd:    100_000, maxApy: Infinity, minApy: 0,    blockWashTraded: false }
 } as const;
 
