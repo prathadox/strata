@@ -6,6 +6,8 @@
 
 **Architecture:** Event-driven loop. Subscribe to bus events; on each new YieldMap, verify → fetch → score-weight per tranche → propose. The signing / IPFS pin / on-chain emit chain mirrors Scout's exactly (canonical JSON, EIP-191, Lighthouse, role-gated bus call). Net-exposure tracker maintains an in-memory ledger of Operator's hedge positions, refreshed every cycle from the bus log. No external data sources beyond the chain + IPFS.
 
+**LLM**: not required. Tasks 1-15 produce a fully deterministic Architect. Task 16 is an *optional* Gemini narrative-text layer that pins a human-readable rationale alongside the deterministic numbers. The allocation decisions themselves never come from an LLM (that would break integrity-check #5). Architect ships without any LLM key; flip on Task 16 only if you want the dashboard prose.
+
 **Tech Stack:** same as Scout (TS 5.6, viem 2.x on Mantle, zod, vitest, pino, prom-client, Lighthouse). Add the workspace dep `@strata/scout` so we reuse `canonicalStringify`, `signYieldMap` (renamed/reused), `pinYieldMap`, and shared schemas. Architect lives at `agents/architect/`.
 
 ---
@@ -346,7 +348,11 @@ const Env = z.object({
   LIGHTHOUSE_API_KEY: z.string().min(1),
   CYCLE_INTERVAL_MS: z.coerce.number().int().min(15_000).default(60_000),
   LOG_LEVEL: z.enum(['debug', 'info', 'warn', 'error']).default('info'),
-  ARCHITECT_DRY_RUN: z.enum(['true', 'false']).default('false').transform((v) => v === 'true')
+  ARCHITECT_DRY_RUN: z.enum(['true', 'false']).default('false').transform((v) => v === 'true'),
+  // Optional. When set, Task 16 generates a narrative reasoning blob via Gemini and
+  // pins it alongside the deterministic proposal. Allocation math is unaffected.
+  GEMINI_API_KEY: z.string().min(1).optional(),
+  GEMINI_MODEL: z.string().default('gemini-2.5-flash')
 });
 
 export function loadConfig() {
@@ -368,6 +374,7 @@ export function loadConfig() {
       dryRun: env.ARCHITECT_DRY_RUN
     },
     ipfs: { lighthouseApiKey: env.LIGHTHOUSE_API_KEY },
+    llm: { geminiApiKey: env.GEMINI_API_KEY, model: env.GEMINI_MODEL },
     cycleIntervalMs: env.CYCLE_INTERVAL_MS,
     logLevel: env.LOG_LEVEL
   } as const;
@@ -389,6 +396,11 @@ SCOUT_ADDRESS=
 LIGHTHOUSE_API_KEY=
 CYCLE_INTERVAL_MS=60000
 LOG_LEVEL=info
+
+# Optional: enables Task 16's narrative-text layer. Leave blank to ship Architect
+# fully deterministic with no LLM in the allocation path.
+GEMINI_API_KEY=
+GEMINI_MODEL=gemini-2.5-flash
 ```
 
 - [ ] **Step 5: Run, expect PASS. Commit:** `architect: config + viem chain client with RPC fallback`
@@ -872,11 +884,116 @@ The run loop is event-driven, not timer-driven (Architect doesn't poll, it react
 
 ---
 
+### Task 16 (optional): Gemini narrative layer
+
+**Files:**
+- Create: `agents/architect/src/llm/gemini.ts`
+- Create: `agents/architect/src/llm/narrative.ts`
+- Create: `agents/architect/tests/unit/narrative.test.ts`
+- Modify: `agents/architect/src/publication/publish.ts`
+- Modify: `agents/architect/src/types.ts`
+
+**This task is fully optional.** Skip it and Architect ships without any LLM dependency. The deterministic proposal at Task 15 already satisfies product.md's "every decision has a reasoning hash on chain" commitment — the reasoning is the algorithm itself, fetchable from IPFS, replayable in code.
+
+Wire this in only if you want the dashboard to render a paragraph of plain-language rationale beside the bps numbers.
+
+**Design rules:**
+
+1. **The LLM never sees a decision in flight.** It only summarizes the *already-computed* deterministic proposal. Inputs to the prompt: the YieldMap CID, the per-tranche bps + positions Architect just computed, the methodology hash. Outputs: ≤300 words of prose.
+2. **The LLM never affects the numbers.** The `tranches` object is finalized before the LLM is called. If the LLM disagrees, the deterministic output wins.
+3. **`methodologyHash` covers only the deterministic block.** The narrative is in a separate object alongside it in the pinned IPFS payload.
+4. **No LLM key → no call.** The publisher checks `cfg.llm.geminiApiKey` and skips narrative generation cleanly. The proposal is still emitted, just with `narrative: null` in the pinned blob.
+
+- [ ] **Step 1: Failing test** for `generateNarrative(proposal, geminiKey)`: mocks the Gemini REST endpoint, asserts the response is parsed correctly and bounded to 300 words. Also tests that an HTTP failure returns `null` rather than throwing (Architect must never block on LLM availability).
+
+- [ ] **Step 2: Implement `agents/architect/src/llm/gemini.ts`**
+
+```ts
+import { z } from 'zod';
+
+const GeminiResponse = z.object({
+  candidates: z.array(z.object({
+    content: z.object({
+      parts: z.array(z.object({ text: z.string() }))
+    })
+  })).min(1)
+});
+
+export async function callGeminiText(
+  prompt: string,
+  apiKey: string,
+  model: string
+): Promise<string | null> {
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+  let res: Response;
+  try {
+    res = await globalThis.fetch(url, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: { maxOutputTokens: 400, temperature: 0.2 }
+      })
+    });
+  } catch { return null; }
+  if (!res.ok) return null;
+  let body: unknown;
+  try { body = await res.json(); } catch { return null; }
+  const parsed = GeminiResponse.safeParse(body);
+  if (!parsed.success) return null;
+  return parsed.data.candidates[0]?.content.parts[0]?.text.trim() ?? null;
+}
+```
+
+- [ ] **Step 3: Implement `agents/architect/src/llm/narrative.ts`**
+
+```ts
+import { callGeminiText } from './gemini.js';
+import type { AllocationProposal } from '../types.js';
+
+export async function generateNarrative(
+  proposal: Omit<AllocationProposal, 'signature'>,
+  apiKey: string | undefined,
+  model: string
+): Promise<string | null> {
+  if (!apiKey) return null;
+  const prompt = [
+    'You are explaining a yield protocol allocation decision in plain English. ≤200 words.',
+    'Do NOT invent numbers. Use only the data given.',
+    '',
+    `Yield Map CID: ${proposal.sourceMapCid}`,
+    `Methodology hash: ${proposal.methodologyHash}`,
+    '',
+    `Senior allocation (${proposal.tranches.senior.bps} bps of total deposits):`,
+    ...Object.entries(proposal.tranches.senior.positions).map(([id, bps]) => `  ${id}: ${bps} bps`),
+    `Mezzanine allocation (${proposal.tranches.mezzanine.bps} bps):`,
+    ...Object.entries(proposal.tranches.mezzanine.positions).map(([id, bps]) => `  ${id}: ${bps} bps`),
+    `Junior allocation (${proposal.tranches.junior.bps} bps):`,
+    ...Object.entries(proposal.tranches.junior.positions).map(([id, bps]) => `  ${id}: ${bps} bps`),
+    '',
+    'Write 2-3 short paragraphs. Lead with the senior tranche rationale. Be concrete.'
+  ].join('\n');
+  return callGeminiText(prompt, apiKey, model);
+}
+```
+
+- [ ] **Step 4: Extend the pinned blob.** Update `AllocationProposalSchema` in `types.ts` to include an optional `narrative` field:
+
+```ts
+narrative: z.string().nullable().default(null)
+```
+
+Update `buildProposal` (Task 9) signature to accept an optional narrative string; default is `null`. Update the publisher (Task 11) to call `generateNarrative` AFTER the deterministic block is built, BEFORE signing/pinning. The narrative is part of the canonical JSON that gets signed.
+
+- [ ] **Step 5: Run, expect PASS. Commit:** `architect: optional Gemini narrative layer (off when GEMINI_API_KEY unset)`.
+
+---
+
 ## Stretch (post-MVP, after Scout/Architect handshake works end-to-end)
 
 - **Multi-objective allocation**: replace pure score-weighting with a small QP solver that maximizes (Σ score · bps) subject to concentration caps + correlation budget. Optional library: a tiny in-house implementation since the problem is well-conditioned (~10 variables).
-- **LLM-generated reasoning text** appended to the pinned proposal (Gemini 2.5 Flash). The CID points to a doc with both the deterministic numbers *and* the prose. Architect's `methodologyHash` covers the algorithm, the prose is supplementary.
 - **Correlation-aware rebalancing**: when Sentinel publishes a correlation matrix, Architect uses it to avoid pile-on in correlated positions.
+- **Per-cycle exposure reporting**: include a snapshot of the prior cycle's actual fills (from chain) alongside the new proposal, so the dashboard can show "you allocated X, here's what filled."
 
 ---
 
