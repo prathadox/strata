@@ -44,17 +44,17 @@ async function main(): Promise<void> {
 
   process.stderr.write('enriching + scoring...\n');
   const nansenKey = process.env.NANSEN_API_KEY;
-  if (nansenKey) {
-    process.stderr.write('NANSEN_API_KEY found, enabling smart-money enrichment...\n');
-  } else {
-    process.stderr.write('NANSEN_API_KEY not set, smartMoneySignal will be null for every opp\n');
-  }
+  const cgKey = process.env.COINGECKO_API_KEY;
+  if (nansenKey) process.stderr.write('NANSEN_API_KEY found, enabling smart-money enrichment...\n');
+  else process.stderr.write('NANSEN_API_KEY not set, smartMoneySignal will be null for every opp\n');
+  if (cgKey) process.stderr.write('COINGECKO_API_KEY found, using CoinGecko for depeg history...\n');
+  else process.stderr.write('COINGECKO_API_KEY not set, falling back to DefiLlama coins API for depeg history\n');
 
   const scored = await Promise.all(
     ingestion.opportunities.map(async (opp) => {
       const poolId = opp.id.includes(':') ? opp.id.split(':').slice(1).join(':') : opp.id;
       const [depeg, apyHist, smart] = await Promise.all([
-        fetchDepegHistory(opp.asset).catch(() => null),
+        fetchDepegHistory(opp.asset, cgKey).catch(() => null),
         fetchApyHistory(poolId).catch(() => null),
         nansenKey ? fetchSmartMoneyFlow(opp.asset, nansenKey).catch(() => null) : Promise.resolve(null)
       ]);

@@ -1,8 +1,10 @@
-// Depeg history is fetched from DefiLlama's coins API (coins.llama.fi).
-// Same vendor as the yield fetcher, no API key needed, generous public rate limit.
-// We use coingecko slugs as the coin id (e.g. "coingecko:tether") because the
-// stables we care about all have well-known coingecko entries and the price is
-// universal, not chain-specific.
+// Depeg history. Two sources, picked at call time:
+//   1) CoinGecko Demo API when a key is provided. Preferred: longer history, daily
+//      granularity, well-curated stable-asset entries.
+//   2) DefiLlama coins API as a keyless fallback. Same coingecko slugs work as ids.
+//
+// The compression algorithm (deviation > 2% starts an event, deviation < 0.5% ends it)
+// is shared. The state machine over the price series is identical regardless of source.
 
 import { z } from 'zod';
 import type { z as zType } from 'zod';
@@ -26,6 +28,10 @@ const STABLE_TO_COINGECKO_ID: Record<string, string> = {
 const DEVIATION_THRESHOLD = 0.02;
 const RECOVERY_THRESHOLD = 0.005;
 
+const CoinGeckoChartResponse = z.object({
+  prices: z.array(z.tuple([z.number(), z.number()]))
+});
+
 const LlamaChartResponse = z.object({
   coins: z.record(
     z.string(),
@@ -35,35 +41,57 @@ const LlamaChartResponse = z.object({
   )
 });
 
-export async function fetchDepegHistory(assetAddress: string): Promise<DepegEvent[]> {
-  const slug = STABLE_TO_COINGECKO_ID[assetAddress.toLowerCase()];
-  if (!slug) return [];
+interface PricePoint { ms: number; price: number; }
 
+async function fetchSeriesCoinGecko(slug: string, apiKey: string): Promise<PricePoint[] | null> {
+  const url = new URL(`https://api.coingecko.com/api/v3/coins/${slug}/market_chart`);
+  url.searchParams.set('vs_currency', 'usd');
+  url.searchParams.set('days', '365');
+  url.searchParams.set('interval', 'daily');
+
+  let res: Response;
+  try {
+    res = await globalThis.fetch(url.toString(), { headers: { 'x-cg-demo-api-key': apiKey } });
+  } catch { return null; }
+  if (!res.ok) return null;
+
+  let body: unknown;
+  try { body = await res.json(); } catch { return null; }
+  const parsed = CoinGeckoChartResponse.safeParse(body);
+  if (!parsed.success) return null;
+
+  return parsed.data.prices.map((p) => ({ ms: p[0], price: p[1] }));
+}
+
+async function fetchSeriesDefiLlama(slug: string): Promise<PricePoint[] | null> {
   const coinId = `coingecko:${slug}`;
   const url = new URL(`https://coins.llama.fi/chart/${encodeURIComponent(coinId)}`);
   url.searchParams.set('period', '1d');
   url.searchParams.set('span', '365');
 
-  const res = await globalThis.fetch(url.toString());
-  if (!res.ok) return [];
-  const body = await res.json();
+  let res: Response;
+  try { res = await globalThis.fetch(url.toString()); } catch { return null; }
+  if (!res.ok) return null;
+
+  let body: unknown;
+  try { body = await res.json(); } catch { return null; }
   const parsed = LlamaChartResponse.safeParse(body);
-  if (!parsed.success) return [];
+  if (!parsed.success) return null;
 
   const entry = parsed.data.coins[coinId];
-  if (!entry) return [];
+  if (!entry) return null;
+  return entry.prices.map((p) => ({ ms: p.timestamp * 1000, price: p.price }));
+}
 
+function compressDeviations(series: PricePoint[]): DepegEvent[] {
   const events: DepegEvent[] = [];
   let currentStart: number | null = null;
   let currentMax = 0;
-
-  for (const point of entry.prices) {
-    const ms = point.timestamp * 1000;
-    const price = point.price;
-    const dev = Math.abs(price - 1);
+  for (const point of series) {
+    const dev = Math.abs(point.price - 1);
     if (currentStart === null) {
       if (dev > DEVIATION_THRESHOLD) {
-        currentStart = ms;
+        currentStart = point.ms;
         currentMax = dev;
       }
     } else {
@@ -71,9 +99,9 @@ export async function fetchDepegHistory(assetAddress: string): Promise<DepegEven
       if (dev < RECOVERY_THRESHOLD) {
         events.push({
           startMs: currentStart,
-          endMs: ms,
+          endMs: point.ms,
           maxDeviation: currentMax,
-          recoveryHours: (ms - currentStart) / 3_600_000
+          recoveryHours: (point.ms - currentStart) / 3_600_000
         });
         currentStart = null;
         currentMax = 0;
@@ -84,4 +112,21 @@ export async function fetchDepegHistory(assetAddress: string): Promise<DepegEven
     events.push({ startMs: currentStart, endMs: null, maxDeviation: currentMax, recoveryHours: null });
   }
   return events;
+}
+
+export async function fetchDepegHistory(
+  assetAddress: string,
+  coingeckoApiKey?: string
+): Promise<DepegEvent[]> {
+  const slug = STABLE_TO_COINGECKO_ID[assetAddress.toLowerCase()];
+  if (!slug) return [];
+
+  // Prefer CoinGecko when a key is provided. Fall back to DefiLlama coins otherwise,
+  // and also if CoinGecko returns nothing usable (rate limit, key revoked, etc).
+  let series: PricePoint[] | null = null;
+  if (coingeckoApiKey) series = await fetchSeriesCoinGecko(slug, coingeckoApiKey);
+  if (series === null) series = await fetchSeriesDefiLlama(slug);
+  if (series === null) return [];
+
+  return compressDeviations(series);
 }

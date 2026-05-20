@@ -8,6 +8,10 @@ const Env = z.object({
   AGENT_EVENT_BUS_ADDRESS: z.string().regex(/^0x[a-fA-F0-9]{40}$/).optional(),
   LIGHTHOUSE_API_KEY: z.string().min(1),
   NANSEN_API_KEY: z.string().min(1),
+  // Optional. When set, depeg history fetches from CoinGecko Demo (preferred:
+  // longer history, cleaner data). When unset, falls back to DefiLlama's keyless
+  // coins API.
+  COINGECKO_API_KEY: z.string().min(1).optional(),
   CYCLE_INTERVAL_MS: z.coerce.number().int().min(15_000).default(60_000),
   LOG_LEVEL: z.enum(['debug', 'info', 'warn', 'error']).default('info'),
   // Skip the on-chain emit. Pipeline still ingests, scores, signs, and pins to IPFS.
@@ -37,7 +41,8 @@ export function loadConfig() {
     },
     ipfs: { lighthouseApiKey: env.LIGHTHOUSE_API_KEY },
     apis: {
-      nansen: env.NANSEN_API_KEY
+      nansen: env.NANSEN_API_KEY,
+      coingecko: env.COINGECKO_API_KEY
     },
     cycleIntervalMs: env.CYCLE_INTERVAL_MS,
     logLevel: env.LOG_LEVEL
