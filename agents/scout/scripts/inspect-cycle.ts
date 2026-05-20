@@ -33,6 +33,7 @@ import { mainnet } from 'viem/chains';
 import { DefiLlamaFetcher } from '../src/pipeline/ingestion/sources/defiLlama.js';
 import { runIngestion } from '../src/pipeline/ingestion/index.js';
 import { fetchDepegHistory } from '../src/pipeline/enrichment/depegHistory.js';
+import { fetchYieldAccrualEvents } from '../src/pipeline/enrichment/yieldAccrual.js';
 import { fetchApyHistory } from '../src/pipeline/enrichment/apyHistory.js';
 import { fetchSmartMoneyFlow } from '../src/pipeline/enrichment/smartMoneyFlow.js';
 import { metaFor } from '../src/pipeline/enrichment/protocolConfig.js';
@@ -72,8 +73,9 @@ async function main(): Promise<void> {
   const scored = await Promise.all(
     ingestion.opportunities.map(async (opp) => {
       const poolId = opp.id.includes(':') ? opp.id.split(':').slice(1).join(':') : opp.id;
-      const [depeg, apyHist, smart] = await Promise.all([
+      const [depeg, accrual, apyHist, smart] = await Promise.all([
         fetchDepegHistory(opp.asset, cgKey).catch(() => null),
+        fetchYieldAccrualEvents(opp.asset, cgKey).catch(() => null),
         fetchApyHistory(poolId).catch(() => null),
         nansenKey ? fetchSmartMoneyFlow(opp.asset, nansenKey).catch(() => null) : Promise.resolve(null)
       ]);
@@ -88,7 +90,8 @@ async function main(): Promise<void> {
         counterpartyClass: meta?.counterpartyClass ?? null,
         smartMoneySignal: smart,
         apyVolatility: apyHist?.volatility ?? null,
-        apyDrift: apyHist?.drift ?? null
+        apyDrift: apyHist?.drift ?? null,
+        yieldAccrualEvents: accrual
       };
       return scoreOpportunity(opp, risk);
     })

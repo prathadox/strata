@@ -9,6 +9,7 @@ import type { LastPublished } from '../cache/lastPublished.js';
 
 export interface Enrichers {
   depegHistory(asset: `0x${string}`): Promise<RiskFactors['depegEvents']>;
+  yieldAccrual(asset: `0x${string}`): Promise<RiskFactors['yieldAccrualEvents']>;
   smartMoneyFlow(asset: `0x${string}`): Promise<RiskFactors['smartMoneySignal']>;
   apyHistory(poolId: string): Promise<{ volatility: number; drift: number } | null>;
 }
@@ -32,8 +33,9 @@ export async function runCycle(args: RunCycleArgs): Promise<YieldMap | null> {
     ingestion.opportunities.map(async (opp) => {
       // Strip the "source:" prefix to recover DefiLlama's pool id for the chart endpoint.
       const poolId = opp.id.includes(':') ? opp.id.split(':').slice(1).join(':') : opp.id;
-      const [depeg, smart, apyHist] = await Promise.all([
+      const [depeg, accrual, smart, apyHist] = await Promise.all([
         args.enrichers.depegHistory(opp.asset as `0x${string}`).catch(() => null),
+        args.enrichers.yieldAccrual(opp.asset as `0x${string}`).catch(() => null),
         args.enrichers.smartMoneyFlow(opp.asset as `0x${string}`).catch(() => null),
         args.enrichers.apyHistory(poolId).catch(() => null)
       ]);
@@ -48,7 +50,8 @@ export async function runCycle(args: RunCycleArgs): Promise<YieldMap | null> {
         counterpartyClass: meta.counterpartyClass,
         smartMoneySignal: smart,
         apyVolatility: apyHist?.volatility ?? null,
-        apyDrift: apyHist?.drift ?? null
+        apyDrift: apyHist?.drift ?? null,
+        yieldAccrualEvents: accrual
       };
       return scoreOpportunity(opp, risk);
     })

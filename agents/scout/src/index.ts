@@ -11,6 +11,7 @@ import { loadConfig } from './config.js';
 import { makeClients } from './chain/client.js';
 import { DefiLlamaFetcher } from './pipeline/ingestion/sources/defiLlama.js';
 import { fetchDepegHistory } from './pipeline/enrichment/depegHistory.js';
+import { fetchYieldAccrualEvents } from './pipeline/enrichment/yieldAccrual.js';
 import { fetchSmartMoneyFlow } from './pipeline/enrichment/smartMoneyFlow.js';
 import { fetchApyHistory } from './pipeline/enrichment/apyHistory.js';
 import { runCycle } from './pipeline/orchestrator.js';
@@ -52,6 +53,7 @@ async function main(): Promise<void> {
 
   const enrichers = {
     depegHistory: (asset: `0x${string}`) => fetchDepegHistory(asset, cfg.apis.coingecko),
+    yieldAccrual: (asset: `0x${string}`) => fetchYieldAccrualEvents(asset, cfg.apis.coingecko),
     smartMoneyFlow: (asset: `0x${string}`) => fetchSmartMoneyFlow(asset, cfg.apis.nansen),
     apyHistory: (poolId: string) => fetchApyHistory(poolId)
   };

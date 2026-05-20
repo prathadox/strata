@@ -48,7 +48,11 @@ export const RiskFactorsSchema = z.object({
   // From historical APY series. Volatility is stddev over the window (fraction).
   // Drift is recent-window mean / older-window mean. Both null when history unavailable.
   apyVolatility: z.number().nullable().default(null),
-  apyDrift: z.number().nullable().default(null)
+  apyDrift: z.number().nullable().default(null),
+  // For yield-bearing tokens (USDY, sUSDe): events where the asset's price fell more than 2%
+  // below its fitted exponential-accrual trajectory. Captures "issuer underaccruing" or
+  // "custody dump" signals that depeg-check can't see for non-$1-pegged assets.
+  yieldAccrualEvents: z.array(DepegEventSchema).nullable().default(null)
 });
 export type RiskFactors = z.infer<typeof RiskFactorsSchema>;
 

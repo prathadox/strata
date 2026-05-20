@@ -59,11 +59,17 @@ function pExploit(r: RiskFactors, tvlUsd: number): number {
 }
 
 function pDepeg(r: RiskFactors): number {
-  if (!r.depegEvents) return 0.05;
-  if (r.depegEvents.length === 0) return 0.005;
+  // "Depeg" here is a loose name for "asset value deviated from expectation". It covers
+  // both true peg-breaks on $1 stables (depegEvents) and accrual breaks on yield-bearing
+  // assets like USDY / sUSDe (yieldAccrualEvents). Same financial impact on the holder.
+  const depegArr = r.depegEvents;
+  const accrualArr = r.yieldAccrualEvents;
+  if (depegArr === null && accrualArr === null) return 0.05;
+  const events = [...(depegArr ?? []), ...(accrualArr ?? [])];
+  if (events.length === 0) return 0.005;
   const windowDays = 365;
   let agg = 0;
-  for (const ev of r.depegEvents) {
+  for (const ev of events) {
     agg += ev.maxDeviation * (1 / Math.max(1, (ev.recoveryHours ?? 24) / 24));
   }
   return Math.min(1.0, agg / windowDays);
