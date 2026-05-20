@@ -7,12 +7,12 @@ const DAY_S = 86_400;
 const DAY_MS = DAY_S * 1000;
 const baseS = 1_700_000_000;
 const baseMs = baseS * 1000;
-const usdyAddr = '0x5be26527e817998a7206475496fde1e68957c5a6' as const;
+const stableAddr = '0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9' as const;
 const unknownAddr = '0x0000000000000000000000000000000000000bad' as const;
 
 const llamaSeries = {
   coins: {
-    'coingecko:ondo-us-dollar-yield': {
+    'coingecko:usd-coin': {
       prices: [
         { timestamp: baseS + 0 * DAY_S, price: 1.000 },
         { timestamp: baseS + 1 * DAY_S, price: 0.970 },
@@ -36,10 +36,10 @@ const coingeckoSeries = {
 };
 
 const server = setupServer(
-  http.get('https://coins.llama.fi/chart/coingecko%3Aondo-us-dollar-yield', () =>
+  http.get('https://coins.llama.fi/chart/coingecko%3Ausd-coin', () =>
     HttpResponse.json(llamaSeries)
   ),
-  http.get('https://api.coingecko.com/api/v3/coins/ondo-us-dollar-yield/market_chart', () =>
+  http.get('https://api.coingecko.com/api/v3/coins/usd-coin/market_chart', () =>
     HttpResponse.json(coingeckoSeries)
   )
 );
@@ -47,8 +47,8 @@ const server = setupServer(
 beforeAll(() => server.listen());
 afterAll(() => server.close());
 beforeEach(() => server.resetHandlers(
-  http.get('https://coins.llama.fi/chart/coingecko%3Aondo-us-dollar-yield', () => HttpResponse.json(llamaSeries)),
-  http.get('https://api.coingecko.com/api/v3/coins/ondo-us-dollar-yield/market_chart', () => HttpResponse.json(coingeckoSeries))
+  http.get('https://coins.llama.fi/chart/coingecko%3Ausd-coin', () => HttpResponse.json(llamaSeries)),
+  http.get('https://api.coingecko.com/api/v3/coins/usd-coin/market_chart', () => HttpResponse.json(coingeckoSeries))
 ));
 
 describe('fetchDepegHistory', () => {
@@ -58,24 +58,24 @@ describe('fetchDepegHistory', () => {
   });
 
   it('uses DefiLlama coins when no CoinGecko key is provided', async () => {
-    const out = await fetchDepegHistory(usdyAddr);
+    const out = await fetchDepegHistory(stableAddr);
     expect(out.length).toBe(1);
     expect(out[0]!.maxDeviation).toBeCloseTo(0.05, 5);   // Llama fixture max
   });
 
   it('uses CoinGecko when a key is provided (different fixture proves which path ran)', async () => {
-    const out = await fetchDepegHistory(usdyAddr, 'cg-demo-key');
+    const out = await fetchDepegHistory(stableAddr, 'cg-demo-key');
     expect(out.length).toBe(1);
     expect(out[0]!.maxDeviation).toBeCloseTo(0.08, 5);   // CoinGecko fixture max
   });
 
   it('falls back to DefiLlama if CoinGecko fails', async () => {
     server.use(
-      http.get('https://api.coingecko.com/api/v3/coins/ondo-us-dollar-yield/market_chart', () =>
+      http.get('https://api.coingecko.com/api/v3/coins/usd-coin/market_chart', () =>
         new HttpResponse(null, { status: 429 })
       )
     );
-    const out = await fetchDepegHistory(usdyAddr, 'cg-demo-key');
+    const out = await fetchDepegHistory(stableAddr, 'cg-demo-key');
     expect(out.length).toBe(1);
     expect(out[0]!.maxDeviation).toBeCloseTo(0.05, 5);   // fell back to Llama
   });

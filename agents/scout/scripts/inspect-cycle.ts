@@ -6,7 +6,26 @@
 // Run:
 //   pnpm --filter @strata/scout exec tsx scripts/inspect-cycle.ts
 
-import { writeFile } from 'node:fs/promises';
+import { writeFile, readFile } from 'node:fs/promises';
+import { existsSync } from 'node:fs';
+
+// Tiny .env loader. Reads agents/scout/.env if present and sets process.env without
+// overwriting anything already exported. Avoids a dotenv dep for this one-off script.
+async function loadEnv(): Promise<void> {
+  const envPath = new URL('../.env', import.meta.url);
+  if (!existsSync(envPath)) return;
+  const text = await readFile(envPath, 'utf8');
+  for (const line of text.split('\n')) {
+    const m = line.match(/^\s*([A-Z_][A-Z0-9_]*)\s*=\s*(.*?)\s*$/);
+    if (!m) continue;
+    const key = m[1]!;
+    if (process.env[key] !== undefined) continue;
+    const val = m[2]!.replace(/^["']|["']$/g, '');
+    process.env[key] = val;
+  }
+}
+await loadEnv();
+
 import { generatePrivateKey, privateKeyToAccount } from 'viem/accounts';
 import { createWalletClient, http } from 'viem';
 import { mainnet } from 'viem/chains';

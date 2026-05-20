@@ -12,16 +12,16 @@ import { DepegEventSchema } from '../../types.js';
 
 type DepegEvent = zType.infer<typeof DepegEventSchema>;
 
+// Only $1-pegged stables go here. Yield-bearing tokens (USDY, sUSDe) drift above
+// $1 by design (accrued yield) and would generate false "depeg" events under the
+// algorithm below. Their risk is captured by p_counterparty + p_exploit + p_oracle,
+// not p_depeg.
 const STABLE_TO_COINGECKO_ID: Record<string, string> = {
-  // USDY (Ondo) on Mantle, replace with real address
-  '0x5be26527e817998a7206475496fde1e68957c5a6': 'ondo-us-dollar-yield',
-  // sUSDe (Ethena) on Mantle, replace with real address
-  '0x211cc4dd073734da055fbf44a2b4667d5e5fe5d2': 'ethena-staked-usde',
-  // USDe (Ethena) on Mantle
+  // USDe (Ethena) on Mantle, pegged synthetic dollar
   '0x5d3a1ff2b6bab83b63cd9ad0787074081a52ef34': 'ethena-usde',
-  // USDC.e (Mantle bridged)
+  // USDC.e (Mantle bridged), pegged
   '0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9': 'usd-coin',
-  // USDT
+  // USDT, pegged
   '0x201eba5cc46d216ce6dc03f6a759e8e766e956ae': 'tether'
 };
 

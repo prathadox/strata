@@ -1,8 +1,8 @@
 # Scout dry-cycle inspection
 
-Generated: 2026-05-20T13:24:20.677Z
-Ephemeral signer: `0x7e37DB9c32F85436CA5D565E567658B9FbecB9bC`
-Map hash: `0xc390d8e0e597cad20e6bb3eaf41e8804e8b133231e1b5c8dee498cf2bbfbbbc7`
+Generated: 2026-05-20T19:55:15.309Z
+Ephemeral signer: `0x034d6c95d1a1D3abaBBe2FFD7cAb5970517A065c`
+Map hash: `0x81b7d0ecda784c6a1a4618d71d989cb77c372bba23e0d5a0a0356eb18309b280`
 
 This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to end, fetching real data from DefiLlama (yields + price history). Nansen and Lighthouse are skipped; the signature is over an ephemeral keypair generated at run time.
 
@@ -12,7 +12,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
 - Opportunities scored: **57**
 - Senior-eligible: **1**
 - Mezzanine-eligible: **3**
-- Junior-eligible: **23**
+- Junior-eligible: **24**
 
 ## Per-tranche rankings
 
@@ -20,43 +20,44 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
 
 | Rank | Source | Pool id | APY | RAAPY | Score | TVL |
 |---|---|---|---|---|---|---|
-| 1 | ondo | `ondo:b5d7a190-38d2-4fdd-8c14-1fd00c11bce1` | 3.55% | 1.76% | 0.0120 | $29,444,317 |
+| 1 | ondo | `ondo:b5d7a190-38d2-4fdd-8c14-1fd00c11bce1` | 3.55% | 1.67% | 0.0117 | $29,444,317 |
 
 ### Mezzanine (3)
 
 | Rank | Source | Pool id | APY | RAAPY | Score | TVL |
 |---|---|---|---|---|---|---|
-| 1 | aave | `aave:47da0cdd-7b1d-4927-9545-20b53b73afa8` | 8.46% | 7.77% | 0.0542 | $6,830,643 |
-| 2 | ondo | `ondo:b5d7a190-38d2-4fdd-8c14-1fd00c11bce1` | 3.55% | 1.76% | 0.0120 | $29,444,317 |
-| 3 | aave | `aave:32cb38a5-b9b9-441a-bf07-8fab47b999d3` | 1.04% | 0.35% | 0.0017 | $5,852,600 |
+| 1 | aave | `aave:47da0cdd-7b1d-4927-9545-20b53b73afa8` | 3.15% | 2.49% | 0.0174 | $19,363,509 |
+| 2 | ondo | `ondo:b5d7a190-38d2-4fdd-8c14-1fd00c11bce1` | 3.55% | 1.67% | 0.0117 | $29,444,317 |
+| 3 | aave | `aave:32cb38a5-b9b9-441a-bf07-8fab47b999d3` | 2.45% | 1.73% | 0.0085 | $2,868,113 |
 
-### Junior (23)
+### Junior (24)
 
 | Rank | Source | Pool id | APY | RAAPY | Score | TVL |
 |---|---|---|---|---|---|---|
-| 1 | agni | `agni:35f2103d-231b-443b-952e-d2cd118d8f29` | 32.08% | 30.68% | 0.1495 | $1,083,561 |
-| 2 | aave | `aave:47da0cdd-7b1d-4927-9545-20b53b73afa8` | 8.46% | 7.77% | 0.0542 | $6,830,643 |
-| 3 | agni | `agni:85407ecd-f711-4fa6-9328-3078aebfaa95` | 10.59% | 9.17% | 0.0456 | $827,340 |
-| 4 | ondo | `ondo:b5d7a190-38d2-4fdd-8c14-1fd00c11bce1` | 3.55% | 1.76% | 0.0120 | $29,444,317 |
-| 5 | agni | `agni:6d76a4e2-57f2-4190-a882-bd69f6ea32fb` | 2.84% | 1.39% | 0.0068 | $428,827 |
-| 6 | aave | `aave:32cb38a5-b9b9-441a-bf07-8fab47b999d3` | 1.04% | 0.35% | 0.0017 | $5,852,600 |
-| 7 | aave | `aave:76b70b33-d8a4-4e61-8092-9bd1f2be2fc9` | 0.28% | -0.41% | -0.0014 | $5,864,475 |
-| 8 | agni | `agni:649bee89-0a34-4eb1-b8ab-7c5fdee07ccd` | 0.89% | -0.64% | -0.0031 | $131,984 |
-| 9 | aave | `aave:a4e37545-203b-4412-9acd-3e8b1aa4d744` | 0.00% | -0.53% | -0.0037 | $63,888,676 |
-| 10 | agni | `agni:a7e2f58e-1c93-4592-acd6-8e40e6cb26ff` | 0.51% | -1.03% | -0.0050 | $107,709 |
-| 11 | agni | `agni:3b6b75cf-adb5-4fb4-bbcd-8f75c6879c9d` | 0.45% | -1.09% | -0.0052 | $109,138 |
-| 12 | agni | `agni:2a510869-6356-4486-8bb5-d5a808634496` | 0.41% | -1.13% | -0.0055 | $112,580 |
-| 13 | agni | `agni:ebec73de-fd1e-4f97-8287-d9cb01c7d352` | 0.59% | -0.95% | -0.0065 | $111,392 |
-| 14 | agni | `agni:b8d50460-5237-4601-9250-4f2d3a6b569b` | 0.58% | -0.97% | -0.0067 | $103,498 |
-| 15 | agni | `agni:30836422-c578-4f77-8f81-861c509c5d4c` | 0.58% | -0.97% | -0.0067 | $102,818 |
-| 16 | agni | `agni:b5933580-18c1-43b6-aec3-2563cd30e3a2` | 0.13% | -1.42% | -0.0069 | $101,761 |
-| 17 | agni | `agni:3d429d4e-b3a6-4847-957b-b10bf26a6f01` | 0.00% | -1.54% | -0.0075 | $108,235 |
-| 18 | agni | `agni:a4ff3d7c-a117-4b24-a9f9-6af46cd276c0` | 0.42% | -1.12% | -0.0077 | $106,464 |
-| 19 | agni | `agni:2364dd66-69d3-44ef-9e85-4d5217a57b57` | 0.17% | -1.37% | -0.0094 | $109,132 |
-| 20 | agni | `agni:227e8492-33e9-4953-8beb-28973c9fdb8a` | 0.10% | -1.44% | -0.0099 | $116,233 |
-| 21 | agni | `agni:913ce101-55b1-4230-93c7-d523f0d9ca03` | 0.09% | -1.45% | -0.0100 | $106,662 |
-| 22 | mantleVault | `mantleVault:b96d8236-36d4-4be4-92f7-422beeac7073` | 0.00% | -2.55% | -0.0124 | $193,563 |
-| 23 | mantleVault | `mantleVault:c87c5d7c-0285-47a9-8539-d335f05b9ba2` | 0.31% | -2.20% | -0.0153 | $268,958 |
+| 1 | agni | `agni:35f2103d-231b-443b-952e-d2cd118d8f29` | 46.24% | 44.88% | 0.2198 | $1,752,765 |
+| 2 | agni | `agni:85407ecd-f711-4fa6-9328-3078aebfaa95` | 12.27% | 10.85% | 0.0542 | $808,798 |
+| 3 | aave | `aave:4a0e9f84-09a0-491a-aa5e-269813d31a59` | 8.57% | 7.79% | 0.0382 | $376,791 |
+| 4 | aave | `aave:47da0cdd-7b1d-4927-9545-20b53b73afa8` | 3.15% | 2.49% | 0.0174 | $19,363,509 |
+| 5 | ondo | `ondo:b5d7a190-38d2-4fdd-8c14-1fd00c11bce1` | 3.55% | 1.67% | 0.0117 | $29,444,317 |
+| 6 | agni | `agni:6d76a4e2-57f2-4190-a882-bd69f6ea32fb` | 3.36% | 1.90% | 0.0093 | $423,182 |
+| 7 | aave | `aave:32cb38a5-b9b9-441a-bf07-8fab47b999d3` | 2.45% | 1.73% | 0.0085 | $2,868,113 |
+| 8 | agni | `agni:ebec73de-fd1e-4f97-8287-d9cb01c7d352` | 2.45% | 0.91% | 0.0063 | $111,132 |
+| 9 | agni | `agni:649bee89-0a34-4eb1-b8ab-7c5fdee07ccd` | 1.91% | 0.38% | 0.0019 | $133,062 |
+| 10 | agni | `agni:2a510869-6356-4486-8bb5-d5a808634496` | 1.34% | -0.20% | -0.0010 | $112,344 |
+| 11 | aave | `aave:76b70b33-d8a4-4e61-8092-9bd1f2be2fc9` | 0.28% | -0.41% | -0.0014 | $5,862,590 |
+| 12 | agni | `agni:a4ff3d7c-a117-4b24-a9f9-6af46cd276c0` | 1.26% | -0.28% | -0.0019 | $107,152 |
+| 13 | aave | `aave:a4e37545-203b-4412-9acd-3e8b1aa4d744` | 0.00% | -0.62% | -0.0044 | $63,883,998 |
+| 14 | agni | `agni:a7e2f58e-1c93-4592-acd6-8e40e6cb26ff` | 0.51% | -1.03% | -0.0051 | $107,709 |
+| 15 | agni | `agni:3b6b75cf-adb5-4fb4-bbcd-8f75c6879c9d` | 0.50% | -1.04% | -0.0051 | $109,753 |
+| 16 | agni | `agni:3d429d4e-b3a6-4847-957b-b10bf26a6f01` | 0.50% | -1.04% | -0.0051 | $110,072 |
+| 17 | agni | `agni:227e8492-33e9-4953-8beb-28973c9fdb8a` | 0.76% | -0.78% | -0.0054 | $115,881 |
+| 18 | agni | `agni:30836422-c578-4f77-8f81-861c509c5d4c` | 0.58% | -0.97% | -0.0068 | $102,818 |
+| 19 | agni | `agni:2364dd66-69d3-44ef-9e85-4d5217a57b57` | 0.36% | -1.18% | -0.0083 | $109,507 |
+| 20 | agni | `agni:b8d50460-5237-4601-9250-4f2d3a6b569b` | 0.31% | -1.24% | -0.0086 | $103,663 |
+| 21 | agni | `agni:b5933580-18c1-43b6-aec3-2563cd30e3a2` | 0.13% | -1.42% | -0.0099 | $101,761 |
+| 22 | agni | `agni:913ce101-55b1-4230-93c7-d523f0d9ca03` | 0.11% | -1.43% | -0.0100 | $106,878 |
+| 23 | mantleVault | `mantleVault:c87c5d7c-0285-47a9-8539-d335f05b9ba2` | 0.31% | -2.20% | -0.0154 | $268,408 |
+| 24 | mantleVault | `mantleVault:b96d8236-36d4-4be4-92f7-422beeac7073` | 0.00% | -2.55% | -0.0179 | $193,897 |
 
 ## All scored opportunities
 
@@ -65,14 +66,14 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
 - **Source**: aave
 - **Asset**: `0x211cc4dd073734da055fbf44a2b4667d5e5fe5d2`
 - **APY (base)**: 0.00%    **APY (reward)**: 4.00%    **Total**: 4.00%
-- **TVL**: $63,888,676
+- **TVL**: $63,883,998
 - **APY history**: vol=0.00%, drift=1.00x
 - **Nansen signal**: _null_ (no key or asset not covered)
-- **Probabilities**: exploit=0.00097, depeg=0.00063, oracle=0.00200, illiquid=0.02195, counterparty=0.00500
-- **Expected loss**: 0.535% /yr
-- **RAAPY**: -0.53%
-- **Confidence**: 0.686
-- **Score**: -0.0037
+- **Probabilities**: exploit=0.00097, depeg=0.00500, oracle=0.00200, illiquid=0.02195, counterparty=0.00500
+- **Expected loss**: 0.622% /yr
+- **RAAPY**: -0.62%
+- **Confidence**: 0.700
+- **Score**: -0.0044
 - **Eligible tranches**: junior
 - **Primary tranche**: junior
 - **Rejection reasons**:
@@ -87,11 +88,11 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
 - **TVL**: $29,444,317
 - **APY history**: vol=0.01%, drift=1.00x
 - **Nansen signal**: _null_ (no key or asset not covered)
-- **Probabilities**: exploit=0.00088, depeg=0.00038, oracle=0.00200, illiquid=0.02531, counterparty=0.03000
-- **Expected loss**: 1.789% /yr
-- **RAAPY**: 1.76%
-- **Confidence**: 0.682
-- **Score**: 0.0120
+- **Probabilities**: exploit=0.00088, depeg=0.00500, oracle=0.00200, illiquid=0.02531, counterparty=0.03000
+- **Expected loss**: 1.882% /yr
+- **RAAPY**: 1.67%
+- **Confidence**: 0.700
+- **Score**: 0.0117
 - **Eligible tranches**: senior, mezzanine, junior
 - **Primary tranche**: senior
 
@@ -99,284 +100,303 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
 
 - **Source**: aave
 - **Asset**: `0x779ded0c9e1022225f8e0630b35a9b54be713736`
-- **APY (base)**: 8.46%    **APY (reward)**: 3.00%    **Total**: 11.46%
-- **TVL**: $6,830,643
-- **APY history**: vol=2.74%, drift=0.81x
+- **APY (base)**: 3.15%    **APY (reward)**: 2.93%    **Total**: 6.08%
+- **TVL**: $19,363,509
+- **APY history**: vol=2.65%, drift=0.76x
 - **Nansen signal**: _null_ (no key or asset not covered)
-- **Probabilities**: exploit=0.00119, depeg=0.00500, oracle=0.00200, illiquid=0.03166, counterparty=0.00500
-- **Expected loss**: 0.689% /yr
-- **RAAPY**: 7.77%
-- **Confidence**: 0.697
-- **Score**: 0.0542
+- **Probabilities**: exploit=0.00109, depeg=0.00500, oracle=0.00200, illiquid=0.02713, counterparty=0.00500
+- **Expected loss**: 0.658% /yr
+- **RAAPY**: 2.49%
+- **Confidence**: 0.700
+- **Score**: 0.0174
 - **Eligible tranches**: mezzanine, junior
 - **Primary tranche**: mezzanine
 - **Rejection reasons**:
-  - senior: tvlUsd 6830643 < 25000000; apy 8.46% > 8% (too-good-to-be-true gate)
+  - senior: tvlUsd 19363509 < 25000000
 
 ### aave:76b70b33-d8a4-4e61-8092-9bd1f2be2fc9
 
 - **Source**: aave
 - **Asset**: `0x5d3a1ff2b6bab83b63cd9ad0787074081a52ef34`
 - **APY (base)**: 0.28%    **APY (reward)**: 4.00%    **Total**: 4.28%
-- **TVL**: $5,864,475
+- **TVL**: $5,862,590
 - **APY history**: vol=3.21%, drift=42.93x
 - **Nansen signal**: _null_ (no key or asset not covered)
 - **Probabilities**: exploit=0.00120, depeg=0.00500, oracle=0.00200, illiquid=0.03232, counterparty=0.00500
 - **Expected loss**: 0.694% /yr
 - **RAAPY**: -0.41%
-- **Confidence**: 0.335
+- **Confidence**: 0.343
 - **Score**: -0.0014
 - **Eligible tranches**: junior
 - **Primary tranche**: junior
 - **Rejection reasons**:
-  - senior: tvlUsd 5864475 < 25000000; apyBase 0.28% < 2% (reward-only positions blocked)
+  - senior: tvlUsd 5862590 < 25000000; apyBase 0.28% < 2% (reward-only positions blocked)
   - mezzanine: apyBase 0.28% < 1% (reward-only positions blocked)
 
 ### aave:32cb38a5-b9b9-441a-bf07-8fab47b999d3
 
 - **Source**: aave
 - **Asset**: `0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9`
-- **APY (base)**: 1.04%    **APY (reward)**: 0.00%    **Total**: 1.04%
-- **TVL**: $5,852,600
-- **APY history**: vol=3.37%, drift=0.71x
+- **APY (base)**: 2.45%    **APY (reward)**: 5.26%    **Total**: 7.71%
+- **TVL**: $2,868,113
+- **APY history**: vol=3.35%, drift=0.73x
 - **Nansen signal**: _null_ (no key or asset not covered)
-- **Probabilities**: exploit=0.00120, depeg=0.00500, oracle=0.00200, illiquid=0.03233, counterparty=0.00500
-- **Expected loss**: 0.694% /yr
-- **RAAPY**: 0.35%
-- **Confidence**: 0.481
-- **Score**: 0.0017
+- **Probabilities**: exploit=0.00128, depeg=0.00500, oracle=0.00200, illiquid=0.03542, counterparty=0.00500
+- **Expected loss**: 0.716% /yr
+- **RAAPY**: 1.73%
+- **Confidence**: 0.489
+- **Score**: 0.0085
 - **Eligible tranches**: mezzanine, junior
 - **Primary tranche**: mezzanine
 - **Rejection reasons**:
-  - senior: tvlUsd 5852600 < 25000000; apyBase 1.04% < 2% (reward-only positions blocked)
+  - senior: tvlUsd 2868113 < 25000000
 
 ### agni:35f2103d-231b-443b-952e-d2cd118d8f29
 
 - **Source**: agni
 - **Asset**: `0x779ded0c9e1022225f8e0630b35a9b54be713736`
-- **APY (base)**: 32.08%    **APY (reward)**: 0.00%    **Total**: 32.08%
-- **TVL**: $1,083,561
-- **APY history**: vol=61.90%, drift=1.38x
+- **APY (base)**: 46.24%    **APY (reward)**: 0.00%    **Total**: 46.24%
+- **TVL**: $1,752,765
+- **APY history**: vol=61.81%, drift=1.39x
 - **Nansen signal**: _null_ (no key or asset not covered)
-- **Probabilities**: exploit=0.00668, depeg=0.00500, oracle=0.00700, illiquid=0.03965, counterparty=0.00500
-- **Expected loss**: 1.396% /yr
-- **RAAPY**: 30.68%
-- **Confidence**: 0.487
-- **Score**: 0.1495
+- **Probabilities**: exploit=0.00645, depeg=0.00500, oracle=0.00700, illiquid=0.03756, counterparty=0.00500
+- **Expected loss**: 1.366% /yr
+- **RAAPY**: 44.88%
+- **Confidence**: 0.490
+- **Score**: 0.2198
 - **Eligible tranches**: junior
 - **Primary tranche**: junior
 - **Rejection reasons**:
-  - senior: tvlUsd 1083561 < 25000000; apy 32.08% > 8% (too-good-to-be-true gate)
-  - mezzanine: apy 32.08% > 20% (too-good-to-be-true gate)
+  - senior: tvlUsd 1752765 < 25000000; apy 46.24% > 8% (too-good-to-be-true gate)
+  - mezzanine: apy 46.24% > 20% (too-good-to-be-true gate)
 
 ### agni:85407ecd-f711-4fa6-9328-3078aebfaa95
 
 - **Source**: agni
 - **Asset**: `0x55b9f84605b30df9bb9d817a6900219f25218157`
-- **APY (base)**: 10.59%    **APY (reward)**: 0.00%    **Total**: 10.59%
-- **TVL**: $827,340
+- **APY (base)**: 12.27%    **APY (reward)**: 0.00%    **Total**: 12.27%
+- **TVL**: $808,798
 - **APY history**: no history available
 - **Nansen signal**: _null_ (no key or asset not covered)
-- **Probabilities**: exploit=0.00681, depeg=0.00500, oracle=0.00700, illiquid=0.04082, counterparty=0.00500
-- **Expected loss**: 1.413% /yr
-- **RAAPY**: 9.17%
-- **Confidence**: 0.497
-- **Score**: 0.0456
+- **Probabilities**: exploit=0.00682, depeg=0.00500, oracle=0.00700, illiquid=0.04092, counterparty=0.00500
+- **Expected loss**: 1.415% /yr
+- **RAAPY**: 10.85%
+- **Confidence**: 0.500
+- **Score**: 0.0542
 - **Eligible tranches**: junior
 - **Primary tranche**: junior
 - **Rejection reasons**:
-  - senior: tvlUsd 827340 < 25000000; apy 10.59% > 8% (too-good-to-be-true gate)
-  - mezzanine: tvlUsd 827340 < 1000000
+  - senior: tvlUsd 808798 < 25000000; apy 12.27% > 8% (too-good-to-be-true gate)
+  - mezzanine: tvlUsd 808798 < 1000000
 
 ### agni:6d76a4e2-57f2-4190-a882-bd69f6ea32fb
 
 - **Source**: agni
 - **Asset**: `0x45db70e1c808dae42f9c4dfea74ba5e6a113bdc1`
-- **APY (base)**: 2.84%    **APY (reward)**: 0.00%    **Total**: 2.84%
-- **TVL**: $428,827
-- **APY history**: vol=951.26%, drift=0.03x
+- **APY (base)**: 3.36%    **APY (reward)**: 0.00%    **Total**: 3.36%
+- **TVL**: $423,182
+- **APY history**: vol=951.25%, drift=0.03x
 - **Nansen signal**: _null_ (no key or asset not covered)
-- **Probabilities**: exploit=0.00713, depeg=0.00500, oracle=0.00700, illiquid=0.04368, counterparty=0.00500
-- **Expected loss**: 1.455% /yr
-- **RAAPY**: 1.39%
-- **Confidence**: 0.489
-- **Score**: 0.0068
+- **Probabilities**: exploit=0.00714, depeg=0.00500, oracle=0.00700, illiquid=0.04373, counterparty=0.00500
+- **Expected loss**: 1.456% /yr
+- **RAAPY**: 1.90%
+- **Confidence**: 0.490
+- **Score**: 0.0093
 - **Eligible tranches**: junior
 - **Primary tranche**: junior
 - **Rejection reasons**:
-  - senior: tvlUsd 428827 < 25000000
-  - mezzanine: tvlUsd 428827 < 1000000
+  - senior: tvlUsd 423182 < 25000000
+  - mezzanine: tvlUsd 423182 < 1000000
+
+### aave:4a0e9f84-09a0-491a-aa5e-269813d31a59
+
+- **Source**: aave
+- **Asset**: `0xdeaddeaddeaddeaddeaddeaddeaddeaddead1111`
+- **APY (base)**: 8.57%    **APY (reward)**: 0.00%    **Total**: 8.57%
+- **TVL**: $376,791
+- **APY history**: vol=2.15%, drift=2.24x
+- **Nansen signal**: _null_ (no key or asset not covered)
+- **Probabilities**: exploit=0.00148, depeg=0.00500, oracle=0.00200, illiquid=0.04424, counterparty=0.00500
+- **Expected loss**: 0.777% /yr
+- **RAAPY**: 7.79%
+- **Confidence**: 0.490
+- **Score**: 0.0382
+- **Eligible tranches**: junior
+- **Primary tranche**: junior
+- **Rejection reasons**:
+  - senior: tvlUsd 376791 < 25000000; apy 8.57% > 8% (too-good-to-be-true gate)
+  - mezzanine: tvlUsd 376791 < 1000000
 
 ### mantleVault:c87c5d7c-0285-47a9-8539-d335f05b9ba2
 
 - **Source**: mantleVault
 - **Asset**: `0xcda86a272531e8640cd7f1a92c01839911b90bb0`
 - **APY (base)**: 0.31%    **APY (reward)**: 0.03%    **Total**: 0.34%
-- **TVL**: $268,958
+- **TVL**: $268,408
 - **APY history**: vol=0.06%, drift=1.29x
 - **Nansen signal**: _null_ (no key or asset not covered)
-- **Probabilities**: exploit=0.01946, depeg=0.00500, oracle=0.00700, illiquid=0.04570, counterparty=0.00500
+- **Probabilities**: exploit=0.01946, depeg=0.00500, oracle=0.00700, illiquid=0.04571, counterparty=0.00500
 - **Expected loss**: 2.513% /yr
 - **RAAPY**: -2.20%
-- **Confidence**: 0.695
-- **Score**: -0.0153
+- **Confidence**: 0.700
+- **Score**: -0.0154
 - **Eligible tranches**: junior
 - **Primary tranche**: junior
 - **Rejection reasons**:
-  - senior: expectedLoss 0.0251 > 0.02; tvlUsd 268958 < 25000000; apyBase 0.31% < 2% (reward-only positions blocked)
-  - mezzanine: tvlUsd 268958 < 1000000; apyBase 0.31% < 1% (reward-only positions blocked)
+  - senior: expectedLoss 0.0251 > 0.02; tvlUsd 268408 < 25000000; apyBase 0.31% < 2% (reward-only positions blocked)
+  - mezzanine: tvlUsd 268408 < 1000000; apyBase 0.31% < 1% (reward-only positions blocked)
 
 ### mantleVault:b96d8236-36d4-4be4-92f7-422beeac7073
 
 - **Source**: mantleVault
 - **Asset**: `0xe6829d9a7ee3040e1276fa75293bde931859e8fa`
 - **APY (base)**: 0.00%    **APY (reward)**: 0.05%    **Total**: 0.05%
-- **TVL**: $193,563
-- **APY history**: no history available
+- **TVL**: $193,897
+- **APY history**: vol=0.15%, drift=0.10x
 - **Nansen signal**: _null_ (no key or asset not covered)
-- **Probabilities**: exploit=0.01988, depeg=0.00500, oracle=0.00700, illiquid=0.04713, counterparty=0.00500
-- **Expected loss**: 2.556% /yr
+- **Probabilities**: exploit=0.01988, depeg=0.00500, oracle=0.00700, illiquid=0.04712, counterparty=0.00500
+- **Expected loss**: 2.555% /yr
 - **RAAPY**: -2.55%
-- **Confidence**: 0.488
-- **Score**: -0.0124
+- **Confidence**: 0.700
+- **Score**: -0.0179
 - **Eligible tranches**: junior
 - **Primary tranche**: junior
 - **Rejection reasons**:
-  - senior: expectedLoss 0.0256 > 0.02; tvlUsd 193563 < 25000000; apyBase 0.00% < 2% (reward-only positions blocked)
-  - mezzanine: tvlUsd 193563 < 1000000; apyBase 0.00% < 1% (reward-only positions blocked)
+  - senior: expectedLoss 0.0256 > 0.02; tvlUsd 193897 < 25000000; apyBase 0.00% < 2% (reward-only positions blocked)
+  - mezzanine: tvlUsd 193897 < 1000000; apyBase 0.00% < 1% (reward-only positions blocked)
 
 ### agni:649bee89-0a34-4eb1-b8ab-7c5fdee07ccd
 
 - **Source**: agni
 - **Asset**: `0x29cc30f9d113b356ce408667aa6433589cecbdca`
-- **APY (base)**: 0.89%    **APY (reward)**: 0.00%    **Total**: 0.89%
-- **TVL**: $131,984
-- **APY history**: vol=3.04%, drift=0.58x
+- **APY (base)**: 1.91%    **APY (reward)**: 0.00%    **Total**: 1.91%
+- **TVL**: $133,062
+- **APY history**: vol=3.02%, drift=0.59x
 - **Nansen signal**: _null_ (no key or asset not covered)
-- **Probabilities**: exploit=0.00771, depeg=0.00500, oracle=0.00700, illiquid=0.04879, counterparty=0.00500
+- **Probabilities**: exploit=0.00770, depeg=0.00500, oracle=0.00700, illiquid=0.04876, counterparty=0.00500
 - **Expected loss**: 1.529% /yr
-- **RAAPY**: -0.64%
-- **Confidence**: 0.486
-- **Score**: -0.0031
+- **RAAPY**: 0.38%
+- **Confidence**: 0.490
+- **Score**: 0.0019
 - **Eligible tranches**: junior
 - **Primary tranche**: junior
 - **Rejection reasons**:
-  - senior: tvlUsd 131984 < 25000000; apyBase 0.89% < 2% (reward-only positions blocked)
-  - mezzanine: tvlUsd 131984 < 1000000; apyBase 0.89% < 1% (reward-only positions blocked)
+  - senior: tvlUsd 133062 < 25000000; apyBase 1.91% < 2% (reward-only positions blocked)
+  - mezzanine: tvlUsd 133062 < 1000000
 
 ### agni:227e8492-33e9-4953-8beb-28973c9fdb8a
 
 - **Source**: agni
 - **Asset**: `0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9`
-- **APY (base)**: 0.10%    **APY (reward)**: 0.00%    **Total**: 0.10%
-- **TVL**: $116,233
-- **APY history**: vol=0.82%, drift=1.30x
+- **APY (base)**: 0.76%    **APY (reward)**: 0.00%    **Total**: 0.76%
+- **TVL**: $115,881
+- **APY history**: vol=0.81%, drift=1.35x
 - **Nansen signal**: _null_ (no key or asset not covered)
-- **Probabilities**: exploit=0.00777, depeg=0.00500, oracle=0.00700, illiquid=0.04935, counterparty=0.00500
+- **Probabilities**: exploit=0.00777, depeg=0.00500, oracle=0.00700, illiquid=0.04936, counterparty=0.00500
 - **Expected loss**: 1.537% /yr
-- **RAAPY**: -1.44%
-- **Confidence**: 0.687
-- **Score**: -0.0099
+- **RAAPY**: -0.78%
+- **Confidence**: 0.699
+- **Score**: -0.0054
 - **Eligible tranches**: junior
 - **Primary tranche**: junior
 - **Rejection reasons**:
-  - senior: tvlUsd 116233 < 25000000; apyBase 0.10% < 2% (reward-only positions blocked)
-  - mezzanine: tvlUsd 116233 < 1000000; apyBase 0.10% < 1% (reward-only positions blocked)
+  - senior: tvlUsd 115881 < 25000000; apyBase 0.76% < 2% (reward-only positions blocked)
+  - mezzanine: tvlUsd 115881 < 1000000; apyBase 0.76% < 1% (reward-only positions blocked)
 
 ### agni:2a510869-6356-4486-8bb5-d5a808634496
 
 - **Source**: agni
 - **Asset**: `0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9`
-- **APY (base)**: 0.41%    **APY (reward)**: 0.00%    **Total**: 0.41%
-- **TVL**: $112,580
-- **APY history**: vol=1.07%, drift=1.68x
+- **APY (base)**: 1.34%    **APY (reward)**: 0.00%    **Total**: 1.34%
+- **TVL**: $112,344
+- **APY history**: vol=1.06%, drift=1.73x
 - **Nansen signal**: _null_ (no key or asset not covered)
 - **Probabilities**: exploit=0.00778, depeg=0.00500, oracle=0.00700, illiquid=0.04949, counterparty=0.00500
 - **Expected loss**: 1.539% /yr
-- **RAAPY**: -1.13%
-- **Confidence**: 0.481
-- **Score**: -0.0055
+- **RAAPY**: -0.20%
+- **Confidence**: 0.489
+- **Score**: -0.0010
 - **Eligible tranches**: junior
 - **Primary tranche**: junior
 - **Rejection reasons**:
-  - senior: tvlUsd 112580 < 25000000; apyBase 0.41% < 2% (reward-only positions blocked)
-  - mezzanine: tvlUsd 112580 < 1000000; apyBase 0.41% < 1% (reward-only positions blocked)
+  - senior: tvlUsd 112344 < 25000000; apyBase 1.34% < 2% (reward-only positions blocked)
+  - mezzanine: tvlUsd 112344 < 1000000
 
 ### agni:ebec73de-fd1e-4f97-8287-d9cb01c7d352
 
 - **Source**: agni
 - **Asset**: `0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9`
-- **APY (base)**: 0.59%    **APY (reward)**: 0.00%    **Total**: 0.59%
-- **TVL**: $111,392
-- **APY history**: vol=2.42%, drift=0.95x
+- **APY (base)**: 2.45%    **APY (reward)**: 0.00%    **Total**: 2.45%
+- **TVL**: $111,132
+- **APY history**: vol=2.38%, drift=0.97x
 - **Nansen signal**: _null_ (no key or asset not covered)
-- **Probabilities**: exploit=0.00779, depeg=0.00500, oracle=0.00700, illiquid=0.04953, counterparty=0.00500
+- **Probabilities**: exploit=0.00779, depeg=0.00500, oracle=0.00700, illiquid=0.04954, counterparty=0.00500
 - **Expected loss**: 1.540% /yr
-- **RAAPY**: -0.95%
-- **Confidence**: 0.687
-- **Score**: -0.0065
+- **RAAPY**: 0.91%
+- **Confidence**: 0.699
+- **Score**: 0.0063
 - **Eligible tranches**: junior
 - **Primary tranche**: junior
 - **Rejection reasons**:
-  - senior: tvlUsd 111392 < 25000000; apyBase 0.59% < 2% (reward-only positions blocked)
-  - mezzanine: tvlUsd 111392 < 1000000; apyBase 0.59% < 1% (reward-only positions blocked)
-
-### agni:3b6b75cf-adb5-4fb4-bbcd-8f75c6879c9d
-
-- **Source**: agni
-- **Asset**: `0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9`
-- **APY (base)**: 0.45%    **APY (reward)**: 0.00%    **Total**: 0.45%
-- **TVL**: $109,138
-- **APY history**: vol=0.59%, drift=1.79x
-- **Nansen signal**: _null_ (no key or asset not covered)
-- **Probabilities**: exploit=0.00780, depeg=0.00500, oracle=0.00700, illiquid=0.04962, counterparty=0.00500
-- **Expected loss**: 1.541% /yr
-- **RAAPY**: -1.09%
-- **Confidence**: 0.481
-- **Score**: -0.0052
-- **Eligible tranches**: junior
-- **Primary tranche**: junior
-- **Rejection reasons**:
-  - senior: tvlUsd 109138 < 25000000; apyBase 0.45% < 2% (reward-only positions blocked)
-  - mezzanine: tvlUsd 109138 < 1000000; apyBase 0.45% < 1% (reward-only positions blocked)
-
-### agni:2364dd66-69d3-44ef-9e85-4d5217a57b57
-
-- **Source**: agni
-- **Asset**: `0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9`
-- **APY (base)**: 0.17%    **APY (reward)**: 0.00%    **Total**: 0.17%
-- **TVL**: $109,132
-- **APY history**: vol=0.21%, drift=1.21x
-- **Nansen signal**: _null_ (no key or asset not covered)
-- **Probabilities**: exploit=0.00780, depeg=0.00500, oracle=0.00700, illiquid=0.04962, counterparty=0.00500
-- **Expected loss**: 1.541% /yr
-- **RAAPY**: -1.37%
-- **Confidence**: 0.687
-- **Score**: -0.0094
-- **Eligible tranches**: junior
-- **Primary tranche**: junior
-- **Rejection reasons**:
-  - senior: tvlUsd 109132 < 25000000; apyBase 0.17% < 2% (reward-only positions blocked)
-  - mezzanine: tvlUsd 109132 < 1000000; apyBase 0.17% < 1% (reward-only positions blocked)
+  - senior: tvlUsd 111132 < 25000000
+  - mezzanine: tvlUsd 111132 < 1000000
 
 ### agni:3d429d4e-b3a6-4847-957b-b10bf26a6f01
 
 - **Source**: agni
 - **Asset**: `0x779ded0c9e1022225f8e0630b35a9b54be713736`
-- **APY (base)**: 0.00%    **APY (reward)**: 0.00%    **Total**: 0.00%
-- **TVL**: $108,235
-- **APY history**: vol=6.54%, drift=0.16x
+- **APY (base)**: 0.50%    **APY (reward)**: 0.00%    **Total**: 0.50%
+- **TVL**: $110,072
+- **APY history**: vol=6.54%, drift=0.17x
 - **Nansen signal**: _null_ (no key or asset not covered)
-- **Probabilities**: exploit=0.00780, depeg=0.00500, oracle=0.00700, illiquid=0.04966, counterparty=0.00500
-- **Expected loss**: 1.542% /yr
-- **RAAPY**: -1.54%
-- **Confidence**: 0.487
-- **Score**: -0.0075
+- **Probabilities**: exploit=0.00779, depeg=0.00500, oracle=0.00700, illiquid=0.04958, counterparty=0.00500
+- **Expected loss**: 1.540% /yr
+- **RAAPY**: -1.04%
+- **Confidence**: 0.490
+- **Score**: -0.0051
 - **Eligible tranches**: junior
 - **Primary tranche**: junior
 - **Rejection reasons**:
-  - senior: tvlUsd 108235 < 25000000; apyBase 0.00% < 2% (reward-only positions blocked)
-  - mezzanine: tvlUsd 108235 < 1000000; apyBase 0.00% < 1% (reward-only positions blocked)
+  - senior: tvlUsd 110072 < 25000000; apyBase 0.50% < 2% (reward-only positions blocked)
+  - mezzanine: tvlUsd 110072 < 1000000; apyBase 0.50% < 1% (reward-only positions blocked)
+
+### agni:3b6b75cf-adb5-4fb4-bbcd-8f75c6879c9d
+
+- **Source**: agni
+- **Asset**: `0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9`
+- **APY (base)**: 0.50%    **APY (reward)**: 0.00%    **Total**: 0.50%
+- **TVL**: $109,753
+- **APY history**: vol=0.59%, drift=1.79x
+- **Nansen signal**: _null_ (no key or asset not covered)
+- **Probabilities**: exploit=0.00780, depeg=0.00500, oracle=0.00700, illiquid=0.04960, counterparty=0.00500
+- **Expected loss**: 1.541% /yr
+- **RAAPY**: -1.04%
+- **Confidence**: 0.489
+- **Score**: -0.0051
+- **Eligible tranches**: junior
+- **Primary tranche**: junior
+- **Rejection reasons**:
+  - senior: tvlUsd 109753 < 25000000; apyBase 0.50% < 2% (reward-only positions blocked)
+  - mezzanine: tvlUsd 109753 < 1000000; apyBase 0.50% < 1% (reward-only positions blocked)
+
+### agni:2364dd66-69d3-44ef-9e85-4d5217a57b57
+
+- **Source**: agni
+- **Asset**: `0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9`
+- **APY (base)**: 0.36%    **APY (reward)**: 0.00%    **Total**: 0.36%
+- **TVL**: $109,507
+- **APY history**: vol=0.21%, drift=1.24x
+- **Nansen signal**: _null_ (no key or asset not covered)
+- **Probabilities**: exploit=0.00780, depeg=0.00500, oracle=0.00700, illiquid=0.04961, counterparty=0.00500
+- **Expected loss**: 1.541% /yr
+- **RAAPY**: -1.18%
+- **Confidence**: 0.699
+- **Score**: -0.0083
+- **Eligible tranches**: junior
+- **Primary tranche**: junior
+- **Rejection reasons**:
+  - senior: tvlUsd 109507 < 25000000; apyBase 0.36% < 2% (reward-only positions blocked)
+  - mezzanine: tvlUsd 109507 < 1000000; apyBase 0.36% < 1% (reward-only positions blocked)
 
 ### agni:a7e2f58e-1c93-4592-acd6-8e40e6cb26ff
 
@@ -389,70 +409,70 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
 - **Probabilities**: exploit=0.00781, depeg=0.00500, oracle=0.00700, illiquid=0.04968, counterparty=0.00500
 - **Expected loss**: 1.542% /yr
 - **RAAPY**: -1.03%
-- **Confidence**: 0.481
-- **Score**: -0.0050
+- **Confidence**: 0.489
+- **Score**: -0.0051
 - **Eligible tranches**: junior
 - **Primary tranche**: junior
 - **Rejection reasons**:
   - senior: tvlUsd 107709 < 25000000; apyBase 0.51% < 2% (reward-only positions blocked)
   - mezzanine: tvlUsd 107709 < 1000000; apyBase 0.51% < 1% (reward-only positions blocked)
 
-### agni:913ce101-55b1-4230-93c7-d523f0d9ca03
-
-- **Source**: agni
-- **Asset**: `0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9`
-- **APY (base)**: 0.09%    **APY (reward)**: 0.00%    **Total**: 0.09%
-- **TVL**: $106,662
-- **APY history**: vol=0.13%, drift=0.68x
-- **Nansen signal**: _null_ (no key or asset not covered)
-- **Probabilities**: exploit=0.00781, depeg=0.00500, oracle=0.00700, illiquid=0.04972, counterparty=0.00500
-- **Expected loss**: 1.542% /yr
-- **RAAPY**: -1.45%
-- **Confidence**: 0.687
-- **Score**: -0.0100
-- **Eligible tranches**: junior
-- **Primary tranche**: junior
-- **Rejection reasons**:
-  - senior: tvlUsd 106662 < 25000000; apyBase 0.09% < 2% (reward-only positions blocked)
-  - mezzanine: tvlUsd 106662 < 1000000; apyBase 0.09% < 1% (reward-only positions blocked)
-
 ### agni:a4ff3d7c-a117-4b24-a9f9-6af46cd276c0
 
 - **Source**: agni
 - **Asset**: `0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9`
-- **APY (base)**: 0.42%    **APY (reward)**: 0.00%    **Total**: 0.42%
-- **TVL**: $106,464
-- **APY history**: vol=1.18%, drift=1.05x
+- **APY (base)**: 1.26%    **APY (reward)**: 0.00%    **Total**: 1.26%
+- **TVL**: $107,152
+- **APY history**: vol=1.17%, drift=1.08x
 - **Nansen signal**: _null_ (no key or asset not covered)
-- **Probabilities**: exploit=0.00781, depeg=0.00500, oracle=0.00700, illiquid=0.04973, counterparty=0.00500
-- **Expected loss**: 1.543% /yr
-- **RAAPY**: -1.12%
-- **Confidence**: 0.687
-- **Score**: -0.0077
+- **Probabilities**: exploit=0.00781, depeg=0.00500, oracle=0.00700, illiquid=0.04970, counterparty=0.00500
+- **Expected loss**: 1.542% /yr
+- **RAAPY**: -0.28%
+- **Confidence**: 0.699
+- **Score**: -0.0019
 - **Eligible tranches**: junior
 - **Primary tranche**: junior
 - **Rejection reasons**:
-  - senior: tvlUsd 106464 < 25000000; apyBase 0.42% < 2% (reward-only positions blocked)
-  - mezzanine: tvlUsd 106464 < 1000000; apyBase 0.42% < 1% (reward-only positions blocked)
+  - senior: tvlUsd 107152 < 25000000; apyBase 1.26% < 2% (reward-only positions blocked)
+  - mezzanine: tvlUsd 107152 < 1000000
+
+### agni:913ce101-55b1-4230-93c7-d523f0d9ca03
+
+- **Source**: agni
+- **Asset**: `0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9`
+- **APY (base)**: 0.11%    **APY (reward)**: 0.00%    **Total**: 0.11%
+- **TVL**: $106,878
+- **APY history**: vol=0.12%, drift=0.69x
+- **Nansen signal**: _null_ (no key or asset not covered)
+- **Probabilities**: exploit=0.00781, depeg=0.00500, oracle=0.00700, illiquid=0.04971, counterparty=0.00500
+- **Expected loss**: 1.542% /yr
+- **RAAPY**: -1.43%
+- **Confidence**: 0.699
+- **Score**: -0.0100
+- **Eligible tranches**: junior
+- **Primary tranche**: junior
+- **Rejection reasons**:
+  - senior: tvlUsd 106878 < 25000000; apyBase 0.11% < 2% (reward-only positions blocked)
+  - mezzanine: tvlUsd 106878 < 1000000; apyBase 0.11% < 1% (reward-only positions blocked)
 
 ### agni:b8d50460-5237-4601-9250-4f2d3a6b569b
 
 - **Source**: agni
 - **Asset**: `0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9`
-- **APY (base)**: 0.58%    **APY (reward)**: 0.00%    **Total**: 0.58%
-- **TVL**: $103,498
-- **APY history**: vol=0.66%, drift=0.99x
+- **APY (base)**: 0.31%    **APY (reward)**: 0.00%    **Total**: 0.31%
+- **TVL**: $103,663
+- **APY history**: vol=0.67%, drift=0.97x
 - **Nansen signal**: _null_ (no key or asset not covered)
-- **Probabilities**: exploit=0.00782, depeg=0.00500, oracle=0.00700, illiquid=0.04985, counterparty=0.00500
+- **Probabilities**: exploit=0.00782, depeg=0.00500, oracle=0.00700, illiquid=0.04984, counterparty=0.00500
 - **Expected loss**: 1.544% /yr
-- **RAAPY**: -0.97%
-- **Confidence**: 0.687
-- **Score**: -0.0067
+- **RAAPY**: -1.24%
+- **Confidence**: 0.699
+- **Score**: -0.0086
 - **Eligible tranches**: junior
 - **Primary tranche**: junior
 - **Rejection reasons**:
-  - senior: tvlUsd 103498 < 25000000; apyBase 0.58% < 2% (reward-only positions blocked)
-  - mezzanine: tvlUsd 103498 < 1000000; apyBase 0.58% < 1% (reward-only positions blocked)
+  - senior: tvlUsd 103663 < 25000000; apyBase 0.31% < 2% (reward-only positions blocked)
+  - mezzanine: tvlUsd 103663 < 1000000; apyBase 0.31% < 1% (reward-only positions blocked)
 
 ### agni:30836422-c578-4f77-8f81-861c509c5d4c
 
@@ -465,8 +485,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
 - **Probabilities**: exploit=0.00783, depeg=0.00500, oracle=0.00700, illiquid=0.04988, counterparty=0.00500
 - **Expected loss**: 1.545% /yr
 - **RAAPY**: -0.97%
-- **Confidence**: 0.687
-- **Score**: -0.0067
+- **Confidence**: 0.699
+- **Score**: -0.0068
 - **Eligible tranches**: junior
 - **Primary tranche**: junior
 - **Rejection reasons**:
@@ -479,13 +499,13 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
 - **Asset**: `0x779ded0c9e1022225f8e0630b35a9b54be713736`
 - **APY (base)**: 0.13%    **APY (reward)**: 0.00%    **Total**: 0.13%
 - **TVL**: $101,761
-- **APY history**: no history available
+- **APY history**: vol=0.48%, drift=0.50x
 - **Nansen signal**: _null_ (no key or asset not covered)
 - **Probabilities**: exploit=0.00783, depeg=0.00500, oracle=0.00700, illiquid=0.04992, counterparty=0.00500
 - **Expected loss**: 1.545% /yr
 - **RAAPY**: -1.42%
-- **Confidence**: 0.485
-- **Score**: -0.0069
+- **Confidence**: 0.700
+- **Score**: -0.0099
 - **Eligible tranches**: junior
 - **Primary tranche**: junior
 - **Rejection reasons**:
@@ -496,101 +516,101 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
 
 - **Source**: mantleVault
 - **Asset**: `0x78c1b0c915c4faa5fffa6cabf0219da63d7f4cb8`
-- **APY (base)**: 0.07%    **APY (reward)**: 0.36%    **Total**: 0.43%
-- **TVL**: $72,368
+- **APY (base)**: 0.07%    **APY (reward)**: 0.35%    **Total**: 0.42%
+- **TVL**: $74,444
 - **APY history**: vol=0.87%, drift=0.10x
 - **Nansen signal**: _null_ (no key or asset not covered)
-- **Probabilities**: exploit=0.02115, depeg=0.00500, oracle=0.00700, illiquid=0.05140, counterparty=0.00500
-- **Expected loss**: 2.685% /yr
-- **RAAPY**: -2.62%
-- **Confidence**: 0.695
-- **Score**: -0.0182
+- **Probabilities**: exploit=0.02111, depeg=0.00500, oracle=0.00700, illiquid=0.05128, counterparty=0.00500
+- **Expected loss**: 2.681% /yr
+- **RAAPY**: -2.61%
+- **Confidence**: 0.700
+- **Score**: -0.0183
 - **Eligible tranches**: _none_
 - **Primary tranche**: _none_
 - **Rejection reasons**:
-  - senior: expectedLoss 0.0268 > 0.02; tvlUsd 72368 < 25000000; apyBase 0.07% < 2% (reward-only positions blocked)
-  - mezzanine: tvlUsd 72368 < 1000000; apyBase 0.07% < 1% (reward-only positions blocked)
-  - junior: tvlUsd 72368 < 100000
+  - senior: expectedLoss 0.0268 > 0.02; tvlUsd 74444 < 25000000; apyBase 0.07% < 2% (reward-only positions blocked)
+  - mezzanine: tvlUsd 74444 < 1000000; apyBase 0.07% < 1% (reward-only positions blocked)
+  - junior: tvlUsd 74444 < 100000
 
 ### cian:009b6f09-bfa7-4852-8685-0980d9478419
 
 - **Source**: cian
 - **Asset**: `0xcda86a272531e8640cd7f1a92c01839911b90bb0`
 - **APY (base)**: 2.90%    **APY (reward)**: 0.00%    **Total**: 2.90%
-- **TVL**: $51,738
-- **APY history**: no history available
+- **TVL**: $51,751
+- **APY history**: vol=0.31%, drift=0.88x
 - **Nansen signal**: _null_ (no key or asset not covered)
 - **Probabilities**: exploit=0.03096, depeg=0.00500, oracle=0.02000, illiquid=0.05286, counterparty=0.00500
 - **Expected loss**: 4.046% /yr
 - **RAAPY**: -1.14%
-- **Confidence**: 0.490
-- **Score**: -0.0056
+- **Confidence**: 0.700
+- **Score**: -0.0080
 - **Eligible tranches**: _none_
 - **Primary tranche**: _none_
 - **Rejection reasons**:
-  - senior: expectedLoss 0.0405 > 0.02; tvlUsd 51738 < 25000000
-  - mezzanine: expectedLoss 0.0405 > 0.04; tvlUsd 51738 < 1000000
-  - junior: tvlUsd 51738 < 100000
+  - senior: expectedLoss 0.0405 > 0.02; tvlUsd 51751 < 25000000
+  - mezzanine: expectedLoss 0.0405 > 0.04; tvlUsd 51751 < 1000000
+  - junior: tvlUsd 51751 < 100000
 
 ### agni:ab6d4bd4-fa82-4f09-9588-98c953179d61
 
 - **Source**: agni
 - **Asset**: `0x29cc30f9d113b356ce408667aa6433589cecbdca`
-- **APY (base)**: 1.24%    **APY (reward)**: 0.00%    **Total**: 1.24%
-- **TVL**: $47,700
-- **APY history**: vol=2.69%, drift=0.63x
+- **APY (base)**: 1.92%    **APY (reward)**: 0.00%    **Total**: 1.92%
+- **TVL**: $49,036
+- **APY history**: vol=2.67%, drift=0.63x
 - **Nansen signal**: _null_ (no key or asset not covered)
-- **Probabilities**: exploit=0.00820, depeg=0.00500, oracle=0.00700, illiquid=0.05321, counterparty=0.00500
-- **Expected loss**: 1.593% /yr
-- **RAAPY**: -0.35%
-- **Confidence**: 0.696
-- **Score**: -0.0025
+- **Probabilities**: exploit=0.00819, depeg=0.00500, oracle=0.00700, illiquid=0.05309, counterparty=0.00500
+- **Expected loss**: 1.591% /yr
+- **RAAPY**: 0.33%
+- **Confidence**: 0.700
+- **Score**: 0.0023
 - **Eligible tranches**: _none_
 - **Primary tranche**: _none_
 - **Rejection reasons**:
-  - senior: tvlUsd 47700 < 25000000; apyBase 1.24% < 2% (reward-only positions blocked)
-  - mezzanine: tvlUsd 47700 < 1000000
-  - junior: tvlUsd 47700 < 100000
+  - senior: tvlUsd 49036 < 25000000; apyBase 1.92% < 2% (reward-only positions blocked)
+  - mezzanine: tvlUsd 49036 < 1000000
+  - junior: tvlUsd 49036 < 100000
 
 ### agni:6a134700-f4a3-49ad-ad5a-fe1868b1c744
 
 - **Source**: agni
 - **Asset**: `0x111111d2bf19e43c34263401e0cad979ed1cdb61`
-- **APY (base)**: 0.42%    **APY (reward)**: 0.00%    **Total**: 0.42%
-- **TVL**: $44,582
+- **APY (base)**: 0.44%    **APY (reward)**: 0.00%    **Total**: 0.44%
+- **TVL**: $44,583
 - **APY history**: vol=132.60%, drift=0.05x
 - **Nansen signal**: _null_ (no key or asset not covered)
 - **Probabilities**: exploit=0.00823, depeg=0.00500, oracle=0.00700, illiquid=0.05351, counterparty=0.00500
 - **Expected loss**: 1.597% /yr
-- **RAAPY**: -1.17%
-- **Confidence**: 0.488
+- **RAAPY**: -1.16%
+- **Confidence**: 0.490
 - **Score**: -0.0057
 - **Eligible tranches**: _none_
 - **Primary tranche**: _none_
 - **Rejection reasons**:
-  - senior: tvlUsd 44582 < 25000000; apyBase 0.42% < 2% (reward-only positions blocked)
-  - mezzanine: tvlUsd 44582 < 1000000; apyBase 0.42% < 1% (reward-only positions blocked)
-  - junior: tvlUsd 44582 < 100000
+  - senior: tvlUsd 44583 < 25000000; apyBase 0.44% < 2% (reward-only positions blocked)
+  - mezzanine: tvlUsd 44583 < 1000000; apyBase 0.44% < 1% (reward-only positions blocked)
+  - junior: tvlUsd 44583 < 100000
 
 ### mantleVault:4ecffa03-92a0-4eed-bb8b-7537ade00cae
 
 - **Source**: mantleVault
 - **Asset**: `0xcda86a272531e8640cd7f1a92c01839911b90bb0`
 - **APY (base)**: 0.00%    **APY (reward)**: 0.00%    **Total**: 0.00%
-- **TVL**: $34,062
+- **TVL**: $33,993
 - **APY history**: vol=0.00%, drift=1.05x
 - **Nansen signal**: _null_ (no key or asset not covered)
-- **Probabilities**: exploit=0.02212, depeg=0.00500, oracle=0.00700, illiquid=0.05468, counterparty=0.00500
-- **Expected loss**: 2.783% /yr
+- **Probabilities**: exploit=0.02212, depeg=0.00500, oracle=0.00700, illiquid=0.05469, counterparty=0.00500
+- **Expected loss**: 2.784% /yr
 - **RAAPY**: -2.78%
-- **Confidence**: 0.694
-- **Score**: -0.0193
+- **Confidence**: 0.700
+- **Score**: -0.0195
 - **Eligible tranches**: _none_
 - **Primary tranche**: _none_
 - **Rejection reasons**:
-  - senior: expectedLoss 0.0278 > 0.02; tvlUsd 34062 < 25000000; apyBase 0.00% < 2% (reward-only positions blocked)
-  - mezzanine: tvlUsd 34062 < 1000000; apyBase 0.00% < 1% (reward-only positions blocked)
-  - junior: tvlUsd 34062 < 100000
+  - senior: expectedLoss 0.0278 > 0.02; tvlUsd 33993 < 25000000; apyBase 0.00% < 2% (reward-only positions blocked)
+  - mezzanine: tvlUsd 33993 < 1000000; apyBase 0.00% < 1% (reward-only positions blocked)
+  - junior: tvlUsd 33993 < 100000
 
 ### mantleVault:dc732e3d-d65b-4087-8d48-53e50bb47732
 
@@ -603,8 +623,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
 - **Probabilities**: exploit=0.02236, depeg=0.00500, oracle=0.00700, illiquid=0.05549, counterparty=0.00500
 - **Expected loss**: 2.808% /yr
 - **RAAPY**: -2.43%
-- **Confidence**: 0.694
-- **Score**: -0.0168
+- **Confidence**: 0.700
+- **Score**: -0.0170
 - **Eligible tranches**: _none_
 - **Primary tranche**: _none_
 - **Rejection reasons**:
@@ -617,260 +637,240 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
 - **Source**: mantleVault
 - **Asset**: `0x78c1b0c915c4faa5fffa6cabf0219da63d7f4cb8`
 - **APY (base)**: 0.00%    **APY (reward)**: 0.00%    **Total**: 0.00%
-- **TVL**: $21,826
+- **TVL**: $22,452
 - **APY history**: vol=0.00%, drift=1.05x
 - **Nansen signal**: _null_ (no key or asset not covered)
-- **Probabilities**: exploit=0.02269, depeg=0.00500, oracle=0.00700, illiquid=0.05661, counterparty=0.00500
-- **Expected loss**: 2.842% /yr
+- **Probabilities**: exploit=0.02265, depeg=0.00500, oracle=0.00700, illiquid=0.05649, counterparty=0.00500
+- **Expected loss**: 2.838% /yr
 - **RAAPY**: -2.84%
-- **Confidence**: 0.694
-- **Score**: -0.0197
+- **Confidence**: 0.700
+- **Score**: -0.0199
 - **Eligible tranches**: _none_
 - **Primary tranche**: _none_
 - **Rejection reasons**:
-  - senior: expectedLoss 0.0284 > 0.02; tvlUsd 21826 < 25000000; apyBase 0.00% < 2% (reward-only positions blocked)
-  - mezzanine: tvlUsd 21826 < 1000000; apyBase 0.00% < 1% (reward-only positions blocked)
-  - junior: tvlUsd 21826 < 100000
+  - senior: expectedLoss 0.0284 > 0.02; tvlUsd 22452 < 25000000; apyBase 0.00% < 2% (reward-only positions blocked)
+  - mezzanine: tvlUsd 22452 < 1000000; apyBase 0.00% < 1% (reward-only positions blocked)
+  - junior: tvlUsd 22452 < 100000
 
 ### cian:6eec4d69-bcad-48b9-aa3a-31005778de19
 
 - **Source**: cian
 - **Asset**: `0xcda86a272531e8640cd7f1a92c01839911b90bb0`
 - **APY (base)**: 0.44%    **APY (reward)**: 0.00%    **Total**: 0.44%
-- **TVL**: $17,517
+- **TVL**: $17,582
 - **APY history**: vol=4.63%, drift=0.16x
 - **Nansen signal**: _null_ (no key or asset not covered)
-- **Probabilities**: exploit=0.03296, depeg=0.00500, oracle=0.02000, illiquid=0.05757, counterparty=0.00500
-- **Expected loss**: 4.240% /yr
+- **Probabilities**: exploit=0.03296, depeg=0.00500, oracle=0.02000, illiquid=0.05755, counterparty=0.00500
+- **Expected loss**: 4.239% /yr
 - **RAAPY**: -3.79%
-- **Confidence**: 0.485
-- **Score**: -0.0184
+- **Confidence**: 0.490
+- **Score**: -0.0186
 - **Eligible tranches**: _none_
 - **Primary tranche**: _none_
 - **Rejection reasons**:
-  - senior: expectedLoss 0.0424 > 0.02; tvlUsd 17517 < 25000000; apyBase 0.44% < 2% (reward-only positions blocked)
-  - mezzanine: expectedLoss 0.0424 > 0.04; tvlUsd 17517 < 1000000; apyBase 0.44% < 1% (reward-only positions blocked)
-  - junior: tvlUsd 17517 < 100000
+  - senior: expectedLoss 0.0424 > 0.02; tvlUsd 17582 < 25000000; apyBase 0.44% < 2% (reward-only positions blocked)
+  - mezzanine: expectedLoss 0.0424 > 0.04; tvlUsd 17582 < 1000000; apyBase 0.44% < 1% (reward-only positions blocked)
+  - junior: tvlUsd 17582 < 100000
 
 ### mantleVault:e118b8cb-a7f6-4619-8844-791956db623b
 
 - **Source**: mantleVault
 - **Asset**: `0xcda86a272531e8640cd7f1a92c01839911b90bb0`
 - **APY (base)**: 0.00%    **APY (reward)**: 0.00%    **Total**: 0.00%
-- **TVL**: $14,738
+- **TVL**: $14,707
 - **APY history**: vol=0.00%, drift=1.00x
 - **Nansen signal**: _null_ (no key or asset not covered)
-- **Probabilities**: exploit=0.02319, depeg=0.00500, oracle=0.00700, illiquid=0.05832, counterparty=0.00500
+- **Probabilities**: exploit=0.02320, depeg=0.00500, oracle=0.00700, illiquid=0.05832, counterparty=0.00500
 - **Expected loss**: 2.893% /yr
 - **RAAPY**: -2.89%
-- **Confidence**: 0.694
-- **Score**: -0.0201
+- **Confidence**: 0.700
+- **Score**: -0.0202
 - **Eligible tranches**: _none_
 - **Primary tranche**: _none_
 - **Rejection reasons**:
-  - senior: expectedLoss 0.0289 > 0.02; tvlUsd 14738 < 25000000; apyBase 0.00% < 2% (reward-only positions blocked)
-  - mezzanine: tvlUsd 14738 < 1000000; apyBase 0.00% < 1% (reward-only positions blocked)
-  - junior: tvlUsd 14738 < 100000
+  - senior: expectedLoss 0.0289 > 0.02; tvlUsd 14707 < 25000000; apyBase 0.00% < 2% (reward-only positions blocked)
+  - mezzanine: tvlUsd 14707 < 1000000; apyBase 0.00% < 1% (reward-only positions blocked)
+  - junior: tvlUsd 14707 < 100000
 
 ### fbtc:d8733ab8-a147-4e31-a668-2c9dff24ea56
 
 - **Source**: fbtc
 - **Asset**: `0x201eba5cc46d216ce6dc03f6a759e8e766e956ae`
-- **APY (base)**: 10.79%    **APY (reward)**: 1.98%    **Total**: 12.77%
-- **TVL**: $14,665
+- **APY (base)**: 10.79%    **APY (reward)**: 2.01%    **Total**: 12.81%
+- **TVL**: $14,659
 - **APY history**: vol=3.32%, drift=1.20x
 - **Nansen signal**: _null_ (no key or asset not covered)
 - **Probabilities**: exploit=0.02320, depeg=0.00500, oracle=0.02000, illiquid=0.05834, counterparty=0.08000
 - **Expected loss**: 7.164% /yr
 - **RAAPY**: 3.63%
-- **Confidence**: 0.479
-- **Score**: 0.0174
+- **Confidence**: 0.489
+- **Score**: 0.0178
 - **Eligible tranches**: _none_
 - **Primary tranche**: _none_
 - **Rejection reasons**:
-  - senior: expectedLoss 0.0716 > 0.02; tvlUsd 14665 < 25000000; apy 10.79% > 8% (too-good-to-be-true gate)
-  - mezzanine: expectedLoss 0.0716 > 0.04; tvlUsd 14665 < 1000000
-  - junior: tvlUsd 14665 < 100000
+  - senior: expectedLoss 0.0716 > 0.02; tvlUsd 14659 < 25000000; apy 10.79% > 8% (too-good-to-be-true gate)
+  - mezzanine: expectedLoss 0.0716 > 0.04; tvlUsd 14659 < 1000000
+  - junior: tvlUsd 14659 < 100000
 
 ### mantleVault:edc32e93-0feb-4d38-bb73-366bb4a2aace
 
 - **Source**: mantleVault
 - **Asset**: `0xdeaddeaddeaddeaddeaddeaddeaddeaddead1111`
 - **APY (base)**: 0.00%    **APY (reward)**: 0.00%    **Total**: 0.00%
-- **TVL**: $10,426
+- **TVL**: $10,495
 - **APY history**: vol=0.00%, drift=0.96x
 - **Nansen signal**: _null_ (no key or asset not covered)
-- **Probabilities**: exploit=0.02364, depeg=0.00500, oracle=0.00700, illiquid=0.05982, counterparty=0.00500
+- **Probabilities**: exploit=0.02363, depeg=0.00500, oracle=0.00700, illiquid=0.05979, counterparty=0.00500
 - **Expected loss**: 2.938% /yr
 - **RAAPY**: -2.93%
-- **Confidence**: 0.694
-- **Score**: -0.0204
+- **Confidence**: 0.700
+- **Score**: -0.0205
 - **Eligible tranches**: _none_
 - **Primary tranche**: _none_
 - **Rejection reasons**:
-  - senior: expectedLoss 0.0294 > 0.02; tvlUsd 10426 < 25000000; apyBase 0.00% < 2% (reward-only positions blocked)
-  - mezzanine: tvlUsd 10426 < 1000000; apyBase 0.00% < 1% (reward-only positions blocked)
-  - junior: tvlUsd 10426 < 100000
+  - senior: expectedLoss 0.0294 > 0.02; tvlUsd 10495 < 25000000; apyBase 0.00% < 2% (reward-only positions blocked)
+  - mezzanine: tvlUsd 10495 < 1000000; apyBase 0.00% < 1% (reward-only positions blocked)
+  - junior: tvlUsd 10495 < 100000
 
 ### mantleVault:ae619265-65fd-4584-8934-16a66dc50af3
 
 - **Source**: mantleVault
 - **Asset**: `0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9`
 - **APY (base)**: 0.02%    **APY (reward)**: 0.00%    **Total**: 0.02%
-- **TVL**: $10,369
+- **TVL**: $10,373
 - **APY history**: vol=0.00%, drift=1.01x
 - **Nansen signal**: _null_ (no key or asset not covered)
 - **Probabilities**: exploit=0.02365, depeg=0.00500, oracle=0.00700, illiquid=0.05984, counterparty=0.00500
 - **Expected loss**: 2.939% /yr
 - **RAAPY**: -2.92%
-- **Confidence**: 0.687
-- **Score**: -0.0201
+- **Confidence**: 0.699
+- **Score**: -0.0204
 - **Eligible tranches**: _none_
 - **Primary tranche**: _none_
 - **Rejection reasons**:
-  - senior: expectedLoss 0.0294 > 0.02; tvlUsd 10369 < 25000000; apyBase 0.02% < 2% (reward-only positions blocked)
-  - mezzanine: tvlUsd 10369 < 1000000; apyBase 0.02% < 1% (reward-only positions blocked)
-  - junior: tvlUsd 10369 < 100000
+  - senior: expectedLoss 0.0294 > 0.02; tvlUsd 10373 < 25000000; apyBase 0.02% < 2% (reward-only positions blocked)
+  - mezzanine: tvlUsd 10373 < 1000000; apyBase 0.02% < 1% (reward-only positions blocked)
+  - junior: tvlUsd 10373 < 100000
 
 ### mantleVault:3441a15d-5f50-4a52-af27-597c182c5c4a
 
 - **Source**: mantleVault
 - **Asset**: `0x201eba5cc46d216ce6dc03f6a759e8e766e956ae`
 - **APY (base)**: 0.04%    **APY (reward)**: 0.00%    **Total**: 0.04%
-- **TVL**: $6,362
+- **TVL**: $6,368
 - **APY history**: vol=0.00%, drift=1.06x
 - **Nansen signal**: _null_ (no key or asset not covered)
 - **Probabilities**: exploit=0.02427, depeg=0.00500, oracle=0.00700, illiquid=0.06196, counterparty=0.00500
 - **Expected loss**: 3.003% /yr
 - **RAAPY**: -2.96%
-- **Confidence**: 0.682
-- **Score**: -0.0202
+- **Confidence**: 0.699
+- **Score**: -0.0207
 - **Eligible tranches**: _none_
 - **Primary tranche**: _none_
 - **Rejection reasons**:
-  - senior: expectedLoss 0.0300 > 0.02; tvlUsd 6362 < 25000000; apyBase 0.04% < 2% (reward-only positions blocked)
-  - mezzanine: tvlUsd 6362 < 1000000; apyBase 0.04% < 1% (reward-only positions blocked)
-  - junior: tvlUsd 6362 < 100000
+  - senior: expectedLoss 0.0300 > 0.02; tvlUsd 6368 < 25000000; apyBase 0.04% < 2% (reward-only positions blocked)
+  - mezzanine: tvlUsd 6368 < 1000000; apyBase 0.04% < 1% (reward-only positions blocked)
+  - junior: tvlUsd 6368 < 100000
 
 ### mantleVault:7be673f4-8b41-4d3f-a533-45d20d62e8fa
 
 - **Source**: mantleVault
 - **Asset**: `0xcabae6f6ea1ecab08ad02fe02ce9a44f09aebfa2`
 - **APY (base)**: 0.71%    **APY (reward)**: 0.02%    **Total**: 0.74%
-- **TVL**: $5,907
+- **TVL**: $5,896
 - **APY history**: vol=0.22%, drift=2.67x
 - **Nansen signal**: _null_ (no key or asset not covered)
 - **Probabilities**: exploit=0.02437, depeg=0.00500, oracle=0.00700, illiquid=0.06229, counterparty=0.00500
 - **Expected loss**: 3.013% /yr
 - **RAAPY**: -2.30%
-- **Confidence**: 0.486
-- **Score**: -0.0112
+- **Confidence**: 0.490
+- **Score**: -0.0113
 - **Eligible tranches**: _none_
 - **Primary tranche**: _none_
 - **Rejection reasons**:
-  - senior: expectedLoss 0.0301 > 0.02; tvlUsd 5907 < 25000000; apyBase 0.71% < 2% (reward-only positions blocked)
-  - mezzanine: tvlUsd 5907 < 1000000; apyBase 0.71% < 1% (reward-only positions blocked)
-  - junior: tvlUsd 5907 < 100000
+  - senior: expectedLoss 0.0301 > 0.02; tvlUsd 5896 < 25000000; apyBase 0.71% < 2% (reward-only positions blocked)
+  - mezzanine: tvlUsd 5896 < 1000000; apyBase 0.71% < 1% (reward-only positions blocked)
+  - junior: tvlUsd 5896 < 100000
 
 ### mantleVault:f7150467-f302-41e8-9f9a-1f73d2b49df4
 
 - **Source**: mantleVault
 - **Asset**: `0x5d3a1ff2b6bab83b63cd9ad0787074081a52ef34`
 - **APY (base)**: 49.21%    **APY (reward)**: 0.54%    **Total**: 49.75%
-- **TVL**: $3,147
+- **TVL**: $3,146
 - **APY history**: vol=19.39%, drift=119.43x
 - **Nansen signal**: _null_ (no key or asset not covered)
 - **Probabilities**: exploit=0.02518, depeg=0.00500, oracle=0.00700, illiquid=0.06502, counterparty=0.00500
 - **Expected loss**: 3.095% /yr
 - **RAAPY**: 46.11%
-- **Confidence**: 0.334
-- **Score**: 0.1541
+- **Confidence**: 0.343
+- **Score**: 0.1579
 - **Eligible tranches**: _none_
 - **Primary tranche**: _none_
 - **Rejection reasons**:
-  - senior: expectedLoss 0.0310 > 0.02; tvlUsd 3147 < 25000000; apy 49.21% > 8% (too-good-to-be-true gate)
-  - mezzanine: tvlUsd 3147 < 1000000; apy 49.21% > 20% (too-good-to-be-true gate)
-  - junior: tvlUsd 3147 < 100000
+  - senior: expectedLoss 0.0310 > 0.02; tvlUsd 3146 < 25000000; apy 49.21% > 8% (too-good-to-be-true gate)
+  - mezzanine: tvlUsd 3146 < 1000000; apy 49.21% > 20% (too-good-to-be-true gate)
+  - junior: tvlUsd 3146 < 100000
 
 ### mantleVault:4f9047f1-ca9f-4b30-b5ad-c7a900c38cae
 
 - **Source**: mantleVault
 - **Asset**: `0xdeaddeaddeaddeaddeaddeaddeaddeaddead1111`
-- **APY (base)**: 43.35%    **APY (reward)**: 1.49%    **Total**: 44.85%
-- **TVL**: $2,924
-- **APY history**: no history available
+- **APY (base)**: 43.35%    **APY (reward)**: 1.50%    **Total**: 44.85%
+- **TVL**: $2,944
+- **APY history**: vol=30.24%, drift=3.69x
 - **Nansen signal**: _null_ (no key or asset not covered)
-- **Probabilities**: exploit=0.02527, depeg=0.00500, oracle=0.00700, illiquid=0.06534, counterparty=0.00500
-- **Expected loss**: 3.105% /yr
+- **Probabilities**: exploit=0.02527, depeg=0.00500, oracle=0.00700, illiquid=0.06531, counterparty=0.00500
+- **Expected loss**: 3.104% /yr
 - **RAAPY**: 40.25%
-- **Confidence**: 0.487
-- **Score**: 0.1962
+- **Confidence**: 0.343
+- **Score**: 0.1380
 - **Eligible tranches**: _none_
 - **Primary tranche**: _none_
 - **Rejection reasons**:
-  - senior: expectedLoss 0.0311 > 0.02; tvlUsd 2924 < 25000000; apy 43.35% > 8% (too-good-to-be-true gate)
-  - mezzanine: tvlUsd 2924 < 1000000; apy 43.35% > 20% (too-good-to-be-true gate)
-  - junior: tvlUsd 2924 < 100000
+  - senior: expectedLoss 0.0310 > 0.02; tvlUsd 2944 < 25000000; apy 43.35% > 8% (too-good-to-be-true gate)
+  - mezzanine: tvlUsd 2944 < 1000000; apy 43.35% > 20% (too-good-to-be-true gate)
+  - junior: tvlUsd 2944 < 100000
 
 ### mantleVault:a5a47cdc-2ca5-4348-ade9-4adddb1d12d5
 
 - **Source**: mantleVault
 - **Asset**: `0xe6829d9a7ee3040e1276fa75293bde931859e8fa`
 - **APY (base)**: 0.02%    **APY (reward)**: 0.00%    **Total**: 0.02%
-- **TVL**: $2,309
+- **TVL**: $2,313
 - **APY history**: vol=0.00%, drift=1.04x
 - **Nansen signal**: _null_ (no key or asset not covered)
-- **Probabilities**: exploit=0.02558, depeg=0.00500, oracle=0.00700, illiquid=0.06637, counterparty=0.00500
+- **Probabilities**: exploit=0.02558, depeg=0.00500, oracle=0.00700, illiquid=0.06636, counterparty=0.00500
 - **Expected loss**: 3.136% /yr
 - **RAAPY**: -3.11%
-- **Confidence**: 0.694
-- **Score**: -0.0216
+- **Confidence**: 0.700
+- **Score**: -0.0218
 - **Eligible tranches**: _none_
 - **Primary tranche**: _none_
 - **Rejection reasons**:
-  - senior: expectedLoss 0.0314 > 0.02; tvlUsd 2309 < 25000000; apyBase 0.02% < 2% (reward-only positions blocked)
-  - mezzanine: tvlUsd 2309 < 1000000; apyBase 0.02% < 1% (reward-only positions blocked)
-  - junior: tvlUsd 2309 < 100000
+  - senior: expectedLoss 0.0314 > 0.02; tvlUsd 2313 < 25000000; apyBase 0.02% < 2% (reward-only positions blocked)
+  - mezzanine: tvlUsd 2313 < 1000000; apyBase 0.02% < 1% (reward-only positions blocked)
+  - junior: tvlUsd 2313 < 100000
 
 ### mantleVault:dce58852-9976-4141-b26a-a832c5edc34e
 
 - **Source**: mantleVault
 - **Asset**: `0x201eba5cc46d216ce6dc03f6a759e8e766e956ae`
-- **APY (base)**: 50.91%    **APY (reward)**: 1.47%    **Total**: 52.38%
-- **TVL**: $2,135
+- **APY (base)**: 50.97%    **APY (reward)**: 1.47%    **Total**: 52.45%
+- **TVL**: $2,134
 - **APY history**: vol=22.48%, drift=3.55x
 - **Nansen signal**: _null_ (no key or asset not covered)
 - **Probabilities**: exploit=0.02568, depeg=0.00500, oracle=0.00700, illiquid=0.06671, counterparty=0.00500
 - **Expected loss**: 3.146% /yr
-- **RAAPY**: 47.76%
-- **Confidence**: 0.336
-- **Score**: 0.1602
+- **RAAPY**: 47.82%
+- **Confidence**: 0.342
+- **Score**: 0.1638
 - **Eligible tranches**: _none_
 - **Primary tranche**: _none_
 - **Rejection reasons**:
-  - senior: expectedLoss 0.0315 > 0.02; tvlUsd 2135 < 25000000; apy 50.91% > 8% (too-good-to-be-true gate)
-  - mezzanine: tvlUsd 2135 < 1000000; apy 50.91% > 20% (too-good-to-be-true gate)
-  - junior: tvlUsd 2135 < 100000
-
-### mantleVault:1362a09f-4853-492b-8083-34e0df20e17b
-
-- **Source**: mantleVault
-- **Asset**: `0xc96de26018a54d51c097160568752c4e3bd6c364`
-- **APY (base)**: 0.00%    **APY (reward)**: 0.00%    **Total**: 0.00%
-- **TVL**: $2,068
-- **APY history**: vol=0.00%, drift=1.01x
-- **Nansen signal**: _null_ (no key or asset not covered)
-- **Probabilities**: exploit=0.02572, depeg=0.00500, oracle=0.00700, illiquid=0.06684, counterparty=0.00500
-- **Expected loss**: 3.150% /yr
-- **RAAPY**: -3.15%
-- **Confidence**: 0.695
-- **Score**: -0.0219
-- **Eligible tranches**: _none_
-- **Primary tranche**: _none_
-- **Rejection reasons**:
-  - senior: expectedLoss 0.0315 > 0.02; tvlUsd 2068 < 25000000; apyBase 0.00% < 2% (reward-only positions blocked)
-  - mezzanine: tvlUsd 2068 < 1000000; apyBase 0.00% < 1% (reward-only positions blocked)
-  - junior: tvlUsd 2068 < 100000
+  - senior: expectedLoss 0.0315 > 0.02; tvlUsd 2134 < 25000000; apy 50.97% > 8% (too-good-to-be-true gate)
+  - mezzanine: tvlUsd 2134 < 1000000; apy 50.97% > 20% (too-good-to-be-true gate)
+  - junior: tvlUsd 2134 < 100000
 
 ### mantleVault:f988235b-39ab-43b4-a0e9-5ce2cd1924cb
 
@@ -883,8 +883,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
 - **Probabilities**: exploit=0.02685, depeg=0.00500, oracle=0.00700, illiquid=0.07067, counterparty=0.00500
 - **Expected loss**: 3.266% /yr
 - **RAAPY**: 395.12%
-- **Confidence**: 0.340
-- **Score**: 1.3445
+- **Confidence**: 0.343
+- **Score**: 1.3545
 - **Eligible tranches**: _none_
 - **Primary tranche**: _none_
 - **Rejection reasons**:
@@ -897,20 +897,20 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
 - **Source**: mantleVault
 - **Asset**: `0x5be26527e817998a7206475496fde1e68957c5a6`
 - **APY (base)**: 1.17%    **APY (reward)**: 0.00%    **Total**: 1.17%
-- **TVL**: $820
+- **TVL**: $822
 - **APY history**: vol=0.49%, drift=9.96x
 - **Nansen signal**: _null_ (no key or asset not covered)
-- **Probabilities**: exploit=0.02691, depeg=0.00038, oracle=0.00700, illiquid=0.07086, counterparty=0.00500
-- **Expected loss**: 3.179% /yr
-- **RAAPY**: -2.01%
-- **Confidence**: 0.477
-- **Score**: -0.0096
+- **Probabilities**: exploit=0.02691, depeg=0.00500, oracle=0.00700, illiquid=0.07085, counterparty=0.00500
+- **Expected loss**: 3.271% /yr
+- **RAAPY**: -2.10%
+- **Confidence**: 0.490
+- **Score**: -0.0103
 - **Eligible tranches**: _none_
 - **Primary tranche**: _none_
 - **Rejection reasons**:
-  - senior: expectedLoss 0.0318 > 0.02; tvlUsd 820 < 25000000; apyBase 1.17% < 2% (reward-only positions blocked)
-  - mezzanine: tvlUsd 820 < 1000000
-  - junior: tvlUsd 820 < 100000
+  - senior: expectedLoss 0.0327 > 0.02; tvlUsd 822 < 25000000; apyBase 1.17% < 2% (reward-only positions blocked)
+  - mezzanine: tvlUsd 822 < 1000000
+  - junior: tvlUsd 822 < 100000
 
 ### fbtc:c5f53253-269e-4b61-a9b8-b9b76cfa8480
 
@@ -923,8 +923,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
 - **Probabilities**: exploit=0.02934, depeg=0.00500, oracle=0.02000, illiquid=0.07907, counterparty=0.08000
 - **Expected loss**: 7.789% /yr
 - **RAAPY**: -7.79%
-- **Confidence**: 0.479
-- **Score**: -0.0373
+- **Confidence**: 0.489
+- **Score**: -0.0381
 - **Eligible tranches**: _none_
 - **Primary tranche**: _none_
 - **Rejection reasons**:
@@ -940,37 +940,37 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
 - **TVL**: $26
 - **APY history**: vol=0.00%, drift=1.00x
 - **Nansen signal**: _null_ (no key or asset not covered)
-- **Probabilities**: exploit=0.03135, depeg=0.00063, oracle=0.00700, illiquid=0.08585, counterparty=0.00500
-- **Expected loss**: 3.637% /yr
-- **RAAPY**: -3.64%
-- **Confidence**: 0.686
-- **Score**: -0.0249
+- **Probabilities**: exploit=0.03135, depeg=0.00500, oracle=0.00700, illiquid=0.08585, counterparty=0.00500
+- **Expected loss**: 3.724% /yr
+- **RAAPY**: -3.72%
+- **Confidence**: 0.700
+- **Score**: -0.0261
 - **Eligible tranches**: _none_
 - **Primary tranche**: _none_
 - **Rejection reasons**:
-  - senior: expectedLoss 0.0364 > 0.02; tvlUsd 26 < 25000000; apyBase 0.00% < 2% (reward-only positions blocked)
+  - senior: expectedLoss 0.0372 > 0.02; tvlUsd 26 < 25000000; apyBase 0.00% < 2% (reward-only positions blocked)
   - mezzanine: tvlUsd 26 < 1000000; apyBase 0.00% < 1% (reward-only positions blocked)
   - junior: tvlUsd 26 < 100000
 
-### fbtc:b283d8ef-8342-4932-a345-155be63c6f84
+### mantleVault:341123b4-b690-4d10-b2f8-b8fa64119220
 
-- **Source**: fbtc
+- **Source**: mantleVault
 - **Asset**: `0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9`
-- **APY (base)**: 9.75%    **APY (reward)**: 0.00%    **Total**: 9.75%
-- **TVL**: $0
-- **APY history**: no history available
+- **APY (base)**: 70.38%    **APY (reward)**: 1.21%    **Total**: 71.59%
+- **TVL**: $3
+- **APY history**: vol=29.69%, drift=7.26x
 - **Nansen signal**: _null_ (no key or asset not covered)
-- **Probabilities**: exploit=0.03554, depeg=0.00500, oracle=0.02000, illiquid=0.10000, counterparty=0.08000
-- **Expected loss**: 8.421% /yr
-- **RAAPY**: 1.33%
-- **Confidence**: 0.491
-- **Score**: 0.0065
+- **Probabilities**: exploit=0.03413, depeg=0.00500, oracle=0.00700, illiquid=0.09523, counterparty=0.00500
+- **Expected loss**: 4.007% /yr
+- **RAAPY**: 66.37%
+- **Confidence**: 0.343
+- **Score**: 0.2273
 - **Eligible tranches**: _none_
 - **Primary tranche**: _none_
 - **Rejection reasons**:
-  - senior: expectedLoss 0.0842 > 0.02; tvlUsd 0 < 25000000; apy 9.75% > 8% (too-good-to-be-true gate)
-  - mezzanine: expectedLoss 0.0842 > 0.04; tvlUsd 0 < 1000000
-  - junior: tvlUsd 0 < 100000
+  - senior: expectedLoss 0.0401 > 0.02; tvlUsd 3 < 25000000; apy 70.38% > 8% (too-good-to-be-true gate)
+  - mezzanine: expectedLoss 0.0401 > 0.04; tvlUsd 3 < 1000000; apy 70.38% > 20% (too-good-to-be-true gate)
+  - junior: tvlUsd 3 < 100000
 
 ### fbtc:098dd57e-f57a-4715-b408-65472b61afe8
 
@@ -983,8 +983,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
 - **Probabilities**: exploit=0.03554, depeg=0.00500, oracle=0.02000, illiquid=0.10000, counterparty=0.08000
 - **Expected loss**: 8.421% /yr
 - **RAAPY**: 9.08%
-- **Confidence**: 0.489
-- **Score**: 0.0444
+- **Confidence**: 0.499
+- **Score**: 0.0453
 - **Eligible tranches**: _none_
 - **Primary tranche**: _none_
 - **Rejection reasons**:
@@ -1003,8 +1003,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
 - **Probabilities**: exploit=0.03554, depeg=0.00500, oracle=0.02000, illiquid=0.10000, counterparty=0.08000
 - **Expected loss**: 8.421% /yr
 - **RAAPY**: 1.58%
-- **Confidence**: 0.491
-- **Score**: 0.0078
+- **Confidence**: 0.499
+- **Score**: 0.0079
 - **Eligible tranches**: _none_
 - **Primary tranche**: _none_
 - **Rejection reasons**:
@@ -1023,8 +1023,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
 - **Probabilities**: exploit=0.03554, depeg=0.00500, oracle=0.02000, illiquid=0.10000, counterparty=0.08000
 - **Expected loss**: 8.421% /yr
 - **RAAPY**: 4.58%
-- **Confidence**: 0.489
-- **Score**: 0.0224
+- **Confidence**: 0.499
+- **Score**: 0.0229
 - **Eligible tranches**: _none_
 - **Primary tranche**: _none_
 - **Rejection reasons**:
@@ -1043,8 +1043,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
 - **Probabilities**: exploit=0.03554, depeg=0.00500, oracle=0.02000, illiquid=0.10000, counterparty=0.08000
 - **Expected loss**: 8.421% /yr
 - **RAAPY**: 6.58%
-- **Confidence**: 0.489
-- **Score**: 0.0322
+- **Confidence**: 0.499
+- **Score**: 0.0328
 - **Eligible tranches**: _none_
 - **Primary tranche**: _none_
 - **Rejection reasons**:
@@ -1063,8 +1063,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
 - **Probabilities**: exploit=0.03554, depeg=0.00500, oracle=0.02000, illiquid=0.10000, counterparty=0.08000
 - **Expected loss**: 8.421% /yr
 - **RAAPY**: 1.58%
-- **Confidence**: 0.491
-- **Score**: 0.0078
+- **Confidence**: 0.499
+- **Score**: 0.0079
 - **Eligible tranches**: _none_
 - **Primary tranche**: _none_
 - **Rejection reasons**:
@@ -1083,8 +1083,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
 - **Probabilities**: exploit=0.03554, depeg=0.00500, oracle=0.02000, illiquid=0.10000, counterparty=0.08000
 - **Expected loss**: 8.421% /yr
 - **RAAPY**: 4.58%
-- **Confidence**: 0.685
-- **Score**: 0.0314
+- **Confidence**: 0.699
+- **Score**: 0.0320
 - **Eligible tranches**: _none_
 - **Primary tranche**: _none_
 - **Rejection reasons**:
@@ -1103,8 +1103,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
 - **Probabilities**: exploit=0.03554, depeg=0.00500, oracle=0.02000, illiquid=0.10000, counterparty=0.08000
 - **Expected loss**: 8.421% /yr
 - **RAAPY**: 1.58%
-- **Confidence**: 0.489
-- **Score**: 0.0077
+- **Confidence**: 0.499
+- **Score**: 0.0079
 - **Eligible tranches**: _none_
 - **Primary tranche**: _none_
 - **Rejection reasons**:
@@ -1112,64 +1112,64 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
   - mezzanine: expectedLoss 0.0842 > 0.04; tvlUsd 0 < 1000000
   - junior: tvlUsd 0 < 100000
 
-### aave:4a0e9f84-09a0-491a-aa5e-269813d31a59
+### fbtc:b283d8ef-8342-4932-a345-155be63c6f84
 
-- **Source**: aave
-- **Asset**: `0xdeaddeaddeaddeaddeaddeaddeaddeaddead1111`
-- **APY (base)**: 8.93%    **APY (reward)**: 0.00%    **Total**: 8.93%
+- **Source**: fbtc
+- **Asset**: `0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9`
+- **APY (base)**: 9.75%    **APY (reward)**: 0.00%    **Total**: 9.75%
 - **TVL**: $0
-- **APY history**: vol=2.18%, drift=2.25x
+- **APY history**: no history available
 - **Nansen signal**: _null_ (no key or asset not covered)
-- **Probabilities**: exploit=0.00276, depeg=0.00500, oracle=0.00200, illiquid=0.10000, counterparty=0.00500
-- **Expected loss**: 1.165% /yr
-- **RAAPY**: 7.76%
-- **Confidence**: 0.487
-- **Score**: 0.0378
+- **Probabilities**: exploit=0.03554, depeg=0.00500, oracle=0.02000, illiquid=0.10000, counterparty=0.08000
+- **Expected loss**: 8.421% /yr
+- **RAAPY**: 1.33%
+- **Confidence**: 0.499
+- **Score**: 0.0066
 - **Eligible tranches**: _none_
 - **Primary tranche**: _none_
 - **Rejection reasons**:
-  - senior: tvlUsd 0 < 25000000; apy 8.93% > 8% (too-good-to-be-true gate)
-  - mezzanine: tvlUsd 0 < 1000000
+  - senior: expectedLoss 0.0842 > 0.02; tvlUsd 0 < 25000000; apy 9.75% > 8% (too-good-to-be-true gate)
+  - mezzanine: expectedLoss 0.0842 > 0.04; tvlUsd 0 < 1000000
   - junior: tvlUsd 0 < 100000
 
 ### aave:125974d5-ad17-4a3a-b967-ebbf721fca22
 
 - **Source**: aave
 - **Asset**: `0xfc421ad3c883bf9e7c4f42de845c4e4405799e73`
-- **APY (base)**: 1.46%    **APY (reward)**: 4.10%    **Total**: 5.56%
+- **APY (base)**: 2.12%    **APY (reward)**: 4.40%    **Total**: 6.51%
 - **TVL**: $0
-- **APY history**: vol=4.17%, drift=0.94x
+- **APY history**: vol=4.17%, drift=0.95x
 - **Nansen signal**: _null_ (no key or asset not covered)
 - **Probabilities**: exploit=0.00276, depeg=0.00500, oracle=0.00200, illiquid=0.10000, counterparty=0.00500
 - **Expected loss**: 1.165% /yr
-- **RAAPY**: 0.30%
-- **Confidence**: 0.487
-- **Score**: 0.0014
+- **RAAPY**: 0.95%
+- **Confidence**: 0.490
+- **Score**: 0.0047
 - **Eligible tranches**: _none_
 - **Primary tranche**: _none_
 - **Rejection reasons**:
-  - senior: tvlUsd 0 < 25000000; apyBase 1.46% < 2% (reward-only positions blocked)
+  - senior: tvlUsd 0 < 25000000
   - mezzanine: tvlUsd 0 < 1000000
   - junior: tvlUsd 0 < 100000
 
-### mantleVault:341123b4-b690-4d10-b2f8-b8fa64119220
+### mantleVault:1362a09f-4853-492b-8083-34e0df20e17b
 
 - **Source**: mantleVault
-- **Asset**: `0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9`
-- **APY (base)**: 70.40%    **APY (reward)**: 1.21%    **Total**: 71.61%
+- **Asset**: `0xc96de26018a54d51c097160568752c4e3bd6c364`
+- **APY (base)**: 0.00%    **APY (reward)**: 0.00%    **Total**: 0.00%
 - **TVL**: $0
-- **APY history**: vol=29.69%, drift=7.26x
+- **APY history**: vol=0.00%, drift=1.01x
 - **Nansen signal**: _null_ (no key or asset not covered)
 - **Probabilities**: exploit=0.03554, depeg=0.00500, oracle=0.00700, illiquid=0.10000, counterparty=0.00500
 - **Expected loss**: 4.151% /yr
-- **RAAPY**: 66.25%
-- **Confidence**: 0.337
-- **Score**: 0.2231
+- **RAAPY**: -4.15%
+- **Confidence**: 0.700
+- **Score**: -0.0290
 - **Eligible tranches**: _none_
 - **Primary tranche**: _none_
 - **Rejection reasons**:
-  - senior: expectedLoss 0.0415 > 0.02; tvlUsd 0 < 25000000; apy 70.40% > 8% (too-good-to-be-true gate)
-  - mezzanine: expectedLoss 0.0415 > 0.04; tvlUsd 0 < 1000000; apy 70.40% > 20% (too-good-to-be-true gate)
+  - senior: expectedLoss 0.0415 > 0.02; tvlUsd 0 < 25000000; apyBase 0.00% < 2% (reward-only positions blocked)
+  - mezzanine: expectedLoss 0.0415 > 0.04; tvlUsd 0 < 1000000; apyBase 0.00% < 1% (reward-only positions blocked)
   - junior: tvlUsd 0 < 100000
 
 ## Signed canonical Yield Map
@@ -1177,9 +1177,9 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
 ```json
 {
   "version": "1.0",
-  "publishedAtMs": 1779283460657,
+  "publishedAtMs": 1779306915299,
   "publisher": {
-    "address": "0x7e37DB9c32F85436CA5D565E567658B9FbecB9bC",
+    "address": "0x034d6c95d1a1D3abaBBe2FFD7cAb5970517A065c",
     "identityNFT": "dry-run"
   },
   "methodologyHash": "0xdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
@@ -1194,8 +1194,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apy": 0,
       "apyReward": 0.04,
       "apyType": "variable",
-      "tvlUsd": 63888676,
-      "lastUpdatedMs": 1779283451669,
+      "tvlUsd": 63883998,
+      "lastUpdatedMs": 1779306914842,
       "raw": {
         "chain": "Mantle",
         "project": "aave-v3",
@@ -1206,21 +1206,14 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "apy": 4,
         "apyBase": 0,
         "apyReward": 4,
-        "tvlUsd": 63888676,
+        "tvlUsd": 63883998,
         "pool": "a4e37545-203b-4412-9acd-3e8b1aa4d744"
       },
       "risk": {
         "contractAgeDays": 700,
         "auditFactor": 0.3,
         "tvlFactor": null,
-        "depegEvents": [
-          {
-            "startMs": 1747833969000,
-            "endMs": null,
-            "maxDeviation": 0.23139594351023907,
-            "recoveryHours": null
-          }
-        ],
+        "depegEvents": [],
         "oracleType": "chainlink_dec",
         "liquiditySlippageBps": null,
         "counterpartyClass": "permissionless",
@@ -1229,10 +1222,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "apyDrift": 1
       },
       "probabilities": {
-        "exploit": 0.0009658676412889938,
-        "depeg": 0.0006339614890691481,
+        "exploit": 0.0009658749639019247,
+        "depeg": 0.005,
         "oracle": 0.002,
-        "illiquid": 0.021945761118968496,
+        "illiquid": 0.021946079125866783,
         "counterparty": 0.005
       },
       "severities": {
@@ -1242,10 +1235,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "illiquid": 0.05,
         "counterparty": 0.5
       },
-      "expectedLoss": 0.005345067848857899,
-      "raapy": -0.005345067848857899,
-      "confidence": 0.6857160826556589,
-      "score": -0.003665198986847548,
+      "expectedLoss": 0.006218297675609975,
+      "raapy": -0.006218297675609975,
+      "confidence": 0.6999393359621462,
+      "score": -0.004352431145881404,
       "eligibleTranches": [
         "junior"
       ],
@@ -1273,7 +1266,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apyReward": 0,
       "apyType": "variable",
       "tvlUsd": 29444317,
-      "lastUpdatedMs": 1779283451669,
+      "lastUpdatedMs": 1779306914842,
       "raw": {
         "chain": "Mantle",
         "project": "ondo-yield-assets",
@@ -1291,14 +1284,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "contractAgeDays": 730,
         "auditFactor": 0.3,
         "tvlFactor": null,
-        "depegEvents": [
-          {
-            "startMs": 1747832337000,
-            "endMs": null,
-            "maxDeviation": 0.13918936997606068,
-            "recoveryHours": null
-          }
-        ],
+        "depegEvents": [],
         "oracleType": "chainlink_dec",
         "liquiditySlippageBps": null,
         "counterpartyClass": "attested_centralized",
@@ -1308,7 +1294,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       },
       "probabilities": {
         "exploit": 0.0008831633608151709,
-        "depeg": 0.00038134073966044024,
+        "depeg": 0.005,
         "oracle": 0.002,
         "illiquid": 0.0253099851526421,
         "counterparty": 0.03
@@ -1320,10 +1306,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "illiquid": 0.05,
         "counterparty": 0.5
       },
-      "expectedLoss": 0.01789245626225709,
-      "raapy": 0.017607543737742908,
-      "confidence": 0.6816640912675701,
-      "score": 0.012002430301442515,
+      "expectedLoss": 0.018816188114325,
+      "raapy": 0.016683811885675,
+      "confidence": 0.6996734095437002,
+      "score": 0.011673219546235935,
       "eligibleTranches": [
         "senior",
         "mezzanine",
@@ -1336,11 +1322,11 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "id": "aave:47da0cdd-7b1d-4927-9545-20b53b73afa8",
       "source": "aave",
       "asset": "0x779ded0c9e1022225f8e0630b35a9b54be713736",
-      "apy": 0.0845736,
-      "apyReward": 0.0300033,
+      "apy": 0.0314917,
+      "apyReward": 0.0293008,
       "apyType": "variable",
-      "tvlUsd": 6830643,
-      "lastUpdatedMs": 1779283451669,
+      "tvlUsd": 19363509,
+      "lastUpdatedMs": 1779306914842,
       "raw": {
         "chain": "Mantle",
         "project": "aave-v3",
@@ -1348,10 +1334,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "underlyingTokens": [
           "0x779Ded0c9e1022225f8E0630b35a9b54bE713736"
         ],
-        "apy": 11.45769,
-        "apyBase": 8.45736,
-        "apyReward": 3.00033,
-        "tvlUsd": 6830643,
+        "apy": 6.07926,
+        "apyBase": 3.14917,
+        "apyReward": 2.93008,
+        "tvlUsd": 19363509,
         "pool": "47da0cdd-7b1d-4927-9545-20b53b73afa8"
       },
       "risk": {
@@ -1363,14 +1349,14 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "liquiditySlippageBps": null,
         "counterpartyClass": "permissionless",
         "smartMoneySignal": null,
-        "apyVolatility": 0.027398863928625602,
-        "apyDrift": 0.8110591220520401
+        "apyVolatility": 0.026457301472066194,
+        "apyDrift": 0.7578453045727985
       },
       "probabilities": {
-        "exploit": 0.001189447102431655,
+        "exploit": 0.0010852466295124025,
         "depeg": 0.005,
         "oracle": 0.002,
-        "illiquid": 0.03165538412247042,
+        "illiquid": 0.027130159382855457,
         "counterparty": 0.005
       },
       "severities": {
@@ -1380,10 +1366,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "illiquid": 0.05,
         "counterparty": 0.5
       },
-      "expectedLoss": 0.006893799243190427,
-      "raapy": 0.07767980075680957,
-      "confidence": 0.6973543456002982,
-      "score": 0.05417034662312648,
+      "expectedLoss": 0.006578967604228315,
+      "raapy": 0.024912732395771683,
+      "confidence": 0.6996710773028887,
+      "score": 0.017430718313908147,
       "eligibleTranches": [
         "mezzanine",
         "junior"
@@ -1393,8 +1379,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         {
           "tranche": "senior",
           "reasons": [
-            "tvlUsd 6830643 < 25000000",
-            "apy 8.46% > 8% (too-good-to-be-true gate)"
+            "tvlUsd 19363509 < 25000000"
           ]
         }
       ]
@@ -1403,11 +1388,11 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "id": "aave:76b70b33-d8a4-4e61-8092-9bd1f2be2fc9",
       "source": "aave",
       "asset": "0x5d3a1ff2b6bab83b63cd9ad0787074081a52ef34",
-      "apy": 0.0027999,
+      "apy": 0.0028000000000000004,
       "apyReward": 0.04,
       "apyType": "variable",
-      "tvlUsd": 5864475,
-      "lastUpdatedMs": 1779283451669,
+      "tvlUsd": 5862590,
+      "lastUpdatedMs": 1779306914842,
       "raw": {
         "chain": "Mantle",
         "project": "aave-v3",
@@ -1415,10 +1400,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "underlyingTokens": [
           "0x5d3a1Ff2b6BAb83b63cd9AD0787074081a52ef34"
         ],
-        "apy": 4.27999,
-        "apyBase": 0.27999,
+        "apy": 4.28,
+        "apyBase": 0.28,
         "apyReward": 4,
-        "tvlUsd": 5864475,
+        "tvlUsd": 5862590,
         "pool": "76b70b33-d8a4-4e61-8092-9bd1f2be2fc9"
       },
       "risk": {
@@ -1430,14 +1415,14 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "liquiditySlippageBps": null,
         "counterpartyClass": "permissionless",
         "smartMoneySignal": null,
-        "apyVolatility": 0.032122994231528416,
-        "apyDrift": 42.93405623447121
+        "apyVolatility": 0.03212299270423797,
+        "apyDrift": 42.93405938369027
       },
       "probabilities": {
-        "exploit": 0.0012046981736029282,
+        "exploit": 0.0012047303224845987,
         "depeg": 0.005,
         "oracle": 0.002,
-        "illiquid": 0.03231770860753638,
+        "illiquid": 0.03231910477120639,
         "counterparty": 0.005
       },
       "severities": {
@@ -1447,10 +1432,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "illiquid": 0.05,
         "counterparty": 0.5
       },
-      "expectedLoss": 0.006939878877939308,
-      "raapy": -0.004139978877939308,
-      "confidence": 0.3349854552882792,
-      "score": -0.0013868327093103584,
+      "expectedLoss": 0.006939976012672228,
+      "raapy": -0.004139976012672228,
+      "confidence": 0.3425064354517626,
+      "score": -0.001417968426956166,
       "eligibleTranches": [
         "junior"
       ],
@@ -1459,7 +1444,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         {
           "tranche": "senior",
           "reasons": [
-            "tvlUsd 5864475 < 25000000",
+            "tvlUsd 5862590 < 25000000",
             "apyBase 0.28% < 2% (reward-only positions blocked)"
           ]
         },
@@ -1475,11 +1460,11 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "id": "aave:32cb38a5-b9b9-441a-bf07-8fab47b999d3",
       "source": "aave",
       "asset": "0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9",
-      "apy": 0.0104236,
-      "apyReward": 0,
+      "apy": 0.024489200000000003,
+      "apyReward": 0.0526267,
       "apyType": "variable",
-      "tvlUsd": 5852600,
-      "lastUpdatedMs": 1779283451669,
+      "tvlUsd": 2868113,
+      "lastUpdatedMs": 1779306914842,
       "raw": {
         "chain": "Mantle",
         "project": "aave-v3",
@@ -1487,10 +1472,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "underlyingTokens": [
           "0x09Bc4E0D864854c6aFB6eB9A9cdF58aC190D0dF9"
         ],
-        "apy": 1.04236,
-        "apyBase": 1.04236,
-        "apyReward": null,
-        "tvlUsd": 5852600,
+        "apy": 7.71159,
+        "apyBase": 2.44892,
+        "apyReward": 5.26267,
+        "tvlUsd": 2868113,
         "pool": "32cb38a5-b9b9-441a-bf07-8fab47b999d3"
       },
       "risk": {
@@ -1502,14 +1487,14 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "liquiditySlippageBps": null,
         "counterpartyClass": "permissionless",
         "smartMoneySignal": null,
-        "apyVolatility": 0.0337009793471602,
-        "apyDrift": 0.7121594904677289
+        "apyVolatility": 0.03353681367510239,
+        "apyDrift": 0.725340099559253
       },
       "probabilities": {
-        "exploit": 0.001204900875774521,
+        "exploit": 0.0012762263186000503,
         "depeg": 0.005,
         "oracle": 0.002,
-        "illiquid": 0.032326511570286626,
+        "illiquid": 0.035424037420175955,
         "counterparty": 0.005
       },
       "severities": {
@@ -1519,10 +1504,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "illiquid": 0.05,
         "counterparty": 0.5
       },
-      "expectedLoss": 0.006940491322922675,
-      "raapy": 0.003483108677077325,
-      "confidence": 0.4811722870484398,
-      "score": 0.0016759753681875622,
+      "expectedLoss": 0.00715599424181884,
+      "raapy": 0.01733320575818116,
+      "confidence": 0.48929816976515755,
+      "score": 0.008481105853640931,
       "eligibleTranches": [
         "mezzanine",
         "junior"
@@ -1532,8 +1517,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         {
           "tranche": "senior",
           "reasons": [
-            "tvlUsd 5852600 < 25000000",
-            "apyBase 1.04% < 2% (reward-only positions blocked)"
+            "tvlUsd 2868113 < 25000000"
           ]
         }
       ]
@@ -1542,11 +1526,11 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "id": "agni:35f2103d-231b-443b-952e-d2cd118d8f29",
       "source": "agni",
       "asset": "0x779ded0c9e1022225f8e0630b35a9b54be713736",
-      "apy": 0.32078490000000004,
+      "apy": 0.4624451,
       "apyReward": 0,
       "apyType": "variable",
-      "tvlUsd": 1083561,
-      "lastUpdatedMs": 1779283451669,
+      "tvlUsd": 1752765,
+      "lastUpdatedMs": 1779306914842,
       "raw": {
         "chain": "Mantle",
         "project": "fluxion-network",
@@ -1555,10 +1539,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
           "0x779ded0c9e1022225f8e0630b35a9b54be713736",
           "0xe5c330addf7aa9c7838da836436142c56a15aa95"
         ],
-        "apy": 32.07849,
-        "apyBase": 32.07849,
+        "apy": 46.24451,
+        "apyBase": 46.24451,
         "apyReward": null,
-        "tvlUsd": 1083561,
+        "tvlUsd": 1752765,
         "pool": "35f2103d-231b-443b-952e-d2cd118d8f29"
       },
       "risk": {
@@ -1570,14 +1554,14 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "liquiditySlippageBps": null,
         "counterpartyClass": "permissionless",
         "smartMoneySignal": null,
-        "apyVolatility": 0.619036347585667,
-        "apyDrift": 1.3799578983996834
+        "apyVolatility": 0.6181358083858305,
+        "apyDrift": 1.3946852106657823
       },
       "probabilities": {
-        "exploit": 0.0066822111748090105,
+        "exploit": 0.006448232746535065,
         "depeg": 0.005,
         "oracle": 0.007,
-        "illiquid": 0.0396514663467394,
+        "illiquid": 0.03756276307548349,
         "counterparty": 0.005
       },
       "severities": {
@@ -1587,10 +1571,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "illiquid": 0.05,
         "counterparty": 0.5
       },
-      "expectedLoss": 0.01396245281592463,
-      "raapy": 0.3068224471840754,
-      "confidence": 0.48736925411099363,
-      "score": 0.14953582722861258,
+      "expectedLoss": 0.013659135988328982,
+      "raapy": 0.44878596401167103,
+      "confidence": 0.48977138668059006,
+      "score": 0.2198025239167815,
       "eligibleTranches": [
         "junior"
       ],
@@ -1599,14 +1583,14 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         {
           "tranche": "senior",
           "reasons": [
-            "tvlUsd 1083561 < 25000000",
-            "apy 32.08% > 8% (too-good-to-be-true gate)"
+            "tvlUsd 1752765 < 25000000",
+            "apy 46.24% > 8% (too-good-to-be-true gate)"
           ]
         },
         {
           "tranche": "mezzanine",
           "reasons": [
-            "apy 32.08% > 20% (too-good-to-be-true gate)"
+            "apy 46.24% > 20% (too-good-to-be-true gate)"
           ]
         }
       ]
@@ -1615,11 +1599,11 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "id": "agni:85407ecd-f711-4fa6-9328-3078aebfaa95",
       "source": "agni",
       "asset": "0x55b9f84605b30df9bb9d817a6900219f25218157",
-      "apy": 0.1058756,
+      "apy": 0.12265359999999999,
       "apyReward": 0,
       "apyType": "variable",
-      "tvlUsd": 827340,
-      "lastUpdatedMs": 1779283451669,
+      "tvlUsd": 808798,
+      "lastUpdatedMs": 1779306914842,
       "raw": {
         "chain": "Mantle",
         "project": "fluxion-network",
@@ -1628,10 +1612,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
           "0x55b9f84605b30df9bb9d817a6900219f25218157",
           "0x779ded0c9e1022225f8e0630b35a9b54be713736"
         ],
-        "apy": 10.58756,
-        "apyBase": 10.58756,
+        "apy": 12.26536,
+        "apyBase": 12.26536,
         "apyReward": null,
-        "tvlUsd": 827340,
+        "tvlUsd": 808798,
         "pool": "85407ecd-f711-4fa6-9328-3078aebfaa95"
       },
       "risk": {
@@ -1647,10 +1631,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "apyDrift": null
       },
       "probabilities": {
-        "exploit": 0.006813465332232468,
+        "exploit": 0.006824492617717289,
         "depeg": 0.005,
         "oracle": 0.007,
-        "illiquid": 0.04082315978018417,
+        "illiquid": 0.04092159931341435,
         "counterparty": 0.005
       },
       "severities": {
@@ -1660,10 +1644,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "illiquid": 0.05,
         "counterparty": 0.5
       },
-      "expectedLoss": 0.014132603521406809,
-      "raapy": 0.09174299647859319,
-      "confidence": 0.49696590978168287,
-      "score": 0.04559314171108179,
+      "expectedLoss": 0.014146898690730415,
+      "raapy": 0.10850670130926957,
+      "confidence": 0.4997650552163491,
+      "score": 0.054227857571171004,
       "eligibleTranches": [
         "junior"
       ],
@@ -1672,14 +1656,14 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         {
           "tranche": "senior",
           "reasons": [
-            "tvlUsd 827340 < 25000000",
-            "apy 10.59% > 8% (too-good-to-be-true gate)"
+            "tvlUsd 808798 < 25000000",
+            "apy 12.27% > 8% (too-good-to-be-true gate)"
           ]
         },
         {
           "tranche": "mezzanine",
           "reasons": [
-            "tvlUsd 827340 < 1000000"
+            "tvlUsd 808798 < 1000000"
           ]
         }
       ]
@@ -1688,11 +1672,11 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "id": "agni:6d76a4e2-57f2-4190-a882-bd69f6ea32fb",
       "source": "agni",
       "asset": "0x45db70e1c808dae42f9c4dfea74ba5e6a113bdc1",
-      "apy": 0.0284449,
+      "apy": 0.0335772,
       "apyReward": 0,
       "apyType": "variable",
-      "tvlUsd": 428827,
-      "lastUpdatedMs": 1779283451669,
+      "tvlUsd": 423182,
+      "lastUpdatedMs": 1779306914842,
       "raw": {
         "chain": "Mantle",
         "project": "fluxion-network",
@@ -1701,10 +1685,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
           "0x45db70e1c808dae42f9c4dfea74ba5e6a113bdc1",
           "0x779ded0c9e1022225f8e0630b35a9b54be713736"
         ],
-        "apy": 2.84449,
-        "apyBase": 2.84449,
+        "apy": 3.35772,
+        "apyBase": 3.35772,
         "apyReward": null,
-        "tvlUsd": 428827,
+        "tvlUsd": 423182,
         "pool": "6d76a4e2-57f2-4190-a882-bd69f6ea32fb"
       },
       "risk": {
@@ -1716,14 +1700,14 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "liquiditySlippageBps": null,
         "counterpartyClass": "permissionless",
         "smartMoneySignal": null,
-        "apyVolatility": 9.51257912505226,
-        "apyDrift": 0.03410064552184095
+        "apyVolatility": 9.512485640219698,
+        "apyDrift": 0.03413563727028446
       },
       "probabilities": {
-        "exploit": 0.007133175120366639,
+        "exploit": 0.007139621850612998,
         "depeg": 0.005,
         "oracle": 0.007,
-        "illiquid": 0.04367717878208346,
+        "illiquid": 0.04373472813248216,
         "counterparty": 0.005
       },
       "severities": {
@@ -1733,10 +1717,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "illiquid": 0.05,
         "counterparty": 0.5
       },
-      "expectedLoss": 0.014547057791415817,
-      "raapy": 0.013897842208584182,
-      "confidence": 0.48852080384490904,
-      "score": 0.00678938504744725,
+      "expectedLoss": 0.014555414979645158,
+      "raapy": 0.019021785020354842,
+      "confidence": 0.48977138668059006,
+      "score": 0.009316326026559267,
       "eligibleTranches": [
         "junior"
       ],
@@ -1745,13 +1729,85 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         {
           "tranche": "senior",
           "reasons": [
-            "tvlUsd 428827 < 25000000"
+            "tvlUsd 423182 < 25000000"
           ]
         },
         {
           "tranche": "mezzanine",
           "reasons": [
-            "tvlUsd 428827 < 1000000"
+            "tvlUsd 423182 < 1000000"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "aave:4a0e9f84-09a0-491a-aa5e-269813d31a59",
+      "source": "aave",
+      "asset": "0xdeaddeaddeaddeaddeaddeaddeaddeaddead1111",
+      "apy": 0.08568540000000001,
+      "apyReward": 0,
+      "apyType": "variable",
+      "tvlUsd": 376791,
+      "lastUpdatedMs": 1779306914842,
+      "raw": {
+        "chain": "Mantle",
+        "project": "aave-v3",
+        "symbol": "WETH",
+        "underlyingTokens": [
+          "0xdEAddEaDdeadDEadDEADDEAddEADDEAddead1111"
+        ],
+        "apy": 8.56854,
+        "apyBase": 8.56854,
+        "apyReward": null,
+        "tvlUsd": 376791,
+        "pool": "4a0e9f84-09a0-491a-aa5e-269813d31a59"
+      },
+      "risk": {
+        "contractAgeDays": 700,
+        "auditFactor": 0.3,
+        "tvlFactor": null,
+        "depegEvents": [],
+        "oracleType": "chainlink_dec",
+        "liquiditySlippageBps": null,
+        "counterpartyClass": "permissionless",
+        "smartMoneySignal": null,
+        "apyVolatility": 0.021459645329348687,
+        "apyDrift": 2.2372289695789473
+      },
+      "probabilities": {
+        "exploit": 0.0014792046853866403,
+        "depeg": 0.005,
+        "oracle": 0.002,
+        "illiquid": 0.04423899479278889,
+        "counterparty": 0.005
+      },
+      "severities": {
+        "exploit": 0.85,
+        "depeg": 0.2,
+        "oracle": 0.4,
+        "illiquid": 0.05,
+        "counterparty": 0.5
+      },
+      "expectedLoss": 0.007769273722218089,
+      "raapy": 0.07791612627778192,
+      "confidence": 0.48977138668059006,
+      "score": 0.038161089211849214,
+      "eligibleTranches": [
+        "junior"
+      ],
+      "primaryTranche": "junior",
+      "rejectionReasons": [
+        {
+          "tranche": "senior",
+          "reasons": [
+            "tvlUsd 376791 < 25000000",
+            "apy 8.57% > 8% (too-good-to-be-true gate)"
+          ]
+        },
+        {
+          "tranche": "mezzanine",
+          "reasons": [
+            "tvlUsd 376791 < 1000000"
           ]
         }
       ]
@@ -1761,10 +1817,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "source": "mantleVault",
       "asset": "0xcda86a272531e8640cd7f1a92c01839911b90bb0",
       "apy": 0.0031143,
-      "apyReward": 0.0002947,
+      "apyReward": 0.0002956,
       "apyType": "variable",
-      "tvlUsd": 268958,
-      "lastUpdatedMs": 1779283451669,
+      "tvlUsd": 268408,
+      "lastUpdatedMs": 1779306914842,
       "raw": {
         "chain": "Mantle",
         "project": "lendle-pooled-markets",
@@ -1772,10 +1828,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "underlyingTokens": [
           "0xcDA86A272531e8640cD7F1a92c01839911B90bb0"
         ],
-        "apy": 0.34091,
+        "apy": 0.341,
         "apyBase": 0.31143,
-        "apyReward": 0.02947,
-        "tvlUsd": 268958,
+        "apyReward": 0.02956,
+        "tvlUsd": 268408,
         "pool": "c87c5d7c-0285-47a9-8539-d335f05b9ba2"
       },
       "risk": {
@@ -1791,10 +1847,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "apyDrift": 1.2934737671305583
       },
       "probabilities": {
-        "exploit": 0.01945879959639608,
+        "exploit": 0.01946143251105418,
         "depeg": 0.005,
         "oracle": 0.007,
-        "illiquid": 0.04570315533352081,
+        "illiquid": 0.045712045440020124,
         "counterparty": 0.005
       },
       "severities": {
@@ -1804,10 +1860,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "illiquid": 0.05,
         "counterparty": 0.5
       },
-      "expectedLoss": 0.02512513742361271,
-      "raapy": -0.02201083742361271,
-      "confidence": 0.6948182739503084,
-      "score": -0.015293532066875436,
+      "expectedLoss": 0.025127819906397057,
+      "raapy": -0.022013519906397057,
+      "confidence": 0.6996640806270992,
+      "score": -0.015402069166675643,
       "eligibleTranches": [
         "junior"
       ],
@@ -1817,14 +1873,14 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
           "tranche": "senior",
           "reasons": [
             "expectedLoss 0.0251 > 0.02",
-            "tvlUsd 268958 < 25000000",
+            "tvlUsd 268408 < 25000000",
             "apyBase 0.31% < 2% (reward-only positions blocked)"
           ]
         },
         {
           "tranche": "mezzanine",
           "reasons": [
-            "tvlUsd 268958 < 1000000",
+            "tvlUsd 268408 < 1000000",
             "apyBase 0.31% < 1% (reward-only positions blocked)"
           ]
         }
@@ -1835,10 +1891,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "source": "mantleVault",
       "asset": "0xe6829d9a7ee3040e1276fa75293bde931859e8fa",
       "apy": 0.0000339,
-      "apyReward": 0.0004763,
+      "apyReward": 0.0004777,
       "apyType": "variable",
-      "tvlUsd": 193563,
-      "lastUpdatedMs": 1779283451669,
+      "tvlUsd": 193897,
+      "lastUpdatedMs": 1779306914842,
       "raw": {
         "chain": "Mantle",
         "project": "lendle-pooled-markets",
@@ -1846,10 +1902,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "underlyingTokens": [
           "0xE6829d9a7eE3040e1276Fa75293Bde931859e8fA"
         ],
-        "apy": 0.05102,
+        "apy": 0.05116,
         "apyBase": 0.00339,
-        "apyReward": 0.04763,
-        "tvlUsd": 193563,
+        "apyReward": 0.04777,
+        "tvlUsd": 193897,
         "pool": "b96d8236-36d4-4be4-92f7-422beeac7073"
       },
       "risk": {
@@ -1861,14 +1917,14 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "liquiditySlippageBps": null,
         "counterpartyClass": "permissionless",
         "smartMoneySignal": null,
-        "apyVolatility": null,
-        "apyDrift": null
+        "apyVolatility": 0.0015096890105314252,
+        "apyDrift": 0.0987103434168527
       },
       "probabilities": {
-        "exploit": 0.019881903386435498,
+        "exploit": 0.01987968588542752,
         "depeg": 0.005,
         "oracle": 0.007,
-        "illiquid": 0.04713177655454977,
+        "illiquid": 0.047124289103309125,
         "counterparty": 0.005
       },
       "severities": {
@@ -1878,10 +1934,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "illiquid": 0.05,
         "counterparty": 0.5
       },
-      "expectedLoss": 0.025556206706197664,
-      "raapy": -0.025522306706197664,
-      "confidence": 0.48761269441600746,
-      "score": -0.01244500074072078,
+      "expectedLoss": 0.02555394745777885,
+      "raapy": -0.02552004745777885,
+      "confidence": 0.6996664128445882,
+      "score": -0.01785552006040778,
       "eligibleTranches": [
         "junior"
       ],
@@ -1891,14 +1947,14 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
           "tranche": "senior",
           "reasons": [
             "expectedLoss 0.0256 > 0.02",
-            "tvlUsd 193563 < 25000000",
+            "tvlUsd 193897 < 25000000",
             "apyBase 0.00% < 2% (reward-only positions blocked)"
           ]
         },
         {
           "tranche": "mezzanine",
           "reasons": [
-            "tvlUsd 193563 < 1000000",
+            "tvlUsd 193897 < 1000000",
             "apyBase 0.00% < 1% (reward-only positions blocked)"
           ]
         }
@@ -1908,11 +1964,11 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "id": "agni:649bee89-0a34-4eb1-b8ab-7c5fdee07ccd",
       "source": "agni",
       "asset": "0x29cc30f9d113b356ce408667aa6433589cecbdca",
-      "apy": 0.0089013,
+      "apy": 0.019094800000000002,
       "apyReward": 0,
       "apyType": "variable",
-      "tvlUsd": 131984,
-      "lastUpdatedMs": 1779283451669,
+      "tvlUsd": 133062,
+      "lastUpdatedMs": 1779306914842,
       "raw": {
         "chain": "Mantle",
         "project": "fluxion-network",
@@ -1921,10 +1977,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
           "0x29cc30f9d113b356ce408667aa6433589cecbdca",
           "0x779ded0c9e1022225f8e0630b35a9b54be713736"
         ],
-        "apy": 0.89013,
-        "apyBase": 0.89013,
+        "apy": 1.90948,
+        "apyBase": 1.90948,
         "apyReward": null,
-        "tvlUsd": 131984,
+        "tvlUsd": 133062,
         "pool": "649bee89-0a34-4eb1-b8ab-7c5fdee07ccd"
       },
       "risk": {
@@ -1936,14 +1992,14 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "liquiditySlippageBps": null,
         "counterpartyClass": "permissionless",
         "smartMoneySignal": null,
-        "apyVolatility": 0.030362326271377783,
-        "apyDrift": 0.5756583630171309
+        "apyVolatility": 0.030157818836081342,
+        "apyDrift": 0.5856145770655262
       },
       "probabilities": {
-        "exploit": 0.007706454233765581,
+        "exploit": 0.007702496803410957,
         "depeg": 0.005,
         "oracle": 0.007,
-        "illiquid": 0.048794787137402006,
+        "illiquid": 0.04875945953139812,
         "counterparty": 0.005
       },
       "severities": {
@@ -1953,10 +2009,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "illiquid": 0.05,
         "counterparty": 0.5
       },
-      "expectedLoss": 0.015290225455570846,
-      "raapy": -0.006388925455570847,
-      "confidence": 0.4860049088860218,
-      "score": -0.003105049133914295,
+      "expectedLoss": 0.01528509525946922,
+      "raapy": 0.0038097047405307814,
+      "confidence": 0.48977138668059006,
+      "score": 0.0018658843736133782,
       "eligibleTranches": [
         "junior"
       ],
@@ -1965,15 +2021,14 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         {
           "tranche": "senior",
           "reasons": [
-            "tvlUsd 131984 < 25000000",
-            "apyBase 0.89% < 2% (reward-only positions blocked)"
+            "tvlUsd 133062 < 25000000",
+            "apyBase 1.91% < 2% (reward-only positions blocked)"
           ]
         },
         {
           "tranche": "mezzanine",
           "reasons": [
-            "tvlUsd 131984 < 1000000",
-            "apyBase 0.89% < 1% (reward-only positions blocked)"
+            "tvlUsd 133062 < 1000000"
           ]
         }
       ]
@@ -1982,11 +2037,11 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "id": "agni:227e8492-33e9-4953-8beb-28973c9fdb8a",
       "source": "agni",
       "asset": "0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9",
-      "apy": 0.0009804,
+      "apy": 0.0076093,
       "apyReward": 0,
       "apyType": "variable",
-      "tvlUsd": 116233,
-      "lastUpdatedMs": 1779283451669,
+      "tvlUsd": 115881,
+      "lastUpdatedMs": 1779306914842,
       "raw": {
         "chain": "Mantle",
         "project": "fluxion-network",
@@ -1995,10 +2050,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
           "0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9",
           "0x1630f08370917e79df0b7572395a5e907508bbbc"
         ],
-        "apy": 0.09804,
-        "apyBase": 0.09804,
+        "apy": 0.76093,
+        "apyBase": 0.76093,
         "apyReward": null,
-        "tvlUsd": 116233,
+        "tvlUsd": 115881,
         "pool": "227e8492-33e9-4953-8beb-28973c9fdb8a"
       },
       "risk": {
@@ -2010,14 +2065,14 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "liquiditySlippageBps": null,
         "counterpartyClass": "permissionless",
         "smartMoneySignal": null,
-        "apyVolatility": 0.00822834382047661,
-        "apyDrift": 1.3016777710289962
+        "apyVolatility": 0.008145614228736239,
+        "apyDrift": 1.3455806174453302
       },
       "probabilities": {
-        "exploit": 0.007768280630733913,
+        "exploit": 0.007769756184503614,
         "depeg": 0.005,
         "oracle": 0.007,
-        "illiquid": 0.04934670552812871,
+        "illiquid": 0.0493598776568947,
         "counterparty": 0.005
       },
       "severities": {
@@ -2027,10 +2082,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "illiquid": 0.05,
         "counterparty": 0.5
       },
-      "expectedLoss": 0.015370373812530261,
-      "raapy": -0.014389973812530262,
-      "confidence": 0.6874004380762674,
-      "score": -0.009891674302639318,
+      "expectedLoss": 0.015372286639672807,
+      "raapy": -0.007762986639672806,
+      "confidence": 0.699009035432303,
+      "score": -0.005426397803071544,
       "eligibleTranches": [
         "junior"
       ],
@@ -2039,15 +2094,15 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         {
           "tranche": "senior",
           "reasons": [
-            "tvlUsd 116233 < 25000000",
-            "apyBase 0.10% < 2% (reward-only positions blocked)"
+            "tvlUsd 115881 < 25000000",
+            "apyBase 0.76% < 2% (reward-only positions blocked)"
           ]
         },
         {
           "tranche": "mezzanine",
           "reasons": [
-            "tvlUsd 116233 < 1000000",
-            "apyBase 0.10% < 1% (reward-only positions blocked)"
+            "tvlUsd 115881 < 1000000",
+            "apyBase 0.76% < 1% (reward-only positions blocked)"
           ]
         }
       ]
@@ -2056,11 +2111,11 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "id": "agni:2a510869-6356-4486-8bb5-d5a808634496",
       "source": "agni",
       "asset": "0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9",
-      "apy": 0.004056000000000001,
+      "apy": 0.0133965,
       "apyReward": 0,
       "apyType": "variable",
-      "tvlUsd": 112580,
-      "lastUpdatedMs": 1779283451669,
+      "tvlUsd": 112344,
+      "lastUpdatedMs": 1779306914842,
       "raw": {
         "chain": "Mantle",
         "project": "fluxion-network",
@@ -2069,10 +2124,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
           "0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9",
           "0x93e62845c1dd5822ebc807ab71a5fb750decd15a"
         ],
-        "apy": 0.4056,
-        "apyBase": 0.4056,
+        "apy": 1.33965,
+        "apyBase": 1.33965,
         "apyReward": null,
-        "tvlUsd": 112580,
+        "tvlUsd": 112344,
         "pool": "2a510869-6356-4486-8bb5-d5a808634496"
       },
       "risk": {
@@ -2084,14 +2139,14 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "liquiditySlippageBps": null,
         "counterpartyClass": "permissionless",
         "smartMoneySignal": null,
-        "apyVolatility": 0.010662856788069417,
-        "apyDrift": 1.682739758238426
+        "apyVolatility": 0.01058046537580218,
+        "apyDrift": 1.731309637752833
       },
       "probabilities": {
-        "exploit": 0.0077838159169256425,
+        "exploit": 0.007784836832298429,
         "depeg": 0.005,
         "oracle": 0.007,
-        "illiquid": 0.049485387556758166,
+        "illiquid": 0.04949450117160952,
         "counterparty": 0.005
       },
       "severities": {
@@ -2101,10 +2156,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "illiquid": 0.05,
         "counterparty": 0.5
       },
-      "expectedLoss": 0.015390512907224705,
-      "raapy": -0.011334512907224705,
-      "confidence": 0.4811787027217049,
-      "score": -0.005453926216680803,
+      "expectedLoss": 0.015391836366034141,
+      "raapy": -0.001995336366034141,
+      "confidence": 0.48930143176382923,
+      "score": -0.0009763209407509412,
       "eligibleTranches": [
         "junior"
       ],
@@ -2113,15 +2168,14 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         {
           "tranche": "senior",
           "reasons": [
-            "tvlUsd 112580 < 25000000",
-            "apyBase 0.41% < 2% (reward-only positions blocked)"
+            "tvlUsd 112344 < 25000000",
+            "apyBase 1.34% < 2% (reward-only positions blocked)"
           ]
         },
         {
           "tranche": "mezzanine",
           "reasons": [
-            "tvlUsd 112580 < 1000000",
-            "apyBase 0.41% < 1% (reward-only positions blocked)"
+            "tvlUsd 112344 < 1000000"
           ]
         }
       ]
@@ -2130,11 +2184,11 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "id": "agni:ebec73de-fd1e-4f97-8287-d9cb01c7d352",
       "source": "agni",
       "asset": "0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9",
-      "apy": 0.0058957,
+      "apy": 0.024468800000000002,
       "apyReward": 0,
       "apyType": "variable",
-      "tvlUsd": 111392,
-      "lastUpdatedMs": 1779283451669,
+      "tvlUsd": 111132,
+      "lastUpdatedMs": 1779306914842,
       "raw": {
         "chain": "Mantle",
         "project": "fluxion-network",
@@ -2143,10 +2197,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
           "0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9",
           "0x266e5923f6118f8b340ca5a23ae7f71897361476"
         ],
-        "apy": 0.58957,
-        "apyBase": 0.58957,
+        "apy": 2.44688,
+        "apyBase": 2.44688,
         "apyReward": null,
-        "tvlUsd": 111392,
+        "tvlUsd": 111132,
         "pool": "ebec73de-fd1e-4f97-8287-d9cb01c7d352"
       },
       "risk": {
@@ -2158,14 +2212,14 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "liquiditySlippageBps": null,
         "counterpartyClass": "permissionless",
         "smartMoneySignal": null,
-        "apyVolatility": 0.024180949079999157,
-        "apyDrift": 0.9505605013355053
+        "apyVolatility": 0.023780099185109007,
+        "apyDrift": 0.9747356903189156
       },
       "probabilities": {
-        "exploit": 0.00778897699186211,
+        "exploit": 0.007790113859926459,
         "depeg": 0.005,
         "oracle": 0.007,
-        "illiquid": 0.049531459983958054,
+        "illiquid": 0.04954160869750618,
         "counterparty": 0.005
       },
       "severities": {
@@ -2175,10 +2229,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "illiquid": 0.05,
         "counterparty": 0.5
       },
-      "expectedLoss": 0.015397203442280696,
-      "raapy": -0.009501503442280696,
-      "confidence": 0.687391272798195,
-      "score": -0.006531250544685759,
+      "expectedLoss": 0.0153986772158128,
+      "raapy": 0.009070122784187203,
+      "confidence": 0.6989973853787965,
+      "score": 0.006339992111211505,
       "eligibleTranches": [
         "junior"
       ],
@@ -2187,163 +2241,13 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         {
           "tranche": "senior",
           "reasons": [
-            "tvlUsd 111392 < 25000000",
-            "apyBase 0.59% < 2% (reward-only positions blocked)"
+            "tvlUsd 111132 < 25000000"
           ]
         },
         {
           "tranche": "mezzanine",
           "reasons": [
-            "tvlUsd 111392 < 1000000",
-            "apyBase 0.59% < 1% (reward-only positions blocked)"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "agni:3b6b75cf-adb5-4fb4-bbcd-8f75c6879c9d",
-      "source": "agni",
-      "asset": "0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9",
-      "apy": 0.0045486,
-      "apyReward": 0,
-      "apyType": "variable",
-      "tvlUsd": 109138,
-      "lastUpdatedMs": 1779283451669,
-      "raw": {
-        "chain": "Mantle",
-        "project": "fluxion-network",
-        "symbol": "USDC-WAAPLX",
-        "underlyingTokens": [
-          "0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9",
-          "0x5aa7649fdbda47de64a07ac81d64b682af9c0724"
-        ],
-        "apy": 0.45486,
-        "apyBase": 0.45486,
-        "apyReward": null,
-        "tvlUsd": 109138,
-        "pool": "3b6b75cf-adb5-4fb4-bbcd-8f75c6879c9d"
-      },
-      "risk": {
-        "contractAgeDays": 540,
-        "auditFactor": 0.6,
-        "tvlFactor": null,
-        "depegEvents": [],
-        "oracleType": "redstone",
-        "liquiditySlippageBps": null,
-        "counterpartyClass": "permissionless",
-        "smartMoneySignal": null,
-        "apyVolatility": 0.005924472666854397,
-        "apyDrift": 1.7883840189457385
-      },
-      "probabilities": {
-        "exploit": 0.007798922219706045,
-        "depeg": 0.005,
-        "oracle": 0.007,
-        "illiquid": 0.049620240091099777,
-        "counterparty": 0.005
-      },
-      "severities": {
-        "exploit": 0.85,
-        "depeg": 0.2,
-        "oracle": 0.4,
-        "illiquid": 0.05,
-        "counterparty": 0.5
-      },
-      "expectedLoss": 0.015410095891305127,
-      "raapy": -0.010861495891305127,
-      "confidence": 0.48117709879536896,
-      "score": -0.005226303081556021,
-      "eligibleTranches": [
-        "junior"
-      ],
-      "primaryTranche": "junior",
-      "rejectionReasons": [
-        {
-          "tranche": "senior",
-          "reasons": [
-            "tvlUsd 109138 < 25000000",
-            "apyBase 0.45% < 2% (reward-only positions blocked)"
-          ]
-        },
-        {
-          "tranche": "mezzanine",
-          "reasons": [
-            "tvlUsd 109138 < 1000000",
-            "apyBase 0.45% < 1% (reward-only positions blocked)"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "agni:2364dd66-69d3-44ef-9e85-4d5217a57b57",
-      "source": "agni",
-      "asset": "0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9",
-      "apy": 0.0016809,
-      "apyReward": 0,
-      "apyType": "variable",
-      "tvlUsd": 109132,
-      "lastUpdatedMs": 1779283451669,
-      "raw": {
-        "chain": "Mantle",
-        "project": "fluxion-network",
-        "symbol": "USDC-WQQQX",
-        "underlyingTokens": [
-          "0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9",
-          "0xdbd9232fee15351068fe02f0683146e16d9f2cea"
-        ],
-        "apy": 0.16809,
-        "apyBase": 0.16809,
-        "apyReward": null,
-        "tvlUsd": 109132,
-        "pool": "2364dd66-69d3-44ef-9e85-4d5217a57b57"
-      },
-      "risk": {
-        "contractAgeDays": 540,
-        "auditFactor": 0.6,
-        "tvlFactor": null,
-        "depegEvents": [],
-        "oracleType": "redstone",
-        "liquiditySlippageBps": null,
-        "counterpartyClass": "permissionless",
-        "smartMoneySignal": null,
-        "apyVolatility": 0.0021034015527902628,
-        "apyDrift": 1.2066335810111604
-      },
-      "probabilities": {
-        "exploit": 0.007798948966429133,
-        "depeg": 0.005,
-        "oracle": 0.007,
-        "illiquid": 0.04962047885656384,
-        "counterparty": 0.005
-      },
-      "severities": {
-        "exploit": 0.85,
-        "depeg": 0.2,
-        "oracle": 0.4,
-        "illiquid": 0.05,
-        "counterparty": 0.5
-      },
-      "expectedLoss": 0.015410130564292955,
-      "raapy": -0.013729230564292955,
-      "confidence": 0.6874004380762674,
-      "score": -0.009437479104345057,
-      "eligibleTranches": [
-        "junior"
-      ],
-      "primaryTranche": "junior",
-      "rejectionReasons": [
-        {
-          "tranche": "senior",
-          "reasons": [
-            "tvlUsd 109132 < 25000000",
-            "apyBase 0.17% < 2% (reward-only positions blocked)"
-          ]
-        },
-        {
-          "tranche": "mezzanine",
-          "reasons": [
-            "tvlUsd 109132 < 1000000",
-            "apyBase 0.17% < 1% (reward-only positions blocked)"
+            "tvlUsd 111132 < 1000000"
           ]
         }
       ]
@@ -2352,11 +2256,11 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "id": "agni:3d429d4e-b3a6-4847-957b-b10bf26a6f01",
       "source": "agni",
       "asset": "0x779ded0c9e1022225f8e0630b35a9b54be713736",
-      "apy": 0.0000491,
+      "apy": 0.0049757000000000004,
       "apyReward": 0,
       "apyType": "variable",
-      "tvlUsd": 108235,
-      "lastUpdatedMs": 1779283451669,
+      "tvlUsd": 110072,
+      "lastUpdatedMs": 1779306914842,
       "raw": {
         "chain": "Mantle",
         "project": "fluxion-network",
@@ -2365,10 +2269,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
           "0x779ded0c9e1022225f8e0630b35a9b54be713736",
           "0x8ddb986b11c039a6cc1dbcabd62bae911b348f33"
         ],
-        "apy": 0.00491,
-        "apyBase": 0.00491,
+        "apy": 0.49757,
+        "apyBase": 0.49757,
         "apyReward": null,
-        "tvlUsd": 108235,
+        "tvlUsd": 110072,
         "pool": "3d429d4e-b3a6-4847-957b-b10bf26a6f01"
       },
       "risk": {
@@ -2380,14 +2284,14 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "liquiditySlippageBps": null,
         "counterpartyClass": "permissionless",
         "smartMoneySignal": null,
-        "apyVolatility": 0.06544062201446131,
-        "apyDrift": 0.1631013717998638
+        "apyVolatility": 0.06539795888132911,
+        "apyDrift": 0.16843876331015792
       },
       "probabilities": {
-        "exploit": 0.007802964235709887,
+        "exploit": 0.007794776475317072,
         "depeg": 0.005,
         "oracle": 0.007,
-        "illiquid": 0.04965632278518391,
+        "illiquid": 0.049583231423544746,
         "counterparty": 0.005
       },
       "severities": {
@@ -2397,10 +2301,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "illiquid": 0.05,
         "counterparty": 0.5
       },
-      "expectedLoss": 0.015415335739612599,
-      "raapy": -0.0153662357396126,
-      "confidence": 0.487375752411037,
-      "score": -0.007489130705319058,
+      "expectedLoss": 0.01540472157519675,
+      "raapy": -0.010429021575196748,
+      "confidence": 0.48976975411202206,
+      "score": -0.005107819332513084,
       "eligibleTranches": [
         "junior"
       ],
@@ -2409,15 +2313,163 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         {
           "tranche": "senior",
           "reasons": [
-            "tvlUsd 108235 < 25000000",
-            "apyBase 0.00% < 2% (reward-only positions blocked)"
+            "tvlUsd 110072 < 25000000",
+            "apyBase 0.50% < 2% (reward-only positions blocked)"
           ]
         },
         {
           "tranche": "mezzanine",
           "reasons": [
-            "tvlUsd 108235 < 1000000",
-            "apyBase 0.00% < 1% (reward-only positions blocked)"
+            "tvlUsd 110072 < 1000000",
+            "apyBase 0.50% < 1% (reward-only positions blocked)"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "agni:3b6b75cf-adb5-4fb4-bbcd-8f75c6879c9d",
+      "source": "agni",
+      "asset": "0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9",
+      "apy": 0.0050387,
+      "apyReward": 0,
+      "apyType": "variable",
+      "tvlUsd": 109753,
+      "lastUpdatedMs": 1779306914842,
+      "raw": {
+        "chain": "Mantle",
+        "project": "fluxion-network",
+        "symbol": "USDC-WAAPLX",
+        "underlyingTokens": [
+          "0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9",
+          "0x5aa7649fdbda47de64a07ac81d64b682af9c0724"
+        ],
+        "apy": 0.50387,
+        "apyBase": 0.50387,
+        "apyReward": null,
+        "tvlUsd": 109753,
+        "pool": "3b6b75cf-adb5-4fb4-bbcd-8f75c6879c9d"
+      },
+      "risk": {
+        "contractAgeDays": 540,
+        "auditFactor": 0.6,
+        "tvlFactor": null,
+        "depegEvents": [],
+        "oracleType": "redstone",
+        "liquiditySlippageBps": null,
+        "counterpartyClass": "permissionless",
+        "smartMoneySignal": null,
+        "apyVolatility": 0.005921275817726916,
+        "apyDrift": 1.793557237317725
+      },
+      "probabilities": {
+        "exploit": 0.007796188451221386,
+        "depeg": 0.005,
+        "oracle": 0.007,
+        "illiquid": 0.0495958359987273,
+        "counterparty": 0.005
+      },
+      "severities": {
+        "exploit": 0.85,
+        "depeg": 0.2,
+        "oracle": 0.4,
+        "illiquid": 0.05,
+        "counterparty": 0.5
+      },
+      "expectedLoss": 0.015406551983474544,
+      "raapy": -0.010367851983474544,
+      "confidence": 0.4893079558264131,
+      "score": -0.0050730724603447516,
+      "eligibleTranches": [
+        "junior"
+      ],
+      "primaryTranche": "junior",
+      "rejectionReasons": [
+        {
+          "tranche": "senior",
+          "reasons": [
+            "tvlUsd 109753 < 25000000",
+            "apyBase 0.50% < 2% (reward-only positions blocked)"
+          ]
+        },
+        {
+          "tranche": "mezzanine",
+          "reasons": [
+            "tvlUsd 109753 < 1000000",
+            "apyBase 0.50% < 1% (reward-only positions blocked)"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "agni:2364dd66-69d3-44ef-9e85-4d5217a57b57",
+      "source": "agni",
+      "asset": "0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9",
+      "apy": 0.0036052000000000002,
+      "apyReward": 0,
+      "apyType": "variable",
+      "tvlUsd": 109507,
+      "lastUpdatedMs": 1779306914842,
+      "raw": {
+        "chain": "Mantle",
+        "project": "fluxion-network",
+        "symbol": "USDC-WQQQX",
+        "underlyingTokens": [
+          "0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9",
+          "0xdbd9232fee15351068fe02f0683146e16d9f2cea"
+        ],
+        "apy": 0.36052,
+        "apyBase": 0.36052,
+        "apyReward": null,
+        "tvlUsd": 109507,
+        "pool": "2364dd66-69d3-44ef-9e85-4d5217a57b57"
+      },
+      "risk": {
+        "contractAgeDays": 540,
+        "auditFactor": 0.6,
+        "tvlFactor": null,
+        "depegEvents": [],
+        "oracleType": "redstone",
+        "liquiditySlippageBps": null,
+        "counterpartyClass": "permissionless",
+        "smartMoneySignal": null,
+        "apyVolatility": 0.002093297181735306,
+        "apyDrift": 1.2397450470457099
+      },
+      "probabilities": {
+        "exploit": 0.007797280115900549,
+        "depeg": 0.005,
+        "oracle": 0.007,
+        "illiquid": 0.049605581185936665,
+        "counterparty": 0.005
+      },
+      "severities": {
+        "exploit": 0.85,
+        "depeg": 0.2,
+        "oracle": 0.4,
+        "illiquid": 0.05,
+        "counterparty": 0.5
+      },
+      "expectedLoss": 0.015407967157812301,
+      "raapy": -0.0118027671578123,
+      "confidence": 0.6990067054060682,
+      "score": -0.00825021338565732,
+      "eligibleTranches": [
+        "junior"
+      ],
+      "primaryTranche": "junior",
+      "rejectionReasons": [
+        {
+          "tranche": "senior",
+          "reasons": [
+            "tvlUsd 109507 < 25000000",
+            "apyBase 0.36% < 2% (reward-only positions blocked)"
+          ]
+        },
+        {
+          "tranche": "mezzanine",
+          "reasons": [
+            "tvlUsd 109507 < 1000000",
+            "apyBase 0.36% < 1% (reward-only positions blocked)"
           ]
         }
       ]
@@ -2430,7 +2482,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apyReward": 0,
       "apyType": "variable",
       "tvlUsd": 107709,
-      "lastUpdatedMs": 1779283451669,
+      "lastUpdatedMs": 1779306914842,
       "raw": {
         "chain": "Mantle",
         "project": "fluxion-network",
@@ -2473,8 +2525,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       },
       "expectedLoss": 0.015418408152134633,
       "raapy": -0.010335308152134633,
-      "confidence": 0.4811722870484398,
-      "score": -0.004973063860913006,
+      "confidence": 0.4893030627713202,
+      "score": -0.005057097933524869,
       "eligibleTranches": [
         "junior"
       ],
@@ -2497,88 +2549,14 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       ]
     },
     {
-      "id": "agni:913ce101-55b1-4230-93c7-d523f0d9ca03",
-      "source": "agni",
-      "asset": "0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9",
-      "apy": 0.0009052999999999999,
-      "apyReward": 0,
-      "apyType": "variable",
-      "tvlUsd": 106662,
-      "lastUpdatedMs": 1779283451669,
-      "raw": {
-        "chain": "Mantle",
-        "project": "fluxion-network",
-        "symbol": "USDC-WSPYX",
-        "underlyingTokens": [
-          "0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9",
-          "0xc88fcd8b874fdb3256e8b55b3decb8c24eab4c02"
-        ],
-        "apy": 0.09053,
-        "apyBase": 0.09053,
-        "apyReward": null,
-        "tvlUsd": 106662,
-        "pool": "913ce101-55b1-4230-93c7-d523f0d9ca03"
-      },
-      "risk": {
-        "contractAgeDays": 540,
-        "auditFactor": 0.6,
-        "tvlFactor": null,
-        "depegEvents": [],
-        "oracleType": "redstone",
-        "liquiditySlippageBps": null,
-        "counterpartyClass": "permissionless",
-        "smartMoneySignal": null,
-        "apyVolatility": 0.0012516502459972107,
-        "apyDrift": 0.6802482673486743
-      },
-      "probabilities": {
-        "exploit": 0.007810086523297243,
-        "depeg": 0.005,
-        "oracle": 0.007,
-        "illiquid": 0.04971990277198986,
-        "counterparty": 0.005
-      },
-      "severities": {
-        "exploit": 0.85,
-        "depeg": 0.2,
-        "oracle": 0.4,
-        "illiquid": 0.05,
-        "counterparty": 0.5
-      },
-      "expectedLoss": 0.01542456868340215,
-      "raapy": -0.014519268683402151,
-      "confidence": 0.687391272798195,
-      "score": -0.009980418580382778,
-      "eligibleTranches": [
-        "junior"
-      ],
-      "primaryTranche": "junior",
-      "rejectionReasons": [
-        {
-          "tranche": "senior",
-          "reasons": [
-            "tvlUsd 106662 < 25000000",
-            "apyBase 0.09% < 2% (reward-only positions blocked)"
-          ]
-        },
-        {
-          "tranche": "mezzanine",
-          "reasons": [
-            "tvlUsd 106662 < 1000000",
-            "apyBase 0.09% < 1% (reward-only positions blocked)"
-          ]
-        }
-      ]
-    },
-    {
       "id": "agni:a4ff3d7c-a117-4b24-a9f9-6af46cd276c0",
       "source": "agni",
       "asset": "0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9",
-      "apy": 0.004203,
+      "apy": 0.0126333,
       "apyReward": 0,
       "apyType": "variable",
-      "tvlUsd": 106464,
-      "lastUpdatedMs": 1779283451669,
+      "tvlUsd": 107152,
+      "lastUpdatedMs": 1779306914842,
       "raw": {
         "chain": "Mantle",
         "project": "fluxion-network",
@@ -2587,10 +2565,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
           "0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9",
           "0x43680abf18cf54898be84c6ef78237cfbd441883"
         ],
-        "apy": 0.4203,
-        "apyBase": 0.4203,
+        "apy": 1.26333,
+        "apyBase": 1.26333,
         "apyReward": null,
-        "tvlUsd": 106464,
+        "tvlUsd": 107152,
         "pool": "a4ff3d7c-a117-4b24-a9f9-6af46cd276c0"
       },
       "risk": {
@@ -2602,14 +2580,14 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "liquiditySlippageBps": null,
         "counterpartyClass": "permissionless",
         "smartMoneySignal": null,
-        "apyVolatility": 0.01180476667605134,
-        "apyDrift": 1.047526957053828
+        "apyVolatility": 0.011695976460455296,
+        "apyDrift": 1.0761218407360666
       },
       "probabilities": {
-        "exploit": 0.007810990468825106,
+        "exploit": 0.007807856681348243,
         "depeg": 0.005,
         "oracle": 0.007,
-        "illiquid": 0.04972797220811272,
+        "illiquid": 0.049699997184078956,
         "counterparty": 0.005
       },
       "severities": {
@@ -2619,10 +2597,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "illiquid": 0.05,
         "counterparty": 0.5
       },
-      "expectedLoss": 0.015425740508906978,
-      "raapy": -0.011222740508906977,
-      "confidence": 0.6873935641062565,
-      "score": -0.00771443959745723,
+      "expectedLoss": 0.015421678038349955,
+      "raapy": -0.0027883780383499545,
+      "confidence": 0.699009035432303,
+      "score": -0.0019491014430076188,
       "eligibleTranches": [
         "junior"
       ],
@@ -2631,15 +2609,88 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         {
           "tranche": "senior",
           "reasons": [
-            "tvlUsd 106464 < 25000000",
-            "apyBase 0.42% < 2% (reward-only positions blocked)"
+            "tvlUsd 107152 < 25000000",
+            "apyBase 1.26% < 2% (reward-only positions blocked)"
           ]
         },
         {
           "tranche": "mezzanine",
           "reasons": [
-            "tvlUsd 106464 < 1000000",
-            "apyBase 0.42% < 1% (reward-only positions blocked)"
+            "tvlUsd 107152 < 1000000"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "agni:913ce101-55b1-4230-93c7-d523f0d9ca03",
+      "source": "agni",
+      "asset": "0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9",
+      "apy": 0.0011366,
+      "apyReward": 0,
+      "apyType": "variable",
+      "tvlUsd": 106878,
+      "lastUpdatedMs": 1779306914842,
+      "raw": {
+        "chain": "Mantle",
+        "project": "fluxion-network",
+        "symbol": "USDC-WSPYX",
+        "underlyingTokens": [
+          "0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9",
+          "0xc88fcd8b874fdb3256e8b55b3decb8c24eab4c02"
+        ],
+        "apy": 0.11366,
+        "apyBase": 0.11366,
+        "apyReward": null,
+        "tvlUsd": 106878,
+        "pool": "913ce101-55b1-4230-93c7-d523f0d9ca03"
+      },
+      "risk": {
+        "contractAgeDays": 540,
+        "auditFactor": 0.6,
+        "tvlFactor": null,
+        "depegEvents": [],
+        "oracleType": "redstone",
+        "liquiditySlippageBps": null,
+        "counterpartyClass": "permissionless",
+        "smartMoneySignal": null,
+        "apyVolatility": 0.0012496281609723438,
+        "apyDrift": 0.6865764254360768
+      },
+      "probabilities": {
+        "exploit": 0.007809102312692368,
+        "depeg": 0.005,
+        "oracle": 0.007,
+        "illiquid": 0.04971111681712567,
+        "counterparty": 0.005
+      },
+      "severities": {
+        "exploit": 0.85,
+        "depeg": 0.2,
+        "oracle": 0.4,
+        "illiquid": 0.05,
+        "counterparty": 0.5
+      },
+      "expectedLoss": 0.015423292806644798,
+      "raapy": -0.014286692806644798,
+      "confidence": 0.6990067054060682,
+      "score": -0.009986494069921354,
+      "eligibleTranches": [
+        "junior"
+      ],
+      "primaryTranche": "junior",
+      "rejectionReasons": [
+        {
+          "tranche": "senior",
+          "reasons": [
+            "tvlUsd 106878 < 25000000",
+            "apyBase 0.11% < 2% (reward-only positions blocked)"
+          ]
+        },
+        {
+          "tranche": "mezzanine",
+          "reasons": [
+            "tvlUsd 106878 < 1000000",
+            "apyBase 0.11% < 1% (reward-only positions blocked)"
           ]
         }
       ]
@@ -2648,11 +2699,11 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "id": "agni:b8d50460-5237-4601-9250-4f2d3a6b569b",
       "source": "agni",
       "asset": "0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9",
-      "apy": 0.0057611,
+      "apy": 0.0030788,
       "apyReward": 0,
       "apyType": "variable",
-      "tvlUsd": 103498,
-      "lastUpdatedMs": 1779283451669,
+      "tvlUsd": 103663,
+      "lastUpdatedMs": 1779306914842,
       "raw": {
         "chain": "Mantle",
         "project": "fluxion-network",
@@ -2661,10 +2712,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
           "0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9",
           "0x4e41a262caa93c6575d336e0a4eb79f3c67caa06"
         ],
-        "apy": 0.57611,
-        "apyBase": 0.57611,
+        "apy": 0.30788,
+        "apyBase": 0.30788,
         "apyReward": null,
-        "tvlUsd": 103498,
+        "tvlUsd": 103663,
         "pool": "b8d50460-5237-4601-9250-4f2d3a6b569b"
       },
       "risk": {
@@ -2676,14 +2727,14 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "liquiditySlippageBps": null,
         "counterpartyClass": "permissionless",
         "smartMoneySignal": null,
-        "apyVolatility": 0.006648203996428054,
-        "apyDrift": 0.9912218291473617
+        "apyVolatility": 0.0066774528930345235,
+        "apyDrift": 0.9739426830050358
       },
       "probabilities": {
-        "exploit": 0.00782473635413419,
+        "exploit": 0.007823961376058024,
         "depeg": 0.005,
         "oracle": 0.007,
-        "illiquid": 0.0498506804245205,
+        "illiquid": 0.049843762268625615,
         "counterparty": 0.005
       },
       "severities": {
@@ -2693,10 +2744,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "illiquid": 0.05,
         "counterparty": 0.5
       },
-      "expectedLoss": 0.015443559922240087,
-      "raapy": -0.009682459922240087,
-      "confidence": 0.6874027294148799,
-      "score": -0.006655749377998022,
+      "expectedLoss": 0.015442555283080603,
+      "raapy": -0.012363755283080603,
+      "confidence": 0.6990043753876003,
+      "score": -0.0086423190390949,
       "eligibleTranches": [
         "junior"
       ],
@@ -2705,15 +2756,15 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         {
           "tranche": "senior",
           "reasons": [
-            "tvlUsd 103498 < 25000000",
-            "apyBase 0.58% < 2% (reward-only positions blocked)"
+            "tvlUsd 103663 < 25000000",
+            "apyBase 0.31% < 2% (reward-only positions blocked)"
           ]
         },
         {
           "tranche": "mezzanine",
           "reasons": [
-            "tvlUsd 103498 < 1000000",
-            "apyBase 0.58% < 1% (reward-only positions blocked)"
+            "tvlUsd 103663 < 1000000",
+            "apyBase 0.31% < 1% (reward-only positions blocked)"
           ]
         }
       ]
@@ -2726,7 +2777,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apyReward": 0,
       "apyType": "variable",
       "tvlUsd": 102818,
-      "lastUpdatedMs": 1779283451669,
+      "lastUpdatedMs": 1779306914842,
       "raw": {
         "chain": "Mantle",
         "project": "fluxion-network",
@@ -2769,8 +2820,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       },
       "expectedLoss": 0.015447717224880827,
       "raapy": -0.009689217224880827,
-      "confidence": 0.6873981467452928,
-      "score": -0.0066603499637956495,
+      "confidence": 0.6989950553913952,
+      "score": -0.006772714930804834,
       "eligibleTranches": [
         "junior"
       ],
@@ -2800,7 +2851,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apyReward": 0,
       "apyType": "variable",
       "tvlUsd": 101761,
-      "lastUpdatedMs": 1779283451669,
+      "lastUpdatedMs": 1779306914842,
       "raw": {
         "chain": "Mantle",
         "project": "fluxion-network",
@@ -2824,8 +2875,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "liquiditySlippageBps": null,
         "counterpartyClass": "permissionless",
         "smartMoneySignal": null,
-        "apyVolatility": null,
-        "apyDrift": null
+        "apyVolatility": 0.004787985991134986,
+        "apyDrift": 0.4999311172074711
       },
       "probabilities": {
         "exploit": 0.007832970553094776,
@@ -2843,8 +2894,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       },
       "expectedLoss": 0.015454234287073378,
       "raapy": -0.014151634287073379,
-      "confidence": 0.48524541103173213,
-      "score": -0.006867015596401675,
+      "confidence": 0.6996710773028887,
+      "score": -0.009901489207233128,
       "eligibleTranches": [
         "junior"
       ],
@@ -2871,10 +2922,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "source": "mantleVault",
       "asset": "0x78c1b0c915c4faa5fffa6cabf0219da63d7f4cb8",
       "apy": 0.0006751999999999999,
-      "apyReward": 0.003636,
+      "apyReward": 0.0035419,
       "apyType": "variable",
-      "tvlUsd": 72368,
-      "lastUpdatedMs": 1779283451669,
+      "tvlUsd": 74444,
+      "lastUpdatedMs": 1779306914842,
       "raw": {
         "chain": "Mantle",
         "project": "lendle-pooled-markets",
@@ -2882,10 +2933,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "underlyingTokens": [
           "0x78c1b0C915c4FAA5FffA6CAbf0219DA63d7f4cb8"
         ],
-        "apy": 0.43112,
+        "apy": 0.4217,
         "apyBase": 0.06752,
-        "apyReward": 0.3636,
-        "tvlUsd": 72368,
+        "apyReward": 0.35419,
+        "tvlUsd": 74444,
         "pool": "3f5789dd-68ed-44c7-9388-b553df96502d"
       },
       "risk": {
@@ -2901,10 +2952,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "apyDrift": 0.10282734499421897
       },
       "probabilities": {
-        "exploit": 0.021147333276254704,
+        "exploit": 0.02111095527205879,
         "depeg": 0.005,
         "oracle": 0.007,
-        "illiquid": 0.051404534295981574,
+        "illiquid": 0.05128170299549115,
         "counterparty": 0.005
       },
       "severities": {
@@ -2914,10 +2965,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "illiquid": 0.05,
         "counterparty": 0.5
       },
-      "expectedLoss": 0.026845459999615576,
-      "raapy": -0.026170259999615576,
-      "confidence": 0.694781217963866,
-      "score": -0.018182605116963953,
+      "expectedLoss": 0.02680839713102453,
+      "raapy": -0.02613319713102453,
+      "confidence": 0.699661748417384,
+      "score": -0.018284398396428786,
       "eligibleTranches": [],
       "primaryTranche": null,
       "rejectionReasons": [
@@ -2925,21 +2976,21 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
           "tranche": "senior",
           "reasons": [
             "expectedLoss 0.0268 > 0.02",
-            "tvlUsd 72368 < 25000000",
+            "tvlUsd 74444 < 25000000",
             "apyBase 0.07% < 2% (reward-only positions blocked)"
           ]
         },
         {
           "tranche": "mezzanine",
           "reasons": [
-            "tvlUsd 72368 < 1000000",
+            "tvlUsd 74444 < 1000000",
             "apyBase 0.07% < 1% (reward-only positions blocked)"
           ]
         },
         {
           "tranche": "junior",
           "reasons": [
-            "tvlUsd 72368 < 100000"
+            "tvlUsd 74444 < 100000"
           ]
         }
       ]
@@ -2951,8 +3002,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apy": 0.029014099999999998,
       "apyReward": 0,
       "apyType": "variable",
-      "tvlUsd": 51738,
-      "lastUpdatedMs": 1779283451669,
+      "tvlUsd": 51751,
+      "lastUpdatedMs": 1779306914842,
       "raw": {
         "chain": "Mantle",
         "project": "circuit-protocol",
@@ -2963,7 +3014,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "apy": 2.90141,
         "apyBase": null,
         "apyReward": null,
-        "tvlUsd": 51738,
+        "tvlUsd": 51751,
         "pool": "009b6f09-bfa7-4852-8685-0980d9478419"
       },
       "risk": {
@@ -2975,14 +3026,14 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "liquiditySlippageBps": null,
         "counterpartyClass": "permissionless",
         "smartMoneySignal": null,
-        "apyVolatility": null,
-        "apyDrift": null
+        "apyVolatility": 0.003124783264647721,
+        "apyDrift": 0.8849439345639647
       },
       "probabilities": {
-        "exploit": 0.030964130939210976,
+        "exploit": 0.030963667255485963,
         "depeg": 0.005,
         "oracle": 0.02,
-        "illiquid": 0.05286190363515722,
+        "illiquid": 0.05286081253788227,
         "counterparty": 0.005
       },
       "severities": {
@@ -2992,10 +3043,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "illiquid": 0.05,
         "counterparty": 0.5
       },
-      "expectedLoss": 0.0404626064800872,
-      "raapy": -0.0114485064800872,
-      "confidence": 0.4899229326468088,
-      "score": -0.005608885869150315,
+      "expectedLoss": 0.04046215779405719,
+      "raapy": -0.011448057794057189,
+      "confidence": 0.699661748417384,
+      "score": -0.008009768132173314,
       "eligibleTranches": [],
       "primaryTranche": null,
       "rejectionReasons": [
@@ -3003,20 +3054,20 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
           "tranche": "senior",
           "reasons": [
             "expectedLoss 0.0405 > 0.02",
-            "tvlUsd 51738 < 25000000"
+            "tvlUsd 51751 < 25000000"
           ]
         },
         {
           "tranche": "mezzanine",
           "reasons": [
             "expectedLoss 0.0405 > 0.04",
-            "tvlUsd 51738 < 1000000"
+            "tvlUsd 51751 < 1000000"
           ]
         },
         {
           "tranche": "junior",
           "reasons": [
-            "tvlUsd 51738 < 100000"
+            "tvlUsd 51751 < 100000"
           ]
         }
       ]
@@ -3025,11 +3076,11 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "id": "agni:ab6d4bd4-fa82-4f09-9588-98c953179d61",
       "source": "agni",
       "asset": "0x29cc30f9d113b356ce408667aa6433589cecbdca",
-      "apy": 0.0124004,
+      "apy": 0.0192329,
       "apyReward": 0,
       "apyType": "variable",
-      "tvlUsd": 47700,
-      "lastUpdatedMs": 1779283451669,
+      "tvlUsd": 49036,
+      "lastUpdatedMs": 1779306914842,
       "raw": {
         "chain": "Mantle",
         "project": "fluxion-network",
@@ -3038,10 +3089,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
           "0x29cc30f9d113b356ce408667aa6433589cecbdca",
           "0x78c1b0c915c4faa5fffa6cabf0219da63d7f4cb8"
         ],
-        "apy": 1.24004,
-        "apyBase": 1.24004,
+        "apy": 1.92329,
+        "apyBase": 1.92329,
         "apyReward": null,
-        "tvlUsd": 47700,
+        "tvlUsd": 49036,
         "pool": "ab6d4bd4-fa82-4f09-9588-98c953179d61"
       },
       "risk": {
@@ -3053,14 +3104,14 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "liquiditySlippageBps": null,
         "counterpartyClass": "permissionless",
         "smartMoneySignal": null,
-        "apyVolatility": 0.026870098257544533,
-        "apyDrift": 0.6259771216147216
+        "apyVolatility": 0.026747435344847643,
+        "apyDrift": 0.6334953991167706
       },
       "probabilities": {
-        "exploit": 0.008201589885377758,
+        "exploit": 0.008188151121405323,
         "depeg": 0.005,
         "oracle": 0.007,
-        "illiquid": 0.05321481620959887,
+        "illiquid": 0.053094849636278724,
         "counterparty": 0.005
       },
       "severities": {
@@ -3070,30 +3121,30 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "illiquid": 0.05,
         "counterparty": 0.5
       },
-      "expectedLoss": 0.015932092213051037,
-      "raapy": -0.0035316922130510364,
-      "confidence": 0.6964483739601749,
-      "score": -0.002459641299107206,
+      "expectedLoss": 0.015914670935008462,
+      "raapy": 0.003318229064991539,
+      "confidence": 0.6996710773028887,
+      "score": 0.002321668904640387,
       "eligibleTranches": [],
       "primaryTranche": null,
       "rejectionReasons": [
         {
           "tranche": "senior",
           "reasons": [
-            "tvlUsd 47700 < 25000000",
-            "apyBase 1.24% < 2% (reward-only positions blocked)"
+            "tvlUsd 49036 < 25000000",
+            "apyBase 1.92% < 2% (reward-only positions blocked)"
           ]
         },
         {
           "tranche": "mezzanine",
           "reasons": [
-            "tvlUsd 47700 < 1000000"
+            "tvlUsd 49036 < 1000000"
           ]
         },
         {
           "tranche": "junior",
           "reasons": [
-            "tvlUsd 47700 < 100000"
+            "tvlUsd 49036 < 100000"
           ]
         }
       ]
@@ -3102,11 +3153,11 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "id": "agni:6a134700-f4a3-49ad-ad5a-fe1868b1c744",
       "source": "agni",
       "asset": "0x111111d2bf19e43c34263401e0cad979ed1cdb61",
-      "apy": 0.0042255,
+      "apy": 0.0043825,
       "apyReward": 0,
       "apyType": "variable",
-      "tvlUsd": 44582,
-      "lastUpdatedMs": 1779283451669,
+      "tvlUsd": 44583,
+      "lastUpdatedMs": 1779306914842,
       "raw": {
         "chain": "Mantle",
         "project": "fluxion-network",
@@ -3115,10 +3166,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
           "0x111111d2bf19e43c34263401e0cad979ed1cdb61",
           "0x779ded0c9e1022225f8e0630b35a9b54be713736"
         ],
-        "apy": 0.42255,
-        "apyBase": 0.42255,
+        "apy": 0.43825,
+        "apyBase": 0.43825,
         "apyReward": null,
-        "tvlUsd": 44582,
+        "tvlUsd": 44583,
         "pool": "6a134700-f4a3-49ad-ad5a-fe1868b1c744"
       },
       "risk": {
@@ -3130,14 +3181,14 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "liquiditySlippageBps": null,
         "counterpartyClass": "permissionless",
         "smartMoneySignal": null,
-        "apyVolatility": 1.3259856272965742,
-        "apyDrift": 0.04994933729770021
+        "apyVolatility": 1.325984098520467,
+        "apyDrift": 0.049963845226056645
       },
       "probabilities": {
-        "exploit": 0.008234477913785057,
+        "exploit": 0.008234467001418009,
         "depeg": 0.005,
         "oracle": 0.007,
-        "illiquid": 0.053508404524668055,
+        "illiquid": 0.053508307111000825,
         "counterparty": 0.005
       },
       "severities": {
@@ -3147,31 +3198,31 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "illiquid": 0.05,
         "counterparty": 0.5
       },
-      "expectedLoss": 0.015974726452950703,
-      "raapy": -0.011749226452950703,
-      "confidence": 0.48753823807461344,
-      "score": -0.005728197163611226,
+      "expectedLoss": 0.01597471230675535,
+      "raapy": -0.011592212306755348,
+      "confidence": 0.4897501637136682,
+      "score": -0.005677287875037031,
       "eligibleTranches": [],
       "primaryTranche": null,
       "rejectionReasons": [
         {
           "tranche": "senior",
           "reasons": [
-            "tvlUsd 44582 < 25000000",
-            "apyBase 0.42% < 2% (reward-only positions blocked)"
+            "tvlUsd 44583 < 25000000",
+            "apyBase 0.44% < 2% (reward-only positions blocked)"
           ]
         },
         {
           "tranche": "mezzanine",
           "reasons": [
-            "tvlUsd 44582 < 1000000",
-            "apyBase 0.42% < 1% (reward-only positions blocked)"
+            "tvlUsd 44583 < 1000000",
+            "apyBase 0.44% < 1% (reward-only positions blocked)"
           ]
         },
         {
           "tranche": "junior",
           "reasons": [
-            "tvlUsd 44582 < 100000"
+            "tvlUsd 44583 < 100000"
           ]
         }
       ]
@@ -3183,8 +3234,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apy": 0.0000072999999999999996,
       "apyReward": 0,
       "apyType": "variable",
-      "tvlUsd": 34062,
-      "lastUpdatedMs": 1779283451669,
+      "tvlUsd": 33993,
+      "lastUpdatedMs": 1779306914842,
       "raw": {
         "chain": "Mantle",
         "project": "minterest",
@@ -3195,7 +3246,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "apy": 0.00073,
         "apyBase": 0.00073,
         "apyReward": null,
-        "tvlUsd": 34062,
+        "tvlUsd": 33993,
         "pool": "4ecffa03-92a0-4eed-bb8b-7537ade00cae"
       },
       "risk": {
@@ -3211,10 +3262,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "apyDrift": 1.0488505747126424
       },
       "probabilities": {
-        "exploit": 0.022116602765642156,
+        "exploit": 0.022119210920218072,
         "depeg": 0.005,
         "oracle": 0.007,
-        "illiquid": 0.05467729855390944,
+        "illiquid": 0.054686105057331506,
         "counterparty": 0.005
       },
       "severities": {
@@ -3224,10 +3275,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "illiquid": 0.05,
         "counterparty": 0.5
       },
-      "expectedLoss": 0.027832977278491305,
-      "raapy": -0.027825677278491306,
-      "confidence": 0.694477896395384,
-      "score": -0.01932431782214348,
+      "expectedLoss": 0.027835634535051935,
+      "raapy": -0.027828334535051936,
+      "confidence": 0.6996290982976333,
+      "score": -0.019469512597883275,
       "eligibleTranches": [],
       "primaryTranche": null,
       "rejectionReasons": [
@@ -3235,21 +3286,21 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
           "tranche": "senior",
           "reasons": [
             "expectedLoss 0.0278 > 0.02",
-            "tvlUsd 34062 < 25000000",
+            "tvlUsd 33993 < 25000000",
             "apyBase 0.00% < 2% (reward-only positions blocked)"
           ]
         },
         {
           "tranche": "mezzanine",
           "reasons": [
-            "tvlUsd 34062 < 1000000",
+            "tvlUsd 33993 < 1000000",
             "apyBase 0.00% < 1% (reward-only positions blocked)"
           ]
         },
         {
           "tranche": "junior",
           "reasons": [
-            "tvlUsd 34062 < 100000"
+            "tvlUsd 33993 < 100000"
           ]
         }
       ]
@@ -3259,10 +3310,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "source": "mantleVault",
       "asset": "0xc96de26018a54d51c097160568752c4e3bd6c364",
       "apy": 0.003801,
-      "apyReward": 0.012481299999999999,
+      "apyReward": 0.0124761,
       "apyType": "variable",
       "tvlUsd": 28256,
-      "lastUpdatedMs": 1779283451669,
+      "lastUpdatedMs": 1779306914842,
       "raw": {
         "chain": "Mantle",
         "project": "lendle-pooled-markets",
@@ -3270,9 +3321,9 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "underlyingTokens": [
           "0xC96dE26018A54D51c097160568752c4E3BD6C364"
         ],
-        "apy": 1.62823,
+        "apy": 1.6277,
         "apyBase": 0.3801,
-        "apyReward": 1.24813,
+        "apyReward": 1.24761,
         "tvlUsd": 28256,
         "pool": "dc732e3d-d65b-4087-8d48-53e50bb47732"
       },
@@ -3304,8 +3355,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       },
       "expectedLoss": 0.028077866202518793,
       "raapy": -0.024276866202518795,
-      "confidence": 0.69405670757843,
-      "score": -0.016849521826842257,
+      "confidence": 0.6996127738091261,
+      "score": -0.0169844057033372,
       "eligibleTranches": [],
       "primaryTranche": null,
       "rejectionReasons": [
@@ -3339,8 +3390,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apy": 0.0000011,
       "apyReward": 0,
       "apyType": "variable",
-      "tvlUsd": 21826,
-      "lastUpdatedMs": 1779283451669,
+      "tvlUsd": 22452,
+      "lastUpdatedMs": 1779306914842,
       "raw": {
         "chain": "Mantle",
         "project": "minterest",
@@ -3351,7 +3402,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "apy": 0.00011,
         "apyBase": 0.00011,
         "apyReward": null,
-        "tvlUsd": 21826,
+        "tvlUsd": 22452,
         "pool": "d6c5fcec-1f1f-40e8-b732-076ece1462fc"
       },
       "risk": {
@@ -3367,10 +3418,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "apyDrift": 1.0476190476190477
       },
       "probabilities": {
-        "exploit": 0.02268907268522491,
+        "exploit": 0.022652701336887873,
         "depeg": 0.005,
         "oracle": 0.007,
-        "illiquid": 0.0566102584913292,
+        "illiquid": 0.05648744966452365,
         "counterparty": 0.005
       },
       "severities": {
@@ -3380,10 +3431,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "illiquid": 0.05,
         "counterparty": 0.5
       },
-      "expectedLoss": 0.028416224707007633,
-      "raapy": -0.028415124707007633,
-      "confidence": 0.6944825262634595,
-      "score": -0.019733807590613908,
+      "expectedLoss": 0.028379168619580876,
+      "raapy": -0.028378068619580876,
+      "confidence": 0.6996267662045258,
+      "score": -0.0198540563794475,
       "eligibleTranches": [],
       "primaryTranche": null,
       "rejectionReasons": [
@@ -3391,21 +3442,21 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
           "tranche": "senior",
           "reasons": [
             "expectedLoss 0.0284 > 0.02",
-            "tvlUsd 21826 < 25000000",
+            "tvlUsd 22452 < 25000000",
             "apyBase 0.00% < 2% (reward-only positions blocked)"
           ]
         },
         {
           "tranche": "mezzanine",
           "reasons": [
-            "tvlUsd 21826 < 1000000",
+            "tvlUsd 22452 < 1000000",
             "apyBase 0.00% < 1% (reward-only positions blocked)"
           ]
         },
         {
           "tranche": "junior",
           "reasons": [
-            "tvlUsd 21826 < 100000"
+            "tvlUsd 22452 < 100000"
           ]
         }
       ]
@@ -3417,8 +3468,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apy": 0.0044471,
       "apyReward": 0,
       "apyType": "variable",
-      "tvlUsd": 17517,
-      "lastUpdatedMs": 1779283451669,
+      "tvlUsd": 17582,
+      "lastUpdatedMs": 1779306914842,
       "raw": {
         "chain": "Mantle",
         "project": "beefy",
@@ -3430,7 +3481,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "apy": 0.44471,
         "apyBase": null,
         "apyReward": null,
-        "tvlUsd": 17517,
+        "tvlUsd": 17582,
         "pool": "6eec4d69-bcad-48b9-aa3a-31005778de19"
       },
       "risk": {
@@ -3446,10 +3497,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "apyDrift": 0.15973448824243033
       },
       "probabilities": {
-        "exploit": 0.03296297743730013,
+        "exploit": 0.03295614159872595,
         "depeg": 0.005,
         "oracle": 0.02,
-        "illiquid": 0.05756540270029051,
+        "illiquid": 0.05754931724281601,
         "counterparty": 0.005
       },
       "severities": {
@@ -3459,10 +3510,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "illiquid": 0.05,
         "counterparty": 0.5
       },
-      "expectedLoss": 0.04239680095671964,
-      "raapy": -0.03794970095671964,
-      "confidence": 0.4852990947676006,
-      "score": -0.018416955520997185,
+      "expectedLoss": 0.04239018622105786,
+      "raapy": -0.03794308622105786,
+      "confidence": 0.48974363375501845,
+      "score": -0.018582384921780846,
       "eligibleTranches": [],
       "primaryTranche": null,
       "rejectionReasons": [
@@ -3470,7 +3521,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
           "tranche": "senior",
           "reasons": [
             "expectedLoss 0.0424 > 0.02",
-            "tvlUsd 17517 < 25000000",
+            "tvlUsd 17582 < 25000000",
             "apyBase 0.44% < 2% (reward-only positions blocked)"
           ]
         },
@@ -3478,14 +3529,14 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
           "tranche": "mezzanine",
           "reasons": [
             "expectedLoss 0.0424 > 0.04",
-            "tvlUsd 17517 < 1000000",
+            "tvlUsd 17582 < 1000000",
             "apyBase 0.44% < 1% (reward-only positions blocked)"
           ]
         },
         {
           "tranche": "junior",
           "reasons": [
-            "tvlUsd 17517 < 100000"
+            "tvlUsd 17582 < 100000"
           ]
         }
       ]
@@ -3497,8 +3548,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apy": 1.0000000000000001e-7,
       "apyReward": 0,
       "apyType": "variable",
-      "tvlUsd": 14738,
-      "lastUpdatedMs": 1779283451669,
+      "tvlUsd": 14707,
+      "lastUpdatedMs": 1779306914842,
       "raw": {
         "chain": "Mantle",
         "project": "aurelius",
@@ -3509,7 +3560,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "apy": 0.00001,
         "apyBase": 0.00001,
         "apyReward": 0,
-        "tvlUsd": 14738,
+        "tvlUsd": 14707,
         "pool": "e118b8cb-a7f6-4619-8844-791956db623b"
       },
       "risk": {
@@ -3525,10 +3576,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "apyDrift": 1.0000000000000007
       },
       "probabilities": {
-        "exploit": 0.02319413488839105,
+        "exploit": 0.023196843173746023,
         "depeg": 0.005,
         "oracle": 0.007,
-        "illiquid": 0.05831561447813228,
+        "illiquid": 0.058324759075797906,
         "counterparty": 0.005
       },
       "severities": {
@@ -3538,10 +3589,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "illiquid": 0.05,
         "counterparty": 0.5
       },
-      "expectedLoss": 0.028930795379039007,
-      "raapy": -0.028930695379039008,
-      "confidence": 0.6939595464408074,
-      "score": -0.020076732243455072,
+      "expectedLoss": 0.028933554651474014,
+      "raapy": -0.028933454651474014,
+      "confidence": 0.6996687450698513,
+      "score": -0.020243833906532276,
       "eligibleTranches": [],
       "primaryTranche": null,
       "rejectionReasons": [
@@ -3549,21 +3600,21 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
           "tranche": "senior",
           "reasons": [
             "expectedLoss 0.0289 > 0.02",
-            "tvlUsd 14738 < 25000000",
+            "tvlUsd 14707 < 25000000",
             "apyBase 0.00% < 2% (reward-only positions blocked)"
           ]
         },
         {
           "tranche": "mezzanine",
           "reasons": [
-            "tvlUsd 14738 < 1000000",
+            "tvlUsd 14707 < 1000000",
             "apyBase 0.00% < 1% (reward-only positions blocked)"
           ]
         },
         {
           "tranche": "junior",
           "reasons": [
-            "tvlUsd 14738 < 100000"
+            "tvlUsd 14707 < 100000"
           ]
         }
       ]
@@ -3572,11 +3623,11 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "id": "fbtc:d8733ab8-a147-4e31-a668-2c9dff24ea56",
       "source": "fbtc",
       "asset": "0x201eba5cc46d216ce6dc03f6a759e8e766e956ae",
-      "apy": 0.10791740000000001,
-      "apyReward": 0.0198312,
+      "apy": 0.1079249,
+      "apyReward": 0.0201292,
       "apyType": "variable",
-      "tvlUsd": 14665,
-      "lastUpdatedMs": 1779283451669,
+      "tvlUsd": 14659,
+      "lastUpdatedMs": 1779306914842,
       "raw": {
         "chain": "Mantle",
         "project": "clearpool-lending",
@@ -3584,10 +3635,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "underlyingTokens": [
           "0x201eba5cc46d216ce6dc03f6a759e8e766e956ae"
         ],
-        "apy": 12.77487,
-        "apyBase": 10.79174,
-        "apyReward": 1.98312,
-        "tvlUsd": 14665,
+        "apy": 12.80541,
+        "apyBase": 10.79249,
+        "apyReward": 2.01292,
+        "tvlUsd": 14659,
         "pool": "d8733ab8-a147-4e31-a668-2c9dff24ea56"
       },
       "risk": {
@@ -3599,14 +3650,14 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "liquiditySlippageBps": null,
         "counterpartyClass": "custodial",
         "smartMoneySignal": null,
-        "apyVolatility": 0.03324706790928885,
-        "apyDrift": 1.2014560350722252
+        "apyVolatility": 0.03324704508115632,
+        "apyDrift": 1.2014583167248043
       },
       "probabilities": {
-        "exploit": 0.02320052158423677,
+        "exploit": 0.02320104793126019,
         "depeg": 0.005,
         "oracle": 0.02,
-        "illiquid": 0.0583371793268343,
+        "illiquid": 0.05833895655158384,
         "counterparty": 0.08
       },
       "severities": {
@@ -3616,10 +3667,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "illiquid": 0.05,
         "counterparty": 0.5
       },
-      "expectedLoss": 0.07163730231294296,
-      "raapy": 0.03628009768705705,
-      "confidence": 0.47928339331233677,
-      "score": 0.017388448329155762,
+      "expectedLoss": 0.07163783856915035,
+      "raapy": 0.03628706143084966,
+      "confidence": 0.48925576576131125,
+      "score": 0.01775365402757809,
       "eligibleTranches": [],
       "primaryTranche": null,
       "rejectionReasons": [
@@ -3627,7 +3678,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
           "tranche": "senior",
           "reasons": [
             "expectedLoss 0.0716 > 0.02",
-            "tvlUsd 14665 < 25000000",
+            "tvlUsd 14659 < 25000000",
             "apy 10.79% > 8% (too-good-to-be-true gate)"
           ]
         },
@@ -3635,13 +3686,13 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
           "tranche": "mezzanine",
           "reasons": [
             "expectedLoss 0.0716 > 0.04",
-            "tvlUsd 14665 < 1000000"
+            "tvlUsd 14659 < 1000000"
           ]
         },
         {
           "tranche": "junior",
           "reasons": [
-            "tvlUsd 14665 < 100000"
+            "tvlUsd 14659 < 100000"
           ]
         }
       ]
@@ -3653,8 +3704,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apy": 0.000047600000000000005,
       "apyReward": 0,
       "apyType": "variable",
-      "tvlUsd": 10426,
-      "lastUpdatedMs": 1779283451669,
+      "tvlUsd": 10495,
+      "lastUpdatedMs": 1779306914842,
       "raw": {
         "chain": "Mantle",
         "project": "minterest",
@@ -3665,7 +3716,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "apy": 0.00476,
         "apyBase": 0.00476,
         "apyReward": null,
-        "tvlUsd": 10426,
+        "tvlUsd": 10495,
         "pool": "edc32e93-0feb-4d38-bb73-366bb4a2aace"
       },
       "risk": {
@@ -3681,10 +3732,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "apyDrift": 0.9596095590710197
       },
       "probabilities": {
-        "exploit": 0.023639328566280277,
+        "exploit": 0.023630844337876697,
         "depeg": 0.005,
         "oracle": 0.007,
-        "illiquid": 0.05981882279409,
+        "illiquid": 0.05979017557081581,
         "counterparty": 0.005
       },
       "severities": {
@@ -3694,10 +3745,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "illiquid": 0.05,
         "counterparty": 0.5
       },
-      "expectedLoss": 0.029384370421042732,
-      "raapy": -0.029336770421042734,
-      "confidence": 0.6942186730387672,
-      "score": -0.02036613383293924,
+      "expectedLoss": 0.029375726465735986,
+      "raapy": -0.029328126465735987,
+      "confidence": 0.6996290982976333,
+      "score": -0.020518810673981824,
       "eligibleTranches": [],
       "primaryTranche": null,
       "rejectionReasons": [
@@ -3705,21 +3756,21 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
           "tranche": "senior",
           "reasons": [
             "expectedLoss 0.0294 > 0.02",
-            "tvlUsd 10426 < 25000000",
+            "tvlUsd 10495 < 25000000",
             "apyBase 0.00% < 2% (reward-only positions blocked)"
           ]
         },
         {
           "tranche": "mezzanine",
           "reasons": [
-            "tvlUsd 10426 < 1000000",
+            "tvlUsd 10495 < 1000000",
             "apyBase 0.00% < 1% (reward-only positions blocked)"
           ]
         },
         {
           "tranche": "junior",
           "reasons": [
-            "tvlUsd 10426 < 100000"
+            "tvlUsd 10495 < 100000"
           ]
         }
       ]
@@ -3731,8 +3782,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apy": 0.0002029,
       "apyReward": 0,
       "apyType": "variable",
-      "tvlUsd": 10369,
-      "lastUpdatedMs": 1779283451669,
+      "tvlUsd": 10373,
+      "lastUpdatedMs": 1779306914842,
       "raw": {
         "chain": "Mantle",
         "project": "minterest",
@@ -3743,7 +3794,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "apy": 0.02029,
         "apyBase": 0.02029,
         "apyReward": null,
-        "tvlUsd": 10369,
+        "tvlUsd": 10373,
         "pool": "ae619265-65fd-4584-8934-16a66dc50af3"
       },
       "risk": {
@@ -3759,10 +3810,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "apyDrift": 1.007331159911958
       },
       "probabilities": {
-        "exploit": 0.02364637973561275,
+        "exploit": 0.023645883653586244,
         "depeg": 0.005,
         "oracle": 0.007,
-        "illiquid": 0.05984263125522551,
+        "illiquid": 0.059840956221044475,
         "counterparty": 0.005
       },
       "severities": {
@@ -3772,10 +3823,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "illiquid": 0.05,
         "counterparty": 0.5
       },
-      "expectedLoss": 0.029391554338032113,
-      "raapy": -0.029188654338032114,
-      "confidence": 0.6873935641062565,
-      "score": -0.020064093136885442,
+      "expectedLoss": 0.02939104891660053,
+      "raapy": -0.029188148916600532,
+      "confidence": 0.6990020453768989,
+      "score": -0.02040257579346929,
       "eligibleTranches": [],
       "primaryTranche": null,
       "rejectionReasons": [
@@ -3783,21 +3834,21 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
           "tranche": "senior",
           "reasons": [
             "expectedLoss 0.0294 > 0.02",
-            "tvlUsd 10369 < 25000000",
+            "tvlUsd 10373 < 25000000",
             "apyBase 0.02% < 2% (reward-only positions blocked)"
           ]
         },
         {
           "tranche": "mezzanine",
           "reasons": [
-            "tvlUsd 10369 < 1000000",
+            "tvlUsd 10373 < 1000000",
             "apyBase 0.02% < 1% (reward-only positions blocked)"
           ]
         },
         {
           "tranche": "junior",
           "reasons": [
-            "tvlUsd 10369 < 100000"
+            "tvlUsd 10373 < 100000"
           ]
         }
       ]
@@ -3809,8 +3860,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apy": 0.00042009999999999997,
       "apyReward": 0,
       "apyType": "variable",
-      "tvlUsd": 6362,
-      "lastUpdatedMs": 1779283451669,
+      "tvlUsd": 6368,
+      "lastUpdatedMs": 1779306914842,
       "raw": {
         "chain": "Mantle",
         "project": "minterest",
@@ -3821,7 +3872,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "apy": 0.04201,
         "apyBase": 0.04201,
         "apyReward": null,
-        "tvlUsd": 6362,
+        "tvlUsd": 6368,
         "pool": "3441a15d-5f50-4a52-af27-597c182c5c4a"
       },
       "risk": {
@@ -3837,10 +3888,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "apyDrift": 1.0597836369675537
       },
       "probabilities": {
-        "exploit": 0.024274668009205184,
+        "exploit": 0.024273455550364465,
         "depeg": 0.005,
         "oracle": 0.007,
-        "illiquid": 0.06196406335228656,
+        "illiquid": 0.06195996945270388,
         "counterparty": 0.005
       },
       "severities": {
@@ -3850,10 +3901,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "illiquid": 0.05,
         "counterparty": 0.5
       },
-      "expectedLoss": 0.030031670975438737,
-      "raapy": -0.029611570975438737,
-      "confidence": 0.6818390741728411,
-      "score": -0.02019032613869652,
+      "expectedLoss": 0.03003043569044499,
+      "raapy": -0.02961033569044499,
+      "confidence": 0.6989391380236885,
+      "score": -0.02069582250407168,
       "eligibleTranches": [],
       "primaryTranche": null,
       "rejectionReasons": [
@@ -3861,21 +3912,21 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
           "tranche": "senior",
           "reasons": [
             "expectedLoss 0.0300 > 0.02",
-            "tvlUsd 6362 < 25000000",
+            "tvlUsd 6368 < 25000000",
             "apyBase 0.04% < 2% (reward-only positions blocked)"
           ]
         },
         {
           "tranche": "mezzanine",
           "reasons": [
-            "tvlUsd 6362 < 1000000",
+            "tvlUsd 6368 < 1000000",
             "apyBase 0.04% < 1% (reward-only positions blocked)"
           ]
         },
         {
           "tranche": "junior",
           "reasons": [
-            "tvlUsd 6362 < 100000"
+            "tvlUsd 6368 < 100000"
           ]
         }
       ]
@@ -3885,10 +3936,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "source": "mantleVault",
       "asset": "0xcabae6f6ea1ecab08ad02fe02ce9a44f09aebfa2",
       "apy": 0.0071475,
-      "apyReward": 0.0002393,
+      "apyReward": 0.0002391,
       "apyType": "variable",
-      "tvlUsd": 5907,
-      "lastUpdatedMs": 1779283451669,
+      "tvlUsd": 5896,
+      "lastUpdatedMs": 1779306914842,
       "raw": {
         "chain": "Mantle",
         "project": "lendle-pooled-markets",
@@ -3896,10 +3947,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "underlyingTokens": [
           "0xCAbAE6f6Ea1ecaB08Ad02fE02ce9A44F09aebfA2"
         ],
-        "apy": 0.73868,
+        "apy": 0.73866,
         "apyBase": 0.71475,
-        "apyReward": 0.02393,
-        "tvlUsd": 5907,
+        "apyReward": 0.02391,
+        "tvlUsd": 5896,
         "pool": "7be673f4-8b41-4d3f-a533-45d20d62e8fa"
       },
       "risk": {
@@ -3915,10 +3966,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "apyDrift": 2.66859676081612
       },
       "probabilities": {
-        "exploit": 0.02437011133690158,
+        "exploit": 0.024372508759139544,
         "depeg": 0.005,
         "oracle": 0.007,
-        "illiquid": 0.0622863302914222,
+        "illiquid": 0.06229442525149005,
         "counterparty": 0.005
       },
       "severities": {
@@ -3928,10 +3979,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "illiquid": 0.05,
         "counterparty": 0.5
       },
-      "expectedLoss": 0.03012891115093745,
-      "raapy": -0.02298141115093745,
-      "confidence": 0.48611508248457214,
-      "score": -0.011171610577249825,
+      "expectedLoss": 0.030131353707843114,
+      "raapy": -0.022983853707843113,
+      "confidence": 0.48972567681765994,
+      "score": -0.011255783312951552,
       "eligibleTranches": [],
       "primaryTranche": null,
       "rejectionReasons": [
@@ -3939,21 +3990,21 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
           "tranche": "senior",
           "reasons": [
             "expectedLoss 0.0301 > 0.02",
-            "tvlUsd 5907 < 25000000",
+            "tvlUsd 5896 < 25000000",
             "apyBase 0.71% < 2% (reward-only positions blocked)"
           ]
         },
         {
           "tranche": "mezzanine",
           "reasons": [
-            "tvlUsd 5907 < 1000000",
+            "tvlUsd 5896 < 1000000",
             "apyBase 0.71% < 1% (reward-only positions blocked)"
           ]
         },
         {
           "tranche": "junior",
           "reasons": [
-            "tvlUsd 5907 < 100000"
+            "tvlUsd 5896 < 100000"
           ]
         }
       ]
@@ -3965,8 +4016,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apy": 0.4920572,
       "apyReward": 0.005412,
       "apyType": "variable",
-      "tvlUsd": 3147,
-      "lastUpdatedMs": 1779283451669,
+      "tvlUsd": 3146,
+      "lastUpdatedMs": 1779306914842,
       "raw": {
         "chain": "Mantle",
         "project": "lendle-pooled-markets",
@@ -3977,7 +4028,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "apy": 49.74693,
         "apyBase": 49.20572,
         "apyReward": 0.5412,
-        "tvlUsd": 3147,
+        "tvlUsd": 3146,
         "pool": "f7150467-f302-41e8-9f9a-1f73d2b49df4"
       },
       "risk": {
@@ -3993,10 +4044,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "apyDrift": 119.43284928264706
       },
       "probabilities": {
-        "exploit": 0.025180027136856936,
+        "exploit": 0.02518043591380564,
         "depeg": 0.005,
         "oracle": 0.007,
-        "illiquid": 0.0650210325708678,
+        "illiquid": 0.06502241281712733,
         "counterparty": 0.005
       },
       "severities": {
@@ -4006,10 +4057,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "illiquid": 0.05,
         "counterparty": 0.5
       },
-      "expectedLoss": 0.030954074694871787,
-      "raapy": 0.4611031253051282,
-      "confidence": 0.33425041152346757,
-      "score": 0.15412390938799614,
+      "expectedLoss": 0.03095449116759116,
+      "raapy": 0.46110270883240884,
+      "confidence": 0.3425075771417836,
+      "score": 0.15793117161570164,
       "eligibleTranches": [],
       "primaryTranche": null,
       "rejectionReasons": [
@@ -4017,21 +4068,21 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
           "tranche": "senior",
           "reasons": [
             "expectedLoss 0.0310 > 0.02",
-            "tvlUsd 3147 < 25000000",
+            "tvlUsd 3146 < 25000000",
             "apy 49.21% > 8% (too-good-to-be-true gate)"
           ]
         },
         {
           "tranche": "mezzanine",
           "reasons": [
-            "tvlUsd 3147 < 1000000",
+            "tvlUsd 3146 < 1000000",
             "apy 49.21% > 20% (too-good-to-be-true gate)"
           ]
         },
         {
           "tranche": "junior",
           "reasons": [
-            "tvlUsd 3147 < 100000"
+            "tvlUsd 3146 < 100000"
           ]
         }
       ]
@@ -4041,10 +4092,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "source": "mantleVault",
       "asset": "0xdeaddeaddeaddeaddeaddeaddeaddeaddead1111",
       "apy": 0.4335303,
-      "apyReward": 0.01494,
+      "apyReward": 0.0149853,
       "apyType": "variable",
-      "tvlUsd": 2924,
-      "lastUpdatedMs": 1779283451669,
+      "tvlUsd": 2944,
+      "lastUpdatedMs": 1779306914842,
       "raw": {
         "chain": "Mantle",
         "project": "lendle-pooled-markets",
@@ -4052,10 +4103,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "underlyingTokens": [
           "0xdEAddEaDdeadDEadDEADDEAddEADDEAddead1111"
         ],
-        "apy": 44.84703,
+        "apy": 44.85157,
         "apyBase": 43.35303,
-        "apyReward": 1.494,
-        "tvlUsd": 2924,
+        "apyReward": 1.49853,
+        "tvlUsd": 2944,
         "pool": "4f9047f1-ca9f-4b30-b5ad-c7a900c38cae"
       },
       "risk": {
@@ -4067,14 +4118,14 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "liquiditySlippageBps": null,
         "counterpartyClass": "permissionless",
         "smartMoneySignal": null,
-        "apyVolatility": null,
-        "apyDrift": null
+        "apyVolatility": 0.3024342641750305,
+        "apyDrift": 3.694840342820245
       },
       "probabilities": {
-        "exploit": 0.025274560300593735,
+        "exploit": 0.025265792600260982,
         "depeg": 0.005,
         "oracle": 0.007,
-        "illiquid": 0.06534022631714179,
+        "illiquid": 0.06531062194334539,
         "counterparty": 0.005
       },
       "severities": {
@@ -4084,32 +4135,32 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "illiquid": 0.05,
         "counterparty": 0.5
       },
-      "expectedLoss": 0.031050387571361766,
-      "raapy": 0.40247991242863823,
-      "confidence": 0.48744855910654816,
-      "score": 0.1961882533826694,
+      "expectedLoss": 0.031041454807389103,
+      "raapy": 0.40248884519261086,
+      "confidence": 0.34280683108102056,
+      "score": 0.13797592556593838,
       "eligibleTranches": [],
       "primaryTranche": null,
       "rejectionReasons": [
         {
           "tranche": "senior",
           "reasons": [
-            "expectedLoss 0.0311 > 0.02",
-            "tvlUsd 2924 < 25000000",
+            "expectedLoss 0.0310 > 0.02",
+            "tvlUsd 2944 < 25000000",
             "apy 43.35% > 8% (too-good-to-be-true gate)"
           ]
         },
         {
           "tranche": "mezzanine",
           "reasons": [
-            "tvlUsd 2924 < 1000000",
+            "tvlUsd 2944 < 1000000",
             "apy 43.35% > 20% (too-good-to-be-true gate)"
           ]
         },
         {
           "tranche": "junior",
           "reasons": [
-            "tvlUsd 2924 < 100000"
+            "tvlUsd 2944 < 100000"
           ]
         }
       ]
@@ -4121,8 +4172,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apy": 0.0002103,
       "apyReward": 0,
       "apyType": "variable",
-      "tvlUsd": 2309,
-      "lastUpdatedMs": 1779283451669,
+      "tvlUsd": 2313,
+      "lastUpdatedMs": 1779306914842,
       "raw": {
         "chain": "Mantle",
         "project": "minterest",
@@ -4133,7 +4184,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "apy": 0.02103,
         "apyBase": 0.02103,
         "apyReward": null,
-        "tvlUsd": 2309,
+        "tvlUsd": 2313,
         "pool": "a5a47cdc-2ca5-4348-ade9-4adddb1d12d5"
       },
       "risk": {
@@ -4149,10 +4200,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "apyDrift": 1.039913520705139
       },
       "probabilities": {
-        "exploit": 0.025578284944658487,
+        "exploit": 0.025576058692855123,
         "depeg": 0.005,
         "oracle": 0.007,
-        "illiquid": 0.06636576067082825,
+        "illiquid": 0.06635824367229382,
         "counterparty": 0.005
       },
       "severities": {
@@ -4162,10 +4213,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "illiquid": 0.05,
         "counterparty": 0.5
       },
-      "expectedLoss": 0.03135983023650113,
-      "raapy": -0.03114953023650113,
-      "confidence": 0.6941932188207526,
-      "score": -0.021623792659631078,
+      "expectedLoss": 0.03135756207254155,
+      "raapy": -0.031147262072541548,
+      "confidence": 0.6996384267478001,
+      "score": -0.02179182143393439,
       "eligibleTranches": [],
       "primaryTranche": null,
       "rejectionReasons": [
@@ -4173,21 +4224,21 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
           "tranche": "senior",
           "reasons": [
             "expectedLoss 0.0314 > 0.02",
-            "tvlUsd 2309 < 25000000",
+            "tvlUsd 2313 < 25000000",
             "apyBase 0.02% < 2% (reward-only positions blocked)"
           ]
         },
         {
           "tranche": "mezzanine",
           "reasons": [
-            "tvlUsd 2309 < 1000000",
+            "tvlUsd 2313 < 1000000",
             "apyBase 0.02% < 1% (reward-only positions blocked)"
           ]
         },
         {
           "tranche": "junior",
           "reasons": [
-            "tvlUsd 2309 < 100000"
+            "tvlUsd 2313 < 100000"
           ]
         }
       ]
@@ -4196,11 +4247,11 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "id": "mantleVault:dce58852-9976-4141-b26a-a832c5edc34e",
       "source": "mantleVault",
       "asset": "0x201eba5cc46d216ce6dc03f6a759e8e766e956ae",
-      "apy": 0.509073,
-      "apyReward": 0.014744,
+      "apy": 0.5097100999999999,
+      "apyReward": 0.0147463,
       "apyType": "variable",
-      "tvlUsd": 2135,
-      "lastUpdatedMs": 1779283451669,
+      "tvlUsd": 2134,
+      "lastUpdatedMs": 1779306914842,
       "raw": {
         "chain": "Mantle",
         "project": "lendle-pooled-markets",
@@ -4208,10 +4259,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "underlyingTokens": [
           "0x201EBa5CC46D216Ce6DC03F6a759e8E766e956aE"
         ],
-        "apy": 52.3817,
-        "apyBase": 50.9073,
-        "apyReward": 1.4744,
-        "tvlUsd": 2135,
+        "apy": 52.44564,
+        "apyBase": 50.97101,
+        "apyReward": 1.47463,
+        "tvlUsd": 2134,
         "pool": "dce58852-9976-4141-b26a-a832c5edc34e"
       },
       "risk": {
@@ -4223,14 +4274,14 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "liquiditySlippageBps": null,
         "counterpartyClass": "permissionless",
         "smartMoneySignal": null,
-        "apyVolatility": 0.22480912653752744,
-        "apyDrift": 3.5500376042084283
+        "apyVolatility": 0.22481687264705344,
+        "apyDrift": 3.550185237991232
       },
       "probabilities": {
-        "exploit": 0.025679057297804096,
+        "exploit": 0.025679659882335275,
         "depeg": 0.005,
         "oracle": 0.007,
-        "illiquid": 0.06670602120638958,
+        "illiquid": 0.06670805584911549,
         "counterparty": 0.005
       },
       "severities": {
@@ -4240,10 +4291,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "illiquid": 0.05,
         "counterparty": 0.5
       },
-      "expectedLoss": 0.031462499763452965,
-      "raapy": 0.47761050023654705,
-      "confidence": 0.33550061198192666,
-      "score": 0.16023861511835566,
+      "expectedLoss": 0.03146311369244076,
+      "raapy": 0.4782469863075592,
+      "confidence": 0.34247903603291785,
+      "score": 0.16378956685626092,
       "eligibleTranches": [],
       "primaryTranche": null,
       "rejectionReasons": [
@@ -4251,99 +4302,21 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
           "tranche": "senior",
           "reasons": [
             "expectedLoss 0.0315 > 0.02",
-            "tvlUsd 2135 < 25000000",
-            "apy 50.91% > 8% (too-good-to-be-true gate)"
+            "tvlUsd 2134 < 25000000",
+            "apy 50.97% > 8% (too-good-to-be-true gate)"
           ]
         },
         {
           "tranche": "mezzanine",
           "reasons": [
-            "tvlUsd 2135 < 1000000",
-            "apy 50.91% > 20% (too-good-to-be-true gate)"
+            "tvlUsd 2134 < 1000000",
+            "apy 50.97% > 20% (too-good-to-be-true gate)"
           ]
         },
         {
           "tranche": "junior",
           "reasons": [
-            "tvlUsd 2135 < 100000"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "mantleVault:1362a09f-4853-492b-8083-34e0df20e17b",
-      "source": "mantleVault",
-      "asset": "0xc96de26018a54d51c097160568752c4e3bd6c364",
-      "apy": 0.0000064000000000000006,
-      "apyReward": 0,
-      "apyType": "variable",
-      "tvlUsd": 2068,
-      "lastUpdatedMs": 1779283451669,
-      "raw": {
-        "chain": "Mantle",
-        "project": "minterest",
-        "symbol": "FBTC",
-        "underlyingTokens": [
-          "0xC96dE26018A54D51c097160568752c4E3BD6C364"
-        ],
-        "apy": 0.00064,
-        "apyBase": 0.00064,
-        "apyReward": null,
-        "tvlUsd": 2068,
-        "pool": "1362a09f-4853-492b-8083-34e0df20e17b"
-      },
-      "risk": {
-        "contractAgeDays": 365,
-        "auditFactor": 0.6,
-        "tvlFactor": null,
-        "depegEvents": [],
-        "oracleType": "redstone",
-        "liquiditySlippageBps": null,
-        "counterpartyClass": "permissionless",
-        "smartMoneySignal": null,
-        "apyVolatility": 2.4868191858117323e-7,
-        "apyDrift": 1.012658227848102
-      },
-      "probabilities": {
-        "exploit": 0.02572006791727055,
-        "depeg": 0.005,
-        "oracle": 0.007,
-        "illiquid": 0.06684449465578096,
-        "counterparty": 0.005
-      },
-      "severities": {
-        "exploit": 0.85,
-        "depeg": 0.2,
-        "oracle": 0.4,
-        "illiquid": 0.05,
-        "counterparty": 0.5
-      },
-      "expectedLoss": 0.031504282462469016,
-      "raapy": -0.03149788246246902,
-      "confidence": 0.6953024993334175,
-      "score": -0.021900556399864927,
-      "eligibleTranches": [],
-      "primaryTranche": null,
-      "rejectionReasons": [
-        {
-          "tranche": "senior",
-          "reasons": [
-            "expectedLoss 0.0315 > 0.02",
-            "tvlUsd 2068 < 25000000",
-            "apyBase 0.00% < 2% (reward-only positions blocked)"
-          ]
-        },
-        {
-          "tranche": "mezzanine",
-          "reasons": [
-            "tvlUsd 2068 < 1000000",
-            "apyBase 0.00% < 1% (reward-only positions blocked)"
-          ]
-        },
-        {
-          "tranche": "junior",
-          "reasons": [
-            "tvlUsd 2068 < 100000"
+            "tvlUsd 2134 < 100000"
           ]
         }
       ]
@@ -4356,7 +4329,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apyReward": 0.3574606,
       "apyType": "variable",
       "tvlUsd": 857,
-      "lastUpdatedMs": 1779283451669,
+      "lastUpdatedMs": 1779306914842,
       "raw": {
         "chain": "Mantle",
         "project": "lendle-pooled-markets",
@@ -4398,8 +4371,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       },
       "expectedLoss": 0.03265864058817829,
       "raapy": 3.951216259411822,
-      "confidence": 0.34028736341841187,
-      "score": 1.3445489632112086,
+      "confidence": 0.342813687286204,
+      "score": 1.354531015154169,
       "eligibleTranches": [],
       "primaryTranche": null,
       "rejectionReasons": [
@@ -4433,8 +4406,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apy": 0.011708799999999998,
       "apyReward": 0,
       "apyType": "variable",
-      "tvlUsd": 820,
-      "lastUpdatedMs": 1779283451669,
+      "tvlUsd": 822,
+      "lastUpdatedMs": 1779306914842,
       "raw": {
         "chain": "Mantle",
         "project": "minterest",
@@ -4445,21 +4418,14 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "apy": 1.17088,
         "apyBase": 1.17088,
         "apyReward": null,
-        "tvlUsd": 820,
+        "tvlUsd": 822,
         "pool": "46cbb5d7-5462-443b-886a-f371349a5d8c"
       },
       "risk": {
         "contractAgeDays": 365,
         "auditFactor": 0.6,
         "tvlFactor": null,
-        "depegEvents": [
-          {
-            "startMs": 1747832337000,
-            "endMs": null,
-            "maxDeviation": 0.13918936997606068,
-            "recoveryHours": null
-          }
-        ],
+        "depegEvents": [],
         "oracleType": "redstone",
         "liquiditySlippageBps": null,
         "counterpartyClass": "permissionless",
@@ -4468,10 +4434,10 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "apyDrift": 9.95816035914269
       },
       "probabilities": {
-        "exploit": 0.026909860636755656,
-        "depeg": 0.00038134073966044024,
+        "exploit": 0.026906727342494132,
+        "depeg": 0.005,
         "oracle": 0.007,
-        "illiquid": 0.07086186147616283,
+        "illiquid": 0.0708512818245995,
         "counterparty": 0.005
       },
       "severities": {
@@ -4481,31 +4447,31 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "illiquid": 0.05,
         "counterparty": 0.5
       },
-      "expectedLoss": 0.03179274276298254,
-      "raapy": -0.02008394276298254,
-      "confidence": 0.4771664544394963,
-      "score": -0.009583383759378158,
+      "expectedLoss": 0.03271328233234999,
+      "raapy": -0.021004482332349993,
+      "confidence": 0.48974363375501845,
+      "score": -0.01028681150258817,
       "eligibleTranches": [],
       "primaryTranche": null,
       "rejectionReasons": [
         {
           "tranche": "senior",
           "reasons": [
-            "expectedLoss 0.0318 > 0.02",
-            "tvlUsd 820 < 25000000",
+            "expectedLoss 0.0327 > 0.02",
+            "tvlUsd 822 < 25000000",
             "apyBase 1.17% < 2% (reward-only positions blocked)"
           ]
         },
         {
           "tranche": "mezzanine",
           "reasons": [
-            "tvlUsd 820 < 1000000"
+            "tvlUsd 822 < 1000000"
           ]
         },
         {
           "tranche": "junior",
           "reasons": [
-            "tvlUsd 820 < 100000"
+            "tvlUsd 822 < 100000"
           ]
         }
       ]
@@ -4518,7 +4484,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apyReward": 0,
       "apyType": "variable",
       "tvlUsd": 124,
-      "lastUpdatedMs": 1779283451669,
+      "lastUpdatedMs": 1779306914842,
       "raw": {
         "chain": "Mantle",
         "project": "clearpool-lending",
@@ -4560,8 +4526,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       },
       "expectedLoss": 0.07789190937520168,
       "raapy": -0.07789180937520168,
-      "confidence": 0.47928499092631044,
-      "score": -0.03733237514962744,
+      "confidence": 0.4892590274772887,
+      "score": -0.038109270903357535,
       "eligibleTranches": [],
       "primaryTranche": null,
       "rejectionReasons": [
@@ -4597,7 +4563,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apyReward": 0.0762024,
       "apyType": "variable",
       "tvlUsd": 26,
-      "lastUpdatedMs": 1779283451669,
+      "lastUpdatedMs": 1779306914842,
       "raw": {
         "chain": "Mantle",
         "project": "lendle-pooled-markets",
@@ -4615,14 +4581,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "contractAgeDays": 365,
         "auditFactor": 0.6,
         "tvlFactor": null,
-        "depegEvents": [
-          {
-            "startMs": 1747833969000,
-            "endMs": null,
-            "maxDeviation": 0.23139594351023907,
-            "recoveryHours": null
-          }
-        ],
+        "depegEvents": [],
         "oracleType": "redstone",
         "liquiditySlippageBps": null,
         "counterpartyClass": "permissionless",
@@ -4632,7 +4591,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       },
       "probabilities": {
         "exploit": 0.03134886160319051,
-        "depeg": 0.0006339614890691481,
+        "depeg": 0.005,
         "oracle": 0.007,
         "illiquid": 0.08585026652029182,
         "counterparty": 0.005
@@ -4644,17 +4603,17 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "illiquid": 0.05,
         "counterparty": 0.5
       },
-      "expectedLoss": 0.036365837986540354,
-      "raapy": -0.036365837986540354,
-      "confidence": 0.685718368379744,
-      "score": -0.024936723088892564,
+      "expectedLoss": 0.037239045688726526,
+      "raapy": -0.037239045688726526,
+      "confidence": 0.6996151058555922,
+      "score": -0.02605299889147964,
       "eligibleTranches": [],
       "primaryTranche": null,
       "rejectionReasons": [
         {
           "tranche": "senior",
           "reasons": [
-            "expectedLoss 0.0364 > 0.02",
+            "expectedLoss 0.0372 > 0.02",
             "tvlUsd 26 < 25000000",
             "apyBase 0.00% < 2% (reward-only positions blocked)"
           ]
@@ -4675,45 +4634,45 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       ]
     },
     {
-      "id": "fbtc:b283d8ef-8342-4932-a345-155be63c6f84",
-      "source": "fbtc",
+      "id": "mantleVault:341123b4-b690-4d10-b2f8-b8fa64119220",
+      "source": "mantleVault",
       "asset": "0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9",
-      "apy": 0.0975,
-      "apyReward": 0,
+      "apy": 0.7037528000000001,
+      "apyReward": 0.0121312,
       "apyType": "variable",
-      "tvlUsd": 0,
-      "lastUpdatedMs": 1779283451669,
+      "tvlUsd": 3,
+      "lastUpdatedMs": 1779306914842,
       "raw": {
         "chain": "Mantle",
-        "project": "clearpool-lending",
+        "project": "lendle-pooled-markets",
         "symbol": "USDC",
         "underlyingTokens": [
-          "0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9"
+          "0x09Bc4E0D864854c6aFB6eB9A9cdF58aC190D0dF9"
         ],
-        "apy": 9.75,
-        "apyBase": 9.75,
-        "apyReward": null,
-        "tvlUsd": 0,
-        "pool": "b283d8ef-8342-4932-a345-155be63c6f84"
+        "apy": 71.58839,
+        "apyBase": 70.37528,
+        "apyReward": 1.21312,
+        "tvlUsd": 3,
+        "pool": "341123b4-b690-4d10-b2f8-b8fa64119220"
       },
       "risk": {
         "contractAgeDays": 365,
         "auditFactor": 0.6,
         "tvlFactor": null,
         "depegEvents": [],
-        "oracleType": "custom_multi",
+        "oracleType": "redstone",
         "liquiditySlippageBps": null,
-        "counterpartyClass": "custodial",
+        "counterpartyClass": "permissionless",
         "smartMoneySignal": null,
-        "apyVolatility": null,
-        "apyDrift": null
+        "apyVolatility": 0.2969386727114919,
+        "apyDrift": 7.255646017528937
       },
       "probabilities": {
-        "exploit": 0.03553947964468942,
+        "exploit": 0.03412642621800958,
         "depeg": 0.005,
-        "oracle": 0.02,
-        "illiquid": 0.1,
-        "counterparty": 0.08
+        "oracle": 0.007,
+        "illiquid": 0.09522878745280339,
+        "counterparty": 0.005
       },
       "severities": {
         "exploit": 0.85,
@@ -4722,32 +4681,33 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "illiquid": 0.05,
         "counterparty": 0.5
       },
-      "expectedLoss": 0.08420855769798602,
-      "raapy": 0.013291442302013984,
-      "confidence": 0.4909970395871113,
-      "score": 0.006526058822131765,
+      "expectedLoss": 0.04006890165794831,
+      "raapy": 0.6636838983420518,
+      "confidence": 0.3425075771417836,
+      "score": 0.22731676400914996,
       "eligibleTranches": [],
       "primaryTranche": null,
       "rejectionReasons": [
         {
           "tranche": "senior",
           "reasons": [
-            "expectedLoss 0.0842 > 0.02",
-            "tvlUsd 0 < 25000000",
-            "apy 9.75% > 8% (too-good-to-be-true gate)"
+            "expectedLoss 0.0401 > 0.02",
+            "tvlUsd 3 < 25000000",
+            "apy 70.38% > 8% (too-good-to-be-true gate)"
           ]
         },
         {
           "tranche": "mezzanine",
           "reasons": [
-            "expectedLoss 0.0842 > 0.04",
-            "tvlUsd 0 < 1000000"
+            "expectedLoss 0.0401 > 0.04",
+            "tvlUsd 3 < 1000000",
+            "apy 70.38% > 20% (too-good-to-be-true gate)"
           ]
         },
         {
           "tranche": "junior",
           "reasons": [
-            "tvlUsd 0 < 100000"
+            "tvlUsd 3 < 100000"
           ]
         }
       ]
@@ -4760,7 +4720,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apyReward": 0,
       "apyType": "variable",
       "tvlUsd": 0,
-      "lastUpdatedMs": 1779283451669,
+      "lastUpdatedMs": 1779306914842,
       "raw": {
         "chain": "Mantle",
         "project": "clearpool-lending",
@@ -4802,8 +4762,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       },
       "expectedLoss": 0.08420855769798602,
       "raapy": 0.09079144230201397,
-      "confidence": 0.4890695777247287,
-      "score": 0.04440333234766504,
+      "confidence": 0.49924390558907017,
+      "score": 0.045327074248922176,
       "eligibleTranches": [],
       "primaryTranche": null,
       "rejectionReasons": [
@@ -4838,7 +4798,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apyReward": 0,
       "apyType": "variable",
       "tvlUsd": 0,
-      "lastUpdatedMs": 1779283451669,
+      "lastUpdatedMs": 1779306914842,
       "raw": {
         "chain": "Mantle",
         "project": "clearpool-lending",
@@ -4880,8 +4840,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       },
       "expectedLoss": 0.08420855769798602,
       "raapy": 0.015791442302013986,
-      "confidence": 0.49099376628442504,
-      "score": 0.007753499730929038,
+      "confidence": 0.49929216816593075,
+      "score": 0.00788454346543976,
       "eligibleTranches": [],
       "primaryTranche": null,
       "rejectionReasons": [
@@ -4916,7 +4876,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apyReward": 0,
       "apyType": "variable",
       "tvlUsd": 0,
-      "lastUpdatedMs": 1779283451669,
+      "lastUpdatedMs": 1779306914842,
       "raw": {
         "chain": "Mantle",
         "project": "clearpool-lending",
@@ -4958,8 +4918,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       },
       "expectedLoss": 0.08420855769798602,
       "raapy": 0.045791442302013985,
-      "confidence": 0.48906794749552,
-      "score": 0.02239512669950551,
+      "confidence": 0.4992405773074605,
+      "score": 0.02286094609059873,
       "eligibleTranches": [],
       "primaryTranche": null,
       "rejectionReasons": [
@@ -4994,7 +4954,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apyReward": 0,
       "apyType": "variable",
       "tvlUsd": 0,
-      "lastUpdatedMs": 1779283451669,
+      "lastUpdatedMs": 1779306914842,
       "raw": {
         "chain": "Mantle",
         "project": "clearpool-lending",
@@ -5036,8 +4996,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       },
       "expectedLoss": 0.08420855769798602,
       "raapy": 0.06579144230201397,
-      "confidence": 0.48906631727174543,
-      "score": 0.0321763783946425,
+      "confidence": 0.4992422414454918,
+      "score": 0.0328458671227892,
       "eligibleTranches": [],
       "primaryTranche": null,
       "rejectionReasons": [
@@ -5072,7 +5032,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apyReward": 0,
       "apyType": "variable",
       "tvlUsd": 0,
-      "lastUpdatedMs": 1779283451669,
+      "lastUpdatedMs": 1779306914842,
       "raw": {
         "chain": "Mantle",
         "project": "clearpool-lending",
@@ -5114,8 +5074,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       },
       "expectedLoss": 0.08420855769798602,
       "raapy": 0.015791442302013986,
-      "confidence": 0.4909970395871113,
-      "score": 0.007753551421099545,
+      "confidence": 0.49928218242242517,
+      "score": 0.007884385776147348,
       "eligibleTranches": [],
       "primaryTranche": null,
       "rejectionReasons": [
@@ -5150,7 +5110,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apyReward": 0,
       "apyType": "variable",
       "tvlUsd": 0,
-      "lastUpdatedMs": 1779283451669,
+      "lastUpdatedMs": 1779306914842,
       "raw": {
         "chain": "Mantle",
         "project": "clearpool-lending",
@@ -5192,8 +5152,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       },
       "expectedLoss": 0.08420855769798602,
       "raapy": 0.045791442302013985,
-      "confidence": 0.6846996911431201,
-      "score": 0.03135338640118698,
+      "confidence": 0.6989391380236885,
+      "score": 0.032005431211431117,
       "eligibleTranches": [],
       "primaryTranche": null,
       "rejectionReasons": [
@@ -5228,7 +5188,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "apyReward": 0,
       "apyType": "variable",
       "tvlUsd": 0,
-      "lastUpdatedMs": 1779283451669,
+      "lastUpdatedMs": 1779306914842,
       "raw": {
         "chain": "Mantle",
         "project": "clearpool-lending",
@@ -5270,8 +5230,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       },
       "expectedLoss": 0.08420855769798602,
       "raapy": 0.015791442302013986,
-      "confidence": 0.4890695777247287,
-      "score": 0.007723114018310398,
+      "confidence": 0.49924390558907017,
+      "score": 0.007883781329741919,
       "eligibleTranches": [],
       "primaryTranche": null,
       "rejectionReasons": [
@@ -5299,45 +5259,45 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       ]
     },
     {
-      "id": "aave:4a0e9f84-09a0-491a-aa5e-269813d31a59",
-      "source": "aave",
-      "asset": "0xdeaddeaddeaddeaddeaddeaddeaddeaddead1111",
-      "apy": 0.08925000000000001,
+      "id": "fbtc:b283d8ef-8342-4932-a345-155be63c6f84",
+      "source": "fbtc",
+      "asset": "0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9",
+      "apy": 0.0975,
       "apyReward": 0,
       "apyType": "variable",
       "tvlUsd": 0,
-      "lastUpdatedMs": 1779283451669,
+      "lastUpdatedMs": 1779306914842,
       "raw": {
         "chain": "Mantle",
-        "project": "aave-v3",
-        "symbol": "WETH",
+        "project": "clearpool-lending",
+        "symbol": "USDC",
         "underlyingTokens": [
-          "0xdEAddEaDdeadDEadDEADDEAddEADDEAddead1111"
+          "0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9"
         ],
-        "apy": 8.925,
-        "apyBase": 8.925,
+        "apy": 9.75,
+        "apyBase": 9.75,
         "apyReward": null,
         "tvlUsd": 0,
-        "pool": "4a0e9f84-09a0-491a-aa5e-269813d31a59"
+        "pool": "b283d8ef-8342-4932-a345-155be63c6f84"
       },
       "risk": {
-        "contractAgeDays": 700,
-        "auditFactor": 0.3,
+        "contractAgeDays": 365,
+        "auditFactor": 0.6,
         "tvlFactor": null,
         "depegEvents": [],
-        "oracleType": "chainlink_dec",
+        "oracleType": "custom_multi",
         "liquiditySlippageBps": null,
-        "counterpartyClass": "permissionless",
+        "counterpartyClass": "custodial",
         "smartMoneySignal": null,
-        "apyVolatility": 0.02181129729638675,
-        "apyDrift": 2.252306259405858
+        "apyVolatility": null,
+        "apyDrift": null
       },
       "probabilities": {
-        "exploit": 0.002763190221437315,
+        "exploit": 0.03553947964468942,
         "depeg": 0.005,
-        "oracle": 0.002,
+        "oracle": 0.02,
         "illiquid": 0.1,
-        "counterparty": 0.005
+        "counterparty": 0.08
       },
       "severities": {
         "exploit": 0.85,
@@ -5346,23 +5306,25 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "illiquid": 0.05,
         "counterparty": 0.5
       },
-      "expectedLoss": 0.01164871168822172,
-      "raapy": 0.07760128831177829,
-      "confidence": 0.48688050552257855,
-      "score": 0.03778255448244198,
+      "expectedLoss": 0.08420855769798602,
+      "raapy": 0.013291442302013984,
+      "confidence": 0.49929050386147733,
+      "score": 0.006636290924018316,
       "eligibleTranches": [],
       "primaryTranche": null,
       "rejectionReasons": [
         {
           "tranche": "senior",
           "reasons": [
+            "expectedLoss 0.0842 > 0.02",
             "tvlUsd 0 < 25000000",
-            "apy 8.93% > 8% (too-good-to-be-true gate)"
+            "apy 9.75% > 8% (too-good-to-be-true gate)"
           ]
         },
         {
           "tranche": "mezzanine",
           "reasons": [
+            "expectedLoss 0.0842 > 0.04",
             "tvlUsd 0 < 1000000"
           ]
         },
@@ -5378,11 +5340,11 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       "id": "aave:125974d5-ad17-4a3a-b967-ebbf721fca22",
       "source": "aave",
       "asset": "0xfc421ad3c883bf9e7c4f42de845c4e4405799e73",
-      "apy": 0.0146153,
-      "apyReward": 0.0409582,
+      "apy": 0.0211843,
+      "apyReward": 0.043957800000000005,
       "apyType": "variable",
       "tvlUsd": 0,
-      "lastUpdatedMs": 1779283451669,
+      "lastUpdatedMs": 1779306914842,
       "raw": {
         "chain": "Mantle",
         "project": "aave-v3",
@@ -5390,9 +5352,9 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "underlyingTokens": [
           "0xfc421aD3C883Bf9E7C4f42dE845C4e4405799e73"
         ],
-        "apy": 5.55735,
-        "apyBase": 1.46153,
-        "apyReward": 4.09582,
+        "apy": 6.51421,
+        "apyBase": 2.11843,
+        "apyReward": 4.39578,
         "tvlUsd": 0,
         "pool": "125974d5-ad17-4a3a-b967-ebbf721fca22"
       },
@@ -5405,8 +5367,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "liquiditySlippageBps": null,
         "counterpartyClass": "permissionless",
         "smartMoneySignal": null,
-        "apyVolatility": 0.041708119624902576,
-        "apyDrift": 0.9436568269851769
+        "apyVolatility": 0.04168779882027279,
+        "apyDrift": 0.9537617310567953
       },
       "probabilities": {
         "exploit": 0.002763190221437315,
@@ -5423,17 +5385,16 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "counterparty": 0.5
       },
       "expectedLoss": 0.01164871168822172,
-      "raapy": 0.0029665883117782794,
-      "confidence": 0.48749436160765736,
-      "score": 0.0014461950752030902,
+      "raapy": 0.00953558831177828,
+      "confidence": 0.4897224119906973,
+      "score": 0.004669791307794361,
       "eligibleTranches": [],
       "primaryTranche": null,
       "rejectionReasons": [
         {
           "tranche": "senior",
           "reasons": [
-            "tvlUsd 0 < 25000000",
-            "apyBase 1.46% < 2% (reward-only positions blocked)"
+            "tvlUsd 0 < 25000000"
           ]
         },
         {
@@ -5451,26 +5412,26 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
       ]
     },
     {
-      "id": "mantleVault:341123b4-b690-4d10-b2f8-b8fa64119220",
+      "id": "mantleVault:1362a09f-4853-492b-8083-34e0df20e17b",
       "source": "mantleVault",
-      "asset": "0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9",
-      "apy": 0.7040000000000001,
-      "apyReward": 0.0121314,
+      "asset": "0xc96de26018a54d51c097160568752c4e3bd6c364",
+      "apy": 0.0000064000000000000006,
+      "apyReward": 0,
       "apyType": "variable",
       "tvlUsd": 0,
-      "lastUpdatedMs": 1779283451669,
+      "lastUpdatedMs": 1779306914842,
       "raw": {
         "chain": "Mantle",
-        "project": "lendle-pooled-markets",
-        "symbol": "USDC",
+        "project": "minterest",
+        "symbol": "FBTC",
         "underlyingTokens": [
-          "0x09Bc4E0D864854c6aFB6eB9A9cdF58aC190D0dF9"
+          "0xC96dE26018A54D51c097160568752c4E3BD6C364"
         ],
-        "apy": 71.61314,
-        "apyBase": 70.4,
-        "apyReward": 1.21314,
+        "apy": 0.00064,
+        "apyBase": 0.00064,
+        "apyReward": null,
         "tvlUsd": 0,
-        "pool": "341123b4-b690-4d10-b2f8-b8fa64119220"
+        "pool": "1362a09f-4853-492b-8083-34e0df20e17b"
       },
       "risk": {
         "contractAgeDays": 365,
@@ -5481,8 +5442,8 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "liquiditySlippageBps": null,
         "counterpartyClass": "permissionless",
         "smartMoneySignal": null,
-        "apyVolatility": 0.2969424953603342,
-        "apyDrift": 7.255732135293098
+        "apyVolatility": 2.4868191858117323e-7,
+        "apyDrift": 1.012658227848102
       },
       "probabilities": {
         "exploit": 0.03553947964468942,
@@ -5499,9 +5460,9 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
         "counterparty": 0.5
       },
       "expectedLoss": 0.04150855769798602,
-      "raapy": 0.6624914423020141,
-      "confidence": 0.3368206009339078,
-      "score": 0.22314076570973568,
+      "raapy": -0.04150215769798602,
+      "confidence": 0.6996011136933972,
+      "score": -0.029034955746190017,
       "eligibleTranches": [],
       "primaryTranche": null,
       "rejectionReasons": [
@@ -5510,7 +5471,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
           "reasons": [
             "expectedLoss 0.0415 > 0.02",
             "tvlUsd 0 < 25000000",
-            "apy 70.40% > 8% (too-good-to-be-true gate)"
+            "apyBase 0.00% < 2% (reward-only positions blocked)"
           ]
         },
         {
@@ -5518,7 +5479,7 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
           "reasons": [
             "expectedLoss 0.0415 > 0.04",
             "tvlUsd 0 < 1000000",
-            "apy 70.40% > 20% (too-good-to-be-true gate)"
+            "apyBase 0.00% < 1% (reward-only positions blocked)"
           ]
         },
         {
@@ -5541,30 +5502,31 @@ This file is produced by `scripts/inspect-cycle.ts`. The pipeline runs end to en
     ],
     "junior": [
       "agni:35f2103d-231b-443b-952e-d2cd118d8f29",
-      "aave:47da0cdd-7b1d-4927-9545-20b53b73afa8",
       "agni:85407ecd-f711-4fa6-9328-3078aebfaa95",
+      "aave:4a0e9f84-09a0-491a-aa5e-269813d31a59",
+      "aave:47da0cdd-7b1d-4927-9545-20b53b73afa8",
       "ondo:b5d7a190-38d2-4fdd-8c14-1fd00c11bce1",
       "agni:6d76a4e2-57f2-4190-a882-bd69f6ea32fb",
       "aave:32cb38a5-b9b9-441a-bf07-8fab47b999d3",
-      "aave:76b70b33-d8a4-4e61-8092-9bd1f2be2fc9",
+      "agni:ebec73de-fd1e-4f97-8287-d9cb01c7d352",
       "agni:649bee89-0a34-4eb1-b8ab-7c5fdee07ccd",
+      "agni:2a510869-6356-4486-8bb5-d5a808634496",
+      "aave:76b70b33-d8a4-4e61-8092-9bd1f2be2fc9",
+      "agni:a4ff3d7c-a117-4b24-a9f9-6af46cd276c0",
       "aave:a4e37545-203b-4412-9acd-3e8b1aa4d744",
       "agni:a7e2f58e-1c93-4592-acd6-8e40e6cb26ff",
       "agni:3b6b75cf-adb5-4fb4-bbcd-8f75c6879c9d",
-      "agni:2a510869-6356-4486-8bb5-d5a808634496",
-      "agni:ebec73de-fd1e-4f97-8287-d9cb01c7d352",
-      "agni:b8d50460-5237-4601-9250-4f2d3a6b569b",
-      "agni:30836422-c578-4f77-8f81-861c509c5d4c",
-      "agni:b5933580-18c1-43b6-aec3-2563cd30e3a2",
       "agni:3d429d4e-b3a6-4847-957b-b10bf26a6f01",
-      "agni:a4ff3d7c-a117-4b24-a9f9-6af46cd276c0",
-      "agni:2364dd66-69d3-44ef-9e85-4d5217a57b57",
       "agni:227e8492-33e9-4953-8beb-28973c9fdb8a",
+      "agni:30836422-c578-4f77-8f81-861c509c5d4c",
+      "agni:2364dd66-69d3-44ef-9e85-4d5217a57b57",
+      "agni:b8d50460-5237-4601-9250-4f2d3a6b569b",
+      "agni:b5933580-18c1-43b6-aec3-2563cd30e3a2",
       "agni:913ce101-55b1-4230-93c7-d523f0d9ca03",
-      "mantleVault:b96d8236-36d4-4be4-92f7-422beeac7073",
-      "mantleVault:c87c5d7c-0285-47a9-8539-d335f05b9ba2"
+      "mantleVault:c87c5d7c-0285-47a9-8539-d335f05b9ba2",
+      "mantleVault:b96d8236-36d4-4be4-92f7-422beeac7073"
     ]
   },
-  "signature": "0x4c805552b059a91c8eb5f0d99b93d1c126e61ae5a02496bc5c54a5922da8b0672bd613ed3aafdd7e09d63c32539a08a41693a8a8c2d79753cf528b8ecbd28da91b"
+  "signature": "0xf1fd7fd48700f3adc098f0db6579a2b4c23534c30f3b51cdf493cbd58a2f26150ee5ee333e0aead9e8021aa1ee7947de3d4d761028549277a1bc1d423fca3ad81b"
 }
 ```
