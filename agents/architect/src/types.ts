@@ -13,7 +13,7 @@ export const TrancheAllocationSchema = z.object({
   positions: z.record(z.string(), z.number().int().min(0).max(10_000))
 });
 
-export const AllocationProposalSchema = z.object({
+export const AllocationProposalBaseSchema = z.object({
   version: z.literal('1.0'),
   proposalId: Uint256Dec,
   sourceMapCid: z.string().min(1),
@@ -28,18 +28,30 @@ export const AllocationProposalSchema = z.object({
   }),
   netExposureAtProposalMs: z.record(z.string(), z.string()).default({}),
   signature: z.string()
-}).superRefine((p, ctx) => {
+});
+
+function applyAllocationInvariants(
+  p: { tranches: { senior: { bps: number; positions: Record<string, number> }; mezzanine: { bps: number; positions: Record<string, number> }; junior: { bps: number; positions: Record<string, number> } } },
+  ctx: z.RefinementCtx
+) {
   const total = p.tranches.senior.bps + p.tranches.mezzanine.bps + p.tranches.junior.bps;
   if (total !== 0 && total !== 10_000) {
     ctx.addIssue({ code: z.ZodIssueCode.custom, message: `tranche bps must sum to 10000 or 0 (zero-state), got ${total}` });
   }
   for (const [tr, alloc] of Object.entries(p.tranches)) {
-    const sum = Object.values(alloc.positions).reduce((s, v) => s + v, 0);
+    const sum = Object.values(alloc.positions).reduce((s, v) => s + (v as number), 0);
     if (alloc.bps > 0 && sum !== 10_000) {
       ctx.addIssue({ code: z.ZodIssueCode.custom, message: `${tr} positions must sum to 10000 bps, got ${sum}` });
     }
   }
-});
+}
+
+// Schema for a proposal draft (no signature field) - used by buildProposal for validation.
+export const AllocationProposalDraftSchema = AllocationProposalBaseSchema
+  .omit({ signature: true })
+  .superRefine(applyAllocationInvariants);
+
+export const AllocationProposalSchema = AllocationProposalBaseSchema.superRefine(applyAllocationInvariants);
 export type AllocationProposal = z.infer<typeof AllocationProposalSchema>;
 
 export const NetExposureSchema = z.object({
