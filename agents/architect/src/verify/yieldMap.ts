@@ -7,7 +7,7 @@ export async function verifyYieldMap(map: YieldMap, expectedSigner?: `0x${string
   const mapHash = keccak256(toBytes(unsigned));
   const recovered = await recoverMessageAddress({ message: { raw: mapHash }, signature: map.signature as `0x${string}` });
   if (recovered.toLowerCase() !== map.publisher.address.toLowerCase()) {
-    throw new Error(`signature does not recover to publisher.address`);
+    throw new Error(`signature does not recover to publisher.address (recovered ${recovered}, publisher ${map.publisher.address})`);
   }
   if (expectedSigner && recovered.toLowerCase() !== expectedSigner.toLowerCase()) {
     throw new Error(`signer ${recovered} is not the expected Scout address ${expectedSigner}`);
