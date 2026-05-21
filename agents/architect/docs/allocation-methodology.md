@@ -165,6 +165,8 @@ pnpm --filter @strata/architect inspect --cid <proposalCid>
 
 and get byte-identical `bps` values. The allocation is fully deterministic: no randomness, no timestamps in position math, no network calls after the YieldMap is fetched.
 
+The `bps` splits and the `proposalId` are the replayable invariants. Two fields will differ between a live run and a replay: `publishedAtMs` (wall-clock at proposal build time) and `signature` (depends on the signing key). The inspect script holds `publishedAtMs` fixed at `1700000000000` and uses an ephemeral key, so its `proposal-output.md` is reproducible for manual inspection but is not byte-identical to a live emission.
+
 ## Constants reference
 
 ```

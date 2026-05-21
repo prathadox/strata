@@ -95,3 +95,7 @@ If all steps pass, the proposal is exactly what Architect signed using exactly t
 6. Cross-check `publisher.address` against Scout's ERC-8004 identity entry on-chain.
 
 If these match, the YieldMap is authentic. Architect's proposal is then verifiable by running `pnpm --filter @strata/architect inspect --cid <cid>` against the source code at `codeCommit`.
+
+### Identity gate today
+
+In v1 the verifier accepts any signature that recovers to `publisher.address`. When `SCOUT_ADDRESS` is set in env, it additionally asserts the recovered signer equals that address (step 6 above, but as an env-var compare, not a registry read). The `IDENTITY_REGISTRY_ADDRESS` field is reserved for a future on-chain lookup that resolves Scout's token to its current signer address.
