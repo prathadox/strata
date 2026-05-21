@@ -1,6 +1,7 @@
 import { signYieldMap } from '@strata/scout/signer';
 import { pinYieldMap } from '@strata/scout/ipfs';
 import { proposeAllocationOnChain } from './onchain.js';
+import { generateNarrative } from '../llm/narrative.js';
 import type { WalletClient, PublicClient, Account } from 'viem';
 import type { AllocationProposal } from '../types.js';
 
@@ -19,13 +20,17 @@ export interface PublisherDeps {
   lighthouseApiKey: string;
   eventBus: `0x${string}`;
   dryRun: boolean;
+  geminiApiKey?: string;
+  geminiModel: string;
 }
 
 export function makePublisher(deps: PublisherDeps): Publisher {
   return {
     async publishProposal(unsigned) {
-      const signed = await signYieldMap(unsigned, deps.wallet, deps.account);
-      const proposal = { ...unsigned, signature: signed.signature } as AllocationProposal;
+      const narrative = await generateNarrative(unsigned, deps.geminiApiKey, deps.geminiModel);
+      const withNarrative = { ...unsigned, narrative };
+      const signed = await signYieldMap(withNarrative, deps.wallet, deps.account);
+      const proposal = { ...withNarrative, signature: signed.signature } as AllocationProposal;
       const pinned = await pinYieldMap(proposal, { lighthouseApiKey: deps.lighthouseApiKey });
 
       if (deps.dryRun) {

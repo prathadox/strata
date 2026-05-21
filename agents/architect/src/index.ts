@@ -72,7 +72,9 @@ async function main(): Promise<void> {
     account: clients.account,
     lighthouseApiKey: cfg.ipfs.lighthouseApiKey,
     eventBus: cfg.architect.eventBus,
-    dryRun: cfg.architect.dryRun
+    dryRun: cfg.architect.dryRun,
+    ...(cfg.llm.geminiApiKey !== undefined && { geminiApiKey: cfg.llm.geminiApiKey }),
+    geminiModel: cfg.llm.model
   });
 
   // Step 8: compose orchestrator.

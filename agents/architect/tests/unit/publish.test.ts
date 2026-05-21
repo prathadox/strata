@@ -35,8 +35,12 @@ const unsigned: Omit<AllocationProposal, 'signature'> = {
     mezzanine: { bps: 3000, positions: { pool2: 10_000 } },
     junior: { bps: 2000, positions: { pool3: 10_000 } }
   },
-  netExposureAtProposalMs: {}
+  netExposureAtProposalMs: {},
+  narrative: null
 };
+
+// withNarrative is what the publisher folds narrative into before signing
+const withNarrative = { ...unsigned, narrative: null };
 
 const makeDeps = (dryRun: boolean) => ({
   wallet: {} as any,
@@ -44,7 +48,8 @@ const makeDeps = (dryRun: boolean) => ({
   account: {} as any,
   lighthouseApiKey: 'lh-key',
   eventBus: EVENT_BUS,
-  dryRun
+  dryRun,
+  geminiModel: 'gemini-2.5-flash'
 });
 
 beforeEach(() => {

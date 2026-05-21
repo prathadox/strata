@@ -27,6 +27,7 @@ export const AllocationProposalBaseSchema = z.object({
     junior:    TrancheAllocationSchema
   }),
   netExposureAtProposalMs: z.record(z.string(), z.string()).default({}),
+  narrative: z.string().nullable().default(null),
   signature: z.string()
 });
 

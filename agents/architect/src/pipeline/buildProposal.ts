@@ -30,7 +30,8 @@ export function buildProposal(args: BuildProposalArgs): Omit<AllocationProposal,
     methodologyHash: args.methodologyHash,
     codeCommit: args.codeCommit,
     tranches,
-    netExposureAtProposalMs: args.ledger.snapshot()
+    netExposureAtProposalMs: args.ledger.snapshot(),
+    narrative: null
   };
 
   const parsed = AllocationProposalDraftSchema.safeParse(draft);
