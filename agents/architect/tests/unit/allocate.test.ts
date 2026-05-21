@@ -193,4 +193,25 @@ describe('allocate', () => {
       expect(total).toBe(0);
     });
   });
+
+  describe('sparse tranche: sum-to-10000 invariant takes precedence over the cap', () => {
+    it('single junior position gets the full 10000 bps even though it exceeds the 2500 cap', () => {
+      const result = allocate(makeYieldMap([makeOpp('only', 5, ['junior'])]));
+      const sum = Object.values(result.junior.positions).reduce((s, v) => s + v, 0);
+      expect(sum).toBe(10_000);
+      expect(result.junior.positions['only']).toBe(10_000);
+    });
+
+    it('two equal-score junior positions split 10000 (both above the 2500 cap)', () => {
+      const opps = [makeOpp('j1', 5, ['junior']), makeOpp('j2', 5, ['junior'])];
+      const result = allocate(makeYieldMap(opps));
+      const sum = Object.values(result.junior.positions).reduce((s, v) => s + v, 0);
+      expect(sum).toBe(10_000);
+      // The top-up adds the rounding leftover to the highest-score below-cap
+      // position; with equal scores neither is below cap so the leftover lands
+      // on the first one. The total still sums to 10000.
+      expect(result.junior.positions['j1']).toBeGreaterThanOrEqual(2500);
+      expect(result.junior.positions['j2']).toBeGreaterThanOrEqual(2500);
+    });
+  });
 });

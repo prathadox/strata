@@ -5,7 +5,7 @@ export const ALLOCATION_CONSTANTS = Object.freeze({
   concentrationCapBps: Object.freeze({ senior: 6000, mezzanine: 4000, junior: 2500 })
 });
 
-interface TrancheAllocation { bps: number; positions: Record<string, number>; }
+export interface TrancheAllocation { bps: number; positions: Record<string, number>; }
 
 export function allocate(map: YieldMap): Record<Tranche, TrancheAllocation> {
   const out = {
@@ -85,8 +85,13 @@ function allocateOneTranche(t: Tranche, all: ScoredOpportunity[]): TrancheAlloca
     if (next.length === 0) break;
   }
 
-  // Top up rounding error to the highest-score position that is below the cap
-  // (eligible is sorted desc by score, so we find the first one not already at the cap).
+  // Top up rounding error to the highest-score position that is below the cap.
+  // When the tranche has fewer than ceil(10000/cap) eligible positions, every
+  // position is at the cap and there is no headroom: the sum-to-10000 invariant
+  // (required by AllocationProposalSchema) takes precedence and the top-up lands
+  // on the highest-score position even though it pushes that position above the
+  // cap. This is intentional: in a sparse tranche, breaching the cap is the only
+  // way to preserve the canonical bps-sum invariant.
   const positionSum = Object.values(bpsByOpp).reduce((s, v) => s + v, 0);
   if (positionSum < 10_000) {
     const topId = eligible.find((o) => bpsByOpp[o.id]! < cap)?.id ?? eligible[0]!.id;
