@@ -72,6 +72,26 @@ describe('subscribeYieldMaps', () => {
     );
   });
 
+  it('forwards onMap rejections to onLiveError instead of swallowing them', async () => {
+    const onLogsCallbacks: ((logs: ReturnType<typeof fakeLog>[]) => Promise<void>)[] = [];
+    const client = {
+      getContractEvents: vi.fn().mockResolvedValue([]),
+      watchContractEvent: vi.fn((opts: { onLogs: (logs: ReturnType<typeof fakeLog>[]) => Promise<void> }) => {
+        onLogsCallbacks.push(opts.onLogs);
+        return vi.fn();
+      })
+    } as unknown as PublicClient;
+
+    const onMap = vi.fn(async () => { throw new Error('boom'); });
+    const onLiveError = vi.fn();
+
+    await subscribeYieldMaps(client, BUS, 50n, onMap, onLiveError);
+    await onLogsCallbacks[0]!([fakeLog('QmBad', 300n, 3000n)]);
+
+    expect(onLiveError).toHaveBeenCalledTimes(1);
+    expect((onLiveError.mock.calls[0]![0] as Error).message).toBe('boom');
+  });
+
   it('unsubscribe: returned function invokes the watchContractEvent unsubscribe spy', async () => {
     const unsubscribeSpy = vi.fn();
 
