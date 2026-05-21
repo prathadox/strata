@@ -27,6 +27,9 @@ export function loadConfig() {
   if (!env.ARCHITECT_DRY_RUN && !env.AGENT_EVENT_BUS_ADDRESS) {
     throw new Error('Config error: AGENT_EVENT_BUS_ADDRESS required when ARCHITECT_DRY_RUN is not true');
   }
+  if (!env.ARCHITECT_DRY_RUN && !env.IDENTITY_REGISTRY_ADDRESS) {
+    throw new Error('Config error: IDENTITY_REGISTRY_ADDRESS required when ARCHITECT_DRY_RUN is not true');
+  }
   return {
     chain: { id: 5000, rpcUrl: env.MANTLE_RPC_URL, rpcFallback: env.MANTLE_RPC_URL_FALLBACK },
     architect: {

@@ -6,6 +6,7 @@ describe('loadConfig', () => {
     process.env.MANTLE_RPC_URL = 'https://rpc.mantle.xyz';
     process.env.ARCHITECT_PRIVATE_KEY = '0x' + '1'.repeat(64);
     process.env.AGENT_EVENT_BUS_ADDRESS = '0x' + '2'.repeat(40);
+    process.env.IDENTITY_REGISTRY_ADDRESS = '0x' + '3'.repeat(40);
     process.env.LIGHTHOUSE_API_KEY = 'lh-key';
     delete process.env.ARCHITECT_DRY_RUN;
     delete process.env.GEMINI_API_KEY;
@@ -32,6 +33,11 @@ describe('loadConfig', () => {
   it('throws when AGENT_EVENT_BUS_ADDRESS is missing in live mode', () => {
     delete process.env.AGENT_EVENT_BUS_ADDRESS;
     expect(() => loadConfig()).toThrow(/AGENT_EVENT_BUS_ADDRESS/);
+  });
+
+  it('throws when IDENTITY_REGISTRY_ADDRESS is missing in live mode', () => {
+    delete process.env.IDENTITY_REGISTRY_ADDRESS;
+    expect(() => loadConfig()).toThrow(/IDENTITY_REGISTRY_ADDRESS/);
   });
 
   it('allows AGENT_EVENT_BUS_ADDRESS to be missing in dry-run mode and defaults eventBus to zero address', () => {
