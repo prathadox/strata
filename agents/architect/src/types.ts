@@ -4,8 +4,8 @@ const Address = z.string().regex(/^0x[a-fA-F0-9]{40}$/);
 const Bytes32 = z.string().regex(/^0x[a-fA-F0-9]{64}$/);
 const Uint256Dec = z.string().regex(/^\d+$/);          // proposalId as decimal string
 
-export const Tranche = z.enum(['senior', 'mezzanine', 'junior']);
-export type Tranche = z.infer<typeof Tranche>;
+export { Tranche } from '@strata/scout/types';
+export type { Tranche as TrancheType } from '@strata/scout/types';
 
 export const TrancheAllocationSchema = z.object({
   bps: z.number().int().min(0).max(10_000),

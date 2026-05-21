@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { AllocationProposalSchema } from '../../src/types.js';
+import { AllocationProposalSchema, NetExposureSchema } from '../../src/types.js';
 
 const VALID_ADDRESS = '0xAbCdEf0123456789AbCdEf0123456789AbCdEf01';
 const VALID_BYTES32 = '0x' + 'ab'.repeat(32);
@@ -70,6 +70,46 @@ describe('AllocationProposalSchema', () => {
       }
     };
     const result = AllocationProposalSchema.safeParse(mismatch);
+    expect(result.success).toBe(false);
+  });
+});
+
+describe('NetExposureSchema', () => {
+  const VALID_ASSET = '0x' + 'a'.repeat(40);
+
+  it('parses a valid net exposure object', () => {
+    const result = NetExposureSchema.safeParse({
+      asset: VALID_ASSET,
+      netNotionalUsd: 1234.5,
+      lastUpdatedMs: 1700000000000
+    });
+    expect(result.success).toBe(true);
+  });
+
+  it('fails when asset is not a valid address', () => {
+    const result = NetExposureSchema.safeParse({
+      asset: 'not-an-address',
+      netNotionalUsd: 1234.5,
+      lastUpdatedMs: 1700000000000
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it('parses a negative netNotionalUsd (short positions are valid)', () => {
+    const result = NetExposureSchema.safeParse({
+      asset: VALID_ASSET,
+      netNotionalUsd: -500.0,
+      lastUpdatedMs: 1700000000000
+    });
+    expect(result.success).toBe(true);
+  });
+
+  it('fails when lastUpdatedMs is not an integer', () => {
+    const result = NetExposureSchema.safeParse({
+      asset: VALID_ASSET,
+      netNotionalUsd: 1234.5,
+      lastUpdatedMs: 123.5
+    });
     expect(result.success).toBe(false);
   });
 });
