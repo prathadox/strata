@@ -27,13 +27,12 @@ export async function fetchYieldMapByCid(cid: string): Promise<YieldMap> {
       const json = await res.json();
       const parsed = YieldMapSchema.safeParse(json);
       if (!parsed.success) {
-        lastError = new Error(`${base}: schema mismatch`);
+        lastError = new Error(`${base}: schema mismatch: ${parsed.error.message}`);
         continue;
       }
       return parsed.data;
     } catch (err) {
       lastError = err;
-      continue;
     }
   }
   throw new Error(

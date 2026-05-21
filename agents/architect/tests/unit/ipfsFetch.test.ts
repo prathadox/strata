@@ -80,6 +80,23 @@ describe('fetchYieldMapByCid', () => {
     await expect(fetchYieldMapByCid(TEST_CID)).rejects.toThrow(TEST_CID);
   });
 
+  it('falls through to dweb.link when both Lighthouse and ipfs.io return 500', async () => {
+    server.use(
+      http.get(`https://gateway.lighthouse.storage/ipfs/${TEST_CID}`, () =>
+        new HttpResponse(null, { status: 500 })
+      ),
+      http.get(`https://ipfs.io/ipfs/${TEST_CID}`, () =>
+        new HttpResponse(null, { status: 500 })
+      ),
+      http.get(`https://dweb.link/ipfs/${TEST_CID}`, () =>
+        HttpResponse.json(VALID_MAP)
+      )
+    );
+    const result = await fetchYieldMapByCid(TEST_CID);
+    expect(result.version).toBe('1.0');
+    expect(result.signature).toBe(VALID_MAP.signature);
+  });
+
   it('advances past Lighthouse on schema mismatch and returns map from ipfs.io', async () => {
     const badBody = { unrelated: 'shape', missing: 'required fields' };
     server.use(
