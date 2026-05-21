@@ -12,6 +12,8 @@ const Env = z.object({
   CYCLE_INTERVAL_MS: z.coerce.number().int().min(15_000).default(60_000),
   LOG_LEVEL: z.enum(['debug', 'info', 'warn', 'error']).default('info'),
   ARCHITECT_DRY_RUN: z.enum(['true', 'false']).default('false').transform((v) => v === 'true'),
+  ARCHITECT_IDENTITY_NFT: z.string().min(1).default('ipfs://placeholder'),
+  ARCHITECT_HEALTH_PORT: z.coerce.number().int().min(1).max(65535).default(9091),
   // Optional. When set, Task 16 generates a narrative reasoning blob via Gemini and
   // pins it alongside the deterministic proposal. Allocation math is unaffected.
   GEMINI_API_KEY: z.string().min(1).optional(),
@@ -37,7 +39,9 @@ export function loadConfig() {
       eventBus: (env.AGENT_EVENT_BUS_ADDRESS ?? '0x0000000000000000000000000000000000000000') as `0x${string}`,
       identityRegistry: (env.IDENTITY_REGISTRY_ADDRESS ?? '0x0000000000000000000000000000000000000000') as `0x${string}`,
       ...(env.SCOUT_ADDRESS !== undefined && { scoutAddress: env.SCOUT_ADDRESS as `0x${string}` }),
-      dryRun: env.ARCHITECT_DRY_RUN
+      dryRun: env.ARCHITECT_DRY_RUN,
+      identityNFT: env.ARCHITECT_IDENTITY_NFT,
+      healthPort: env.ARCHITECT_HEALTH_PORT
     },
     ipfs: { lighthouseApiKey: env.LIGHTHOUSE_API_KEY },
     llm: { geminiApiKey: env.GEMINI_API_KEY, model: env.GEMINI_MODEL },
