@@ -44,14 +44,15 @@ describe('proposeAllocationOnChain', () => {
     expect(waitForTransactionReceipt).toHaveBeenCalledOnce();
   });
 
-  it('reverted tx: throws with "tx reverted" when receipt status is reverted', async () => {
-    const { wallet, publicClient, account } = makeMocks({
+  it('reverted tx: aborts retries and throws with "tx reverted" exactly once', async () => {
+    const { wallet, publicClient, account, writeContract } = makeMocks({
       waitForTransactionReceipt: vi.fn().mockResolvedValue({ status: 'reverted' })
     });
 
     await expect(
       proposeAllocationOnChain({ ...BASE_ARGS, wallet, publicClient, account })
     ).rejects.toThrow('tx reverted');
+    expect(writeContract).toHaveBeenCalledTimes(1);
   });
 
   it('retry on writeContract failure: retries once and returns hash on second attempt', async () => {
@@ -64,7 +65,14 @@ describe('proposeAllocationOnChain', () => {
 
     const { wallet, publicClient, account } = makeMocks({ writeContract });
 
-    const result = await proposeAllocationOnChain({ ...BASE_ARGS, wallet, publicClient, account });
+    // Override backoff so the test runs in milliseconds, not seconds.
+    const result = await proposeAllocationOnChain({
+      ...BASE_ARGS,
+      wallet,
+      publicClient,
+      account,
+      retryConfig: { retries: 2, minTimeout: 1, maxTimeout: 1 }
+    });
 
     expect(result).toBe('0xabc...txhash');
     expect(writeContract).toHaveBeenCalledTimes(2);
