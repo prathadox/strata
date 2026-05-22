@@ -94,6 +94,46 @@ importers:
         specifier: ^2.1.0
         version: 2.1.9(@types/node@22.19.19)(msw@2.14.6(@types/node@22.19.19)(typescript@5.9.3))
 
+  agents/sentinel:
+    dependencies:
+      '@strata/scout':
+        specifier: workspace:*
+        version: link:../scout
+      lru-cache:
+        specifier: ^11.0.0
+        version: 11.3.6
+      p-retry:
+        specifier: ^6.2.0
+        version: 6.2.1
+      pino:
+        specifier: ^9.4.0
+        version: 9.14.0
+      prom-client:
+        specifier: ^15.1.3
+        version: 15.1.3
+      viem:
+        specifier: ^2.21.0
+        version: 2.49.3(typescript@5.9.3)(zod@3.25.76)
+      zod:
+        specifier: ^3.23.0
+        version: 3.25.76
+    devDependencies:
+      '@types/node':
+        specifier: ^22.7.0
+        version: 22.19.19
+      msw:
+        specifier: ^2.4.0
+        version: 2.14.6(@types/node@22.19.19)(typescript@5.9.3)
+      tsx:
+        specifier: ^4.19.0
+        version: 4.22.1
+      typescript:
+        specifier: ^5.6.0
+        version: 5.9.3
+      vitest:
+        specifier: ^2.1.0
+        version: 2.1.9(@types/node@22.19.19)(msw@2.14.6(@types/node@22.19.19)(typescript@5.9.3))
+
   apps/web:
     dependencies:
       geist:
