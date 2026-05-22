@@ -1,7 +1,7 @@
 import { keccak256, toBytes } from 'viem';
 import type { WalletClient, PublicClient, Account } from 'viem';
 import { canonicalStringify } from '@strata/scout/signer';
-import { pinYieldMap } from '@strata/scout/ipfs';
+import { pinJsonToLighthouse } from '@strata/scout/ipfs';
 import type { RiskVerdict, HedgeSignal } from '../types.js';
 import { issueRiskVerdictOnChain, emitHedgeSignalOnChain } from './onchain.js';
 
@@ -22,14 +22,8 @@ export interface PublishedHedgeSignal { cid: string; signal: HedgeSignal; txHash
 
 const VERDICT_LEVEL_TO_UINT8 = { green: 0, yellow: 1, red: 2 } as const;
 
-async function defaultPin(json: string, apiKey: string): Promise<string> {
-  const parsed = JSON.parse(json);
-  const result = await pinYieldMap(parsed, { lighthouseApiKey: apiKey });
-  return result.cid;
-}
-
 export function makePublisher(args: MakePublisherArgs) {
-  const pin = args.pinOverride ?? defaultPin;
+  const pin = args.pinOverride ?? pinJsonToLighthouse;
   const issueOnChain = args.issueOnChainOverride ?? issueRiskVerdictOnChain;
   const emitHedgeOnChain = args.emitHedgeOnChainOverride ?? emitHedgeSignalOnChain;
 
