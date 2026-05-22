@@ -53,7 +53,7 @@ async function fetchJsonWithFallback(cid: string): Promise<unknown> {
   throw new Error(`all gateways failed for ${cid}: ${errors.join('; ')}`);
 }
 
-export async function fetchAllocationProposalByCid(cid: string): Promise<AllocationProposal | null> {
+export async function fetchAllocationProposalByCid(cid: string): Promise<AllocationProposal> {
   const raw = await fetchJsonWithFallback(cid);
   const parsed = AllocationProposalSchema.safeParse(raw);
   if (!parsed.success) {
@@ -62,7 +62,7 @@ export async function fetchAllocationProposalByCid(cid: string): Promise<Allocat
   return parsed.data;
 }
 
-export async function fetchYieldMapByCid(cid: string): Promise<YieldMap | null> {
+export async function fetchYieldMapByCid(cid: string): Promise<YieldMap> {
   const raw = await fetchJsonWithFallback(cid);
   const parsed = YieldMapSchema.safeParse(raw);
   if (!parsed.success) {
