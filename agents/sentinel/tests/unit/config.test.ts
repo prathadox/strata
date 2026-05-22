@@ -24,4 +24,13 @@ describe('loadConfig', () => {
     process.env = { ...baseEnv, SENTINEL_DRY_RUN: 'false' } as any;
     expect(() => loadConfig()).toThrow(/AGENT_EVENT_BUS_ADDRESS/);
   });
+
+  it('rejects when live mode missing identity registry address', () => {
+    process.env = {
+      ...baseEnv,
+      SENTINEL_DRY_RUN: 'false',
+      AGENT_EVENT_BUS_ADDRESS: '0x' + '2'.repeat(40)
+    } as any;
+    expect(() => loadConfig()).toThrow(/IDENTITY_REGISTRY_ADDRESS/);
+  });
 });
