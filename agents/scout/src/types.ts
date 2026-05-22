@@ -59,6 +59,12 @@ export type RiskFactors = z.infer<typeof RiskFactorsSchema>;
 export const Tranche = z.enum(['senior', 'mezzanine', 'junior']);
 export type Tranche = z.infer<typeof Tranche>;
 
+export const VerdictLevel = z.enum(['green', 'yellow', 'red']);
+export type VerdictLevel = z.infer<typeof VerdictLevel>;
+
+export const HedgeDirection = z.enum(['long', 'short']);
+export type HedgeDirection = z.infer<typeof HedgeDirection>;
+
 export const ScoredOpportunitySchema = YieldOpportunitySchema.extend({
   risk: RiskFactorsSchema,
   probabilities: z.object({
