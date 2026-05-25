@@ -28,6 +28,7 @@ export function Nav() {
               <span className="sp-v sp-v-live">Testnet</span>
             </span>
           </div>
+          <a href="/deposit" className="btn-primary">Launch App</a>
           <a href="#access" className="btn-ghost">
             {CTA_COPY}
             <svg className="arrow" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
