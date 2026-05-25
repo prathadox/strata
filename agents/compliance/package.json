@@ -1,0 +1,35 @@
+{
+  "name": "@strata/compliance",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "bin": {
+    "compliance-gate": "./dist/gate.js",
+    "compliance-publisher": "./dist/publisher.js"
+  },
+  "scripts": {
+    "build": "tsc -p .",
+    "dev:gate": "tsx src/gate.ts",
+    "dev:publisher": "tsx src/publisher.ts",
+    "inspect": "tsx scripts/inspect-compliance.ts",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@strata/scout": "workspace:*",
+    "viem": "^2.21.0",
+    "zod": "^3.23.0",
+    "pino": "^9.4.0",
+    "p-retry": "^6.2.0",
+    "prom-client": "^15.1.3",
+    "fastify": "^5.0.0",
+    "@fastify/cors": "^10.0.0",
+    "@fastify/rate-limit": "^10.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.7.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0"
+  }
+}

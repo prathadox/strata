@@ -715,3 +715,47 @@ The v2 plan acknowledges that v1 was an optimistic first pass with three structu
 The hard rule throughout: **the deposit-time decision is a deterministic table lookup against an immutable policy NFT, with all PII off chain, all evidence encrypted, and all denials private.** AI is confined to a single supervised offline step with five layers of defense (pessimistic prompt, cross-check LLM, schema validator, structural diff, human review, 24-hour timelock, 2-of-N multisig). Compliance is perpendicular to the rebalance loop, integrated only via the vault's `canDeposit` gate.
 
 **Next step:** the user resolves §11.1 (Option A vs B vs C), §11.4 (multisig composition), §11.6 (demo flow), §11.7 (subscription model claim). With those locked, a 30-task TDD plan in the shape of `2026-05-22-sentinel-operator.md` can be written.
+
+---
+
+## 16. What "compliance" means in v1 scope
+
+This plan delivers a **compliance-system framework**, not a compliant system. The distinction matters.
+
+### What v1 demonstrates
+
+- Verifiable credential integration pattern (stub adapter, swappable for zkPass/Privado)
+- Auditable on-chain artifacts (KYC receipt NFTs, jurisdiction policy NFTs, revocation registry)
+- PII off chain, encrypted, with key-rotation and GDPR erasure via key destruction
+- Deterministic deposit-time gate with no AI in the hot path
+- AI confined to supervised offline policy publishing with five defense layers
+- Two-TTL model (KYC expiry + sanctions screen expiry) enforced at the vault
+- Content-addressed, replayable decisions stamped with methodologyHash and codeCommit
+- Legal entity shape with subpoena response, evidence retention, multisig custody
+
+### What real-world KYC/AML compliance also requires (not covered here)
+
+| Requirement | Gap |
+|---|---|
+| BSA / FinCEN MSB registration | The foundation entity must register. Out of scope for the agent codebase. |
+| Customer Identification Program (CIP) | Delegated to the credential issuer (zkPass/Privado). The protocol trusts the issuer, does not identify the customer itself. |
+| Risk-based Customer Due Diligence (CDD) | Every depositor gets the same screening regardless of deposit size, source of funds, or risk profile. |
+| Enhanced Due Diligence (EDD) for high-risk users | Not implemented. Senior tranche large deposits should trigger EDD. |
+| Ongoing transaction monitoring | The plan gates deposits only. No monitoring of withdrawals, transfers, or unusual patterns post-deposit. |
+| Suspicious Activity Report (SAR) filing | No infrastructure for filing SARs to FinCEN or equivalent bodies. |
+| Travel Rule (FATF Recommendation 16) | Originator/beneficiary info on cross-VASP transfers above thresholds is not addressed. |
+| PEP screening (separate from sanctions) | Folded into the sanctions screen. Should be a distinct check with different update cadence. |
+| Adverse media screening | Not implemented. Required for enhanced due diligence in most jurisdictions. |
+| Risk-based periodic re-verification | TTL-only. Real CDD requires risk-based review cadence, not a flat clock. |
+| MiCA CASP authorization (EU) | Acknowledged by name only. Actual authorization requires a licensed EU entity. |
+| Designated compliance officer | Proposed in §11.4 but not bound to a named person with qualifications and reporting line. |
+| Written policies, training, independent audit | The operational program around the technical system. Not in scope for the agent code. |
+| Per-jurisdiction recordkeeping retention rules | Partially addressed in §13 (5yr US, 7yr EU). Needs more granular per-jurisdiction rules. |
+
+### The honest framing
+
+For the hackathon demo: the Compliance Agent proves the **technical pattern** works. Jurisdiction policies are published, receipts are minted, the vault gate checks them, denials are private, evidence is encrypted. The architecture is real.
+
+For production deployment: operating this as a real KYC/AML program requires a licensed entity, a designated compliance officer, transaction monitoring infrastructure, SAR filing capability, risk-based CDD/EDD, PEP screening, and the missing checks above. That is a separate workstream measured in months, not sprint tasks.
+
+Do not claim "KYC compliant" or "AML compliant" in any pitch, README, or marketing material based on v1. The correct claim is: "compliance-ready architecture with a stub credential adapter, designed for production upgrade."
