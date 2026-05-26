@@ -20,6 +20,9 @@ contract TrancheController {
     error AdapterInUse();
     error VaultAlreadySet();
     error InsufficientLiquidity();
+    error ProposalNotApproved();
+    error ProposalStale();
+    error AllocationBpsInvalid();
 
     uint16 internal constant BPS = 10_000;
 
@@ -103,6 +106,45 @@ contract TrancheController {
 
     function trancheNAVView(Tranche t) external view returns (uint256) {
         return trancheNAV[t];
+    }
+
+    // ── allocation ───────────────────────────────────────────────────────
+    /// @notice Architect deploys each tranche's idle USDC across adapters, once Sentinel has
+    ///         approved the proposal and within its TTL. Per-tranche AdapterTarget[] bps must each sum to 10_000.
+    function executeAllocation(
+        uint256 proposalId,
+        AdapterTarget[] calldata senior,
+        AdapterTarget[] calldata mezz,
+        AdapterTarget[] calldata junior
+    ) external onlyExecutor {
+        if (!bus.isProposalApproved(proposalId)) revert ProposalNotApproved();
+        IAgentEventBus.Proposal memory p = bus.getProposal(proposalId);
+        if (block.timestamp - p.proposedAt > proposalTTL) revert ProposalStale();
+
+        _allocateTranche(Tranche.Senior, senior);
+        _allocateTranche(Tranche.Mezzanine, mezz);
+        _allocateTranche(Tranche.Junior, junior);
+    }
+
+    function _allocateTranche(Tranche t, AdapterTarget[] calldata targets) internal {
+        uint256 sum;
+        for (uint256 i = 0; i < targets.length; i++) {
+            if (!isAdapter[targets[i].adapter]) revert UnknownAdapter();
+            sum += targets[i].bps;
+        }
+        if (sum != BPS) revert AllocationBpsInvalid();
+
+        uint256 nav = trancheNAV[t];
+        if (nav == 0) return;
+
+        for (uint256 i = 0; i < targets.length; i++) {
+            uint256 amt = (nav * targets[i].bps) / BPS;
+            if (amt == 0) continue;
+            // ensure idle USDC is available, then push into the adapter
+            _ensureLiquidity(amt);
+            underlying.forceApprove(targets[i].adapter, amt);
+            IYieldAdapter(targets[i].adapter).deposit(amt);
+        }
     }
 
     // ── internal liquidity sourcing ──────────────────────────────────────
