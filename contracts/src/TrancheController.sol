@@ -147,6 +147,53 @@ contract TrancheController {
         }
     }
 
+    // ── harvest ──────────────────────────────────────────────────────────
+    event Harvested(int256 delta, uint256 seniorNav, uint256 mezzNav, uint256 juniorNav);
+
+    /// @notice Snapshots total assets across adapters + idle buffer, then applies the waterfall:
+    ///         gains distributed top-down capped at per-tranche targets, losses absorbed bottom-up.
+    function harvest() external {
+        uint256 totalBefore = trancheNAV[Tranche.Senior] + trancheNAV[Tranche.Mezzanine] + trancheNAV[Tranche.Junior];
+        uint256 totalAfter = underlying.balanceOf(address(this));
+        uint256 n = adapters.length;
+        for (uint256 i = 0; i < n; i++) {
+            totalAfter += IYieldAdapter(adapters[i]).totalAssetsFor(address(this));
+        }
+
+        uint64 nowTs = uint64(block.timestamp);
+        uint256 elapsed = nowTs - lastHarvestTs;
+
+        if (totalAfter > totalBefore) {
+            uint256 gain = totalAfter - totalBefore;
+            uint256 seniorCap = (trancheNAV[Tranche.Senior] * seniorTargetBps * elapsed) / (uint256(BPS) * 365 days);
+            uint256 mezzCap = (trancheNAV[Tranche.Mezzanine] * mezzTargetBps * elapsed) / (uint256(BPS) * 365 days);
+
+            uint256 seniorPay = gain < seniorCap ? gain : seniorCap;
+            gain -= seniorPay;
+            uint256 mezzPay = gain < mezzCap ? gain : mezzCap;
+            gain -= mezzPay;
+            uint256 juniorPay = gain; // residual
+
+            trancheNAV[Tranche.Senior] += seniorPay;
+            trancheNAV[Tranche.Mezzanine] += mezzPay;
+            trancheNAV[Tranche.Junior] += juniorPay;
+        } else if (totalAfter < totalBefore) {
+            uint256 loss = totalBefore - totalAfter;
+            uint256 j = loss < trancheNAV[Tranche.Junior] ? loss : trancheNAV[Tranche.Junior];
+            trancheNAV[Tranche.Junior] -= j; loss -= j;
+            uint256 m = loss < trancheNAV[Tranche.Mezzanine] ? loss : trancheNAV[Tranche.Mezzanine];
+            trancheNAV[Tranche.Mezzanine] -= m; loss -= m;
+            uint256 s = loss < trancheNAV[Tranche.Senior] ? loss : trancheNAV[Tranche.Senior];
+            trancheNAV[Tranche.Senior] -= s;
+        }
+
+        lastHarvestTs = nowTs;
+        emit Harvested(
+            int256(totalAfter) - int256(totalBefore),
+            trancheNAV[Tranche.Senior], trancheNAV[Tranche.Mezzanine], trancheNAV[Tranche.Junior]
+        );
+    }
+
     // ── internal liquidity sourcing ──────────────────────────────────────
     /// @dev ensures the controller holds at least `needed` idle USDC, pulling from
     ///      adapters (highest instant liquidity first) if the buffer is short.

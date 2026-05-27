@@ -141,4 +141,55 @@ contract TrancheControllerTest is Test {
         // all 1000 senior USDC should now sit in the adapter
         assertEq(adapter.totalAssetsFor(address(c)), 1_000e6);
     }
+
+    function test_harvest_gainsTopDown_seniorCapped() public {
+        // Senior 1000 @ target 6%/yr; after deposit to adapter (10% APY) and 1 year,
+        // adapter yields ~10% but senior is capped at ~6%, mezz/junior absorb residual.
+        _fundSenior(1_000e6);
+        _approvedProposal(20);
+        TrancheController.AdapterTarget[] memory one = new TrancheController.AdapterTarget[](1);
+        one[0] = TrancheController.AdapterTarget(address(adapter), 10000);
+        vm.prank(architect);
+        c.executeAllocation(20, one, one, one); // only senior has NAV here
+
+        vm.warp(block.timestamp + 365 days);
+        adapter.harvest(); // realize adapter yield
+        c.harvest();
+
+        // senior gained ~6% of 1000 = ~60 (capped), not the full ~100 the adapter earned
+        uint256 seniorNav = c.trancheNAVView(TrancheController.Tranche.Senior);
+        assertApproxEqAbs(seniorNav, 1_060e6, 5e6);
+        // residual went to junior (mezz had 0 NAV)
+        uint256 juniorNav = c.trancheNAVView(TrancheController.Tranche.Junior);
+        assertGt(juniorNav, 0);
+    }
+
+    function test_harvest_lossesBottomUp() public {
+        // seed all three tranches, then simulate a loss by yanking USDC out of the adapter
+        usdc.mint(address(c), 3_000e6);
+        vm.prank(seniorVault);  c.notifyDeposit(TrancheController.Tranche.Senior, 1_000e6);
+        vm.prank(mezzVault);    c.notifyDeposit(TrancheController.Tranche.Mezzanine, 1_000e6);
+        vm.prank(juniorVault);  c.notifyDeposit(TrancheController.Tranche.Junior, 1_000e6);
+        _approvedProposal(21);
+        TrancheController.AdapterTarget[] memory one = new TrancheController.AdapterTarget[](1);
+        one[0] = TrancheController.AdapterTarget(address(adapter), 10000);
+        vm.prank(architect);
+        c.executeAllocation(21, one, one, one);
+
+        // simulate a 200 loss: owner pulls 200 out of the adapter to a burn address
+        vm.prank(owner);
+        adapter.withdraw(200e6, address(0xDEAD));
+
+        c.harvest();
+        // junior (1000) absorbs the full 200 loss first
+        assertEq(c.trancheNAVView(TrancheController.Tranche.Junior), 800e6);
+        assertEq(c.trancheNAVView(TrancheController.Tranche.Mezzanine), 1_000e6);
+        assertEq(c.trancheNAVView(TrancheController.Tranche.Senior), 1_000e6);
+    }
+
+    function test_harvest_zeroDelta_noChange() public {
+        _fundSenior(1_000e6);
+        c.harvest();
+        assertEq(c.trancheNAVView(TrancheController.Tranche.Senior), 1_000e6);
+    }
 }
