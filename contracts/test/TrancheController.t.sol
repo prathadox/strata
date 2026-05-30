@@ -142,6 +142,22 @@ contract TrancheControllerTest is Test {
         assertEq(adapter.totalAssetsFor(address(c)), 1_000e6);
     }
 
+    function test_executeAllocation_emitsAllocationExecuted() public {
+        // Doc pillar "every execution is an on-chain event": execution must be linkable to its proposalId,
+        // with the USDC actually deployed per tranche recorded on-chain for the dashboard to trace.
+        usdc.mint(address(c), 3_000e6);
+        vm.prank(seniorVault); c.notifyDeposit(TrancheController.Tranche.Senior, 1_000e6);
+        vm.prank(mezzVault);   c.notifyDeposit(TrancheController.Tranche.Mezzanine, 600e6);
+        // junior left at 0 NAV -> deploys nothing
+        _approvedProposal(15);
+        TrancheController.AdapterTarget[] memory one = new TrancheController.AdapterTarget[](1);
+        one[0] = TrancheController.AdapterTarget(address(adapter), 10000);
+        vm.expectEmit(true, true, false, true);
+        emit TrancheController.AllocationExecuted(15, architect, 1_000e6, 600e6, 0);
+        vm.prank(architect);
+        c.executeAllocation(15, one, one, one);
+    }
+
     function test_harvest_gainsTopDown_seniorCapped() public {
         // Senior 1000 @ target 6%/yr; after deposit to adapter (10% APY) and 1 year,
         // adapter yields ~10% but senior is capped at ~6%, mezz/junior absorb residual.

@@ -50,6 +50,16 @@ contract TrancheController {
     event TargetsSet(uint16 seniorTargetBps, uint16 mezzTargetBps);
     event Deposited(Tranche indexed tranche, uint256 amount);
     event Withdrawn(Tranche indexed tranche, uint256 amount, address indexed receiver);
+    /// @notice One per allocation: ties the on-chain execution to its Architect proposal and records
+    ///         the USDC actually deployed per tranche, so the Transparency Dashboard can trace
+    ///         proposal -> verdict -> execution end-to-end ("every execution is an on-chain event").
+    event AllocationExecuted(
+        uint256 indexed proposalId,
+        address indexed executor,
+        uint256 seniorDeployed,
+        uint256 mezzDeployed,
+        uint256 juniorDeployed
+    );
 
     constructor(address bus_, address underlying_, address owner_, address executor_) {
         bus = IAgentEventBus(bus_);
@@ -121,12 +131,15 @@ contract TrancheController {
         IAgentEventBus.Proposal memory p = bus.getProposal(proposalId);
         if (block.timestamp - p.proposedAt > proposalTTL) revert ProposalStale();
 
-        _allocateTranche(Tranche.Senior, senior);
-        _allocateTranche(Tranche.Mezzanine, mezz);
-        _allocateTranche(Tranche.Junior, junior);
+        uint256 seniorDeployed = _allocateTranche(Tranche.Senior, senior);
+        uint256 mezzDeployed = _allocateTranche(Tranche.Mezzanine, mezz);
+        uint256 juniorDeployed = _allocateTranche(Tranche.Junior, junior);
+
+        emit AllocationExecuted(proposalId, msg.sender, seniorDeployed, mezzDeployed, juniorDeployed);
     }
 
-    function _allocateTranche(Tranche t, AdapterTarget[] calldata targets) internal {
+    /// @return deployed total USDC pushed into adapters for this tranche
+    function _allocateTranche(Tranche t, AdapterTarget[] calldata targets) internal returns (uint256 deployed) {
         uint256 sum;
         for (uint256 i = 0; i < targets.length; i++) {
             if (!isAdapter[targets[i].adapter]) revert UnknownAdapter();
@@ -135,7 +148,7 @@ contract TrancheController {
         if (sum != BPS) revert AllocationBpsInvalid();
 
         uint256 nav = trancheNAV[t];
-        if (nav == 0) return;
+        if (nav == 0) return 0;
 
         for (uint256 i = 0; i < targets.length; i++) {
             uint256 amt = (nav * targets[i].bps) / BPS;
@@ -144,6 +157,7 @@ contract TrancheController {
             _ensureLiquidity(amt);
             underlying.forceApprove(targets[i].adapter, amt);
             IYieldAdapter(targets[i].adapter).deposit(amt);
+            deployed += amt;
         }
     }
 
