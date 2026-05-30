@@ -13,6 +13,19 @@ contract TrancheController {
 
     struct AdapterTarget { address adapter; uint16 bps; }
 
+    /// @notice Per-tranche execution autonomy. Autonomous = a cleared Sentinel verdict is sufficient.
+    ///         Multisig = an allocation that deploys more than `threshold` USDC for this tranche also
+    ///         requires the tranche `approver` to confirm the proposal first (a human/multisig in the
+    ///         loop). This is the Surface-1 autonomy spectrum: Senior users can opt into oversight for
+    ///         large rebalances; Junior users get pure autonomy.
+    enum AutonomyMode { Autonomous, Multisig }
+
+    struct Autonomy {
+        AutonomyMode mode;
+        address approver;  // who may confirm large moves (only meaningful in Multisig mode)
+        uint256 threshold; // deploys with total > threshold require confirmation (Multisig mode)
+    }
+
     error NotOwner();
     error NotExecutor();
     error NotVault();
@@ -23,6 +36,8 @@ contract TrancheController {
     error ProposalNotApproved();
     error ProposalStale();
     error AllocationBpsInvalid();
+    error NotApprover();
+    error MultisigApprovalRequired();
 
     uint16 internal constant BPS = 10_000;
 
@@ -44,12 +59,19 @@ contract TrancheController {
     uint64 public lastHarvestTs;
     uint64 public proposalTTL = 24 hours;
 
+    // per-tranche autonomy config (default: Autonomous, no approver, zero threshold)
+    mapping(Tranche => Autonomy) public autonomyOf;
+    // multisig confirmation: tranche => proposalId => confirmed (consumed on execute)
+    mapping(Tranche => mapping(uint256 => bool)) public multisigConfirmed;
+
     event VaultSet(Tranche indexed tranche, address vault);
     event AdapterAdded(address indexed adapter);
     event AdapterRemoved(address indexed adapter);
     event TargetsSet(uint16 seniorTargetBps, uint16 mezzTargetBps);
     event Deposited(Tranche indexed tranche, uint256 amount);
     event Withdrawn(Tranche indexed tranche, uint256 amount, address indexed receiver);
+    event TrancheAutonomySet(Tranche indexed tranche, AutonomyMode mode, address approver, uint256 threshold);
+    event AllocationConfirmed(Tranche indexed tranche, uint256 indexed proposalId, address indexed approver);
     /// @notice One per allocation: ties the on-chain execution to its Architect proposal and records
     ///         the USDC actually deployed per tranche, so the Transparency Dashboard can trace
     ///         proposal -> verdict -> execution end-to-end ("every execution is an on-chain event").
@@ -84,6 +106,23 @@ contract TrancheController {
     function setVault(Tranche t, address v) external onlyOwner {
         if (vaultOf[t] != address(0)) revert VaultAlreadySet();
         vaultOf[t] = v; emit VaultSet(t, v);
+    }
+
+    /// @notice Configure a tranche's execution autonomy. In Multisig mode, an allocation that deploys
+    ///         more than `threshold` USDC for this tranche requires `approver` to confirm the proposal.
+    function setTrancheAutonomy(Tranche tranche, AutonomyMode mode, address approver, uint256 threshold)
+        external
+        onlyOwner
+    {
+        autonomyOf[tranche] = Autonomy({mode: mode, approver: approver, threshold: threshold});
+        emit TrancheAutonomySet(tranche, mode, approver, threshold);
+    }
+
+    /// @notice Approver confirms a specific (proposalId, tranche) allocation, satisfying the multisig gate.
+    function confirmAllocation(uint256 proposalId, Tranche tranche) external {
+        if (msg.sender != autonomyOf[tranche].approver) revert NotApprover();
+        multisigConfirmed[tranche][proposalId] = true;
+        emit AllocationConfirmed(tranche, proposalId, msg.sender);
     }
 
     function addAdapter(address a) external onlyOwner {
@@ -131,15 +170,18 @@ contract TrancheController {
         IAgentEventBus.Proposal memory p = bus.getProposal(proposalId);
         if (block.timestamp - p.proposedAt > proposalTTL) revert ProposalStale();
 
-        uint256 seniorDeployed = _allocateTranche(Tranche.Senior, senior);
-        uint256 mezzDeployed = _allocateTranche(Tranche.Mezzanine, mezz);
-        uint256 juniorDeployed = _allocateTranche(Tranche.Junior, junior);
+        uint256 seniorDeployed = _allocateTranche(Tranche.Senior, senior, proposalId);
+        uint256 mezzDeployed = _allocateTranche(Tranche.Mezzanine, mezz, proposalId);
+        uint256 juniorDeployed = _allocateTranche(Tranche.Junior, junior, proposalId);
 
         emit AllocationExecuted(proposalId, msg.sender, seniorDeployed, mezzDeployed, juniorDeployed);
     }
 
     /// @return deployed total USDC pushed into adapters for this tranche
-    function _allocateTranche(Tranche t, AdapterTarget[] calldata targets) internal returns (uint256 deployed) {
+    function _allocateTranche(Tranche t, AdapterTarget[] calldata targets, uint256 proposalId)
+        internal
+        returns (uint256 deployed)
+    {
         uint256 sum;
         for (uint256 i = 0; i < targets.length; i++) {
             if (!isAdapter[targets[i].adapter]) revert UnknownAdapter();
@@ -150,6 +192,14 @@ contract TrancheController {
         uint256 nav = trancheNAV[t];
         if (nav == 0) return 0;
 
+        // total this allocation intends to deploy for the tranche (sum of per-adapter shares).
+        uint256 intended;
+        for (uint256 i = 0; i < targets.length; i++) {
+            intended += (nav * targets[i].bps) / BPS;
+        }
+        // autonomy gate runs before any funds move.
+        _enforceAutonomy(t, proposalId, intended);
+
         for (uint256 i = 0; i < targets.length; i++) {
             uint256 amt = (nav * targets[i].bps) / BPS;
             if (amt == 0) continue;
@@ -159,6 +209,16 @@ contract TrancheController {
             IYieldAdapter(targets[i].adapter).deposit(amt);
             deployed += amt;
         }
+    }
+
+    /// @dev In Multisig mode, an allocation deploying more than the tranche threshold needs the approver's
+    ///      prior confirmation, which is consumed here so it can't be replayed for a later execution.
+    function _enforceAutonomy(Tranche t, uint256 proposalId, uint256 totalMoved) internal {
+        Autonomy storage a = autonomyOf[t];
+        if (a.mode != AutonomyMode.Multisig) return;
+        if (totalMoved <= a.threshold) return;
+        if (!multisigConfirmed[t][proposalId]) revert MultisigApprovalRequired();
+        multisigConfirmed[t][proposalId] = false; // consume
     }
 
     // ── harvest ──────────────────────────────────────────────────────────
