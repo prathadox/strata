@@ -123,4 +123,31 @@ contract AgentEventBusTest is Test {
         vm.expectRevert(AgentEventBus.HedgeSignalMissing.selector);
         bus.logHedge(99, address(0xABCD), -480, "QmProof");
     }
+
+    // ── richer risk model: green/yellow/red per asset & per tranche ──────────
+    function test_setAssetRiskRating_storesAndEmits() public {
+        vm.prank(architect);
+        bus.proposeAllocation(7, 5000, 3000, 2000, "QmR");
+        vm.prank(sentinel);
+        vm.expectEmit(true, true, true, true);
+        emit IAgentEventBus.AssetRiskRated(7, 2, address(0xD0E), IAgentEventBus.Rating.Red, "QmNote");
+        bus.setAssetRiskRating(7, 2, address(0xD0E), IAgentEventBus.Rating.Red, "QmNote");
+        assertEq(uint8(bus.assetRiskRating(7, 2, address(0xD0E))), uint8(IAgentEventBus.Rating.Red));
+        // unrated (asset,tranche) pairs default to None
+        assertEq(uint8(bus.assetRiskRating(7, 0, address(0xD0E))), uint8(IAgentEventBus.Rating.None));
+    }
+
+    function test_setAssetRiskRating_requiresProposal() public {
+        vm.prank(sentinel);
+        vm.expectRevert(AgentEventBus.ProposalMissing.selector);
+        bus.setAssetRiskRating(77, 0, address(0xD0E), IAgentEventBus.Rating.Green, "QmNote");
+    }
+
+    function test_setAssetRiskRating_onlySentinel() public {
+        vm.prank(architect);
+        bus.proposeAllocation(8, 5000, 3000, 2000, "QmR");
+        vm.prank(architect);
+        vm.expectRevert(AgentEventBus.NotAuthorized.selector);
+        bus.setAssetRiskRating(8, 0, address(0xD0E), IAgentEventBus.Rating.Green, "QmNote");
+    }
 }

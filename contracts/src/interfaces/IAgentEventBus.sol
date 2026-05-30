@@ -4,6 +4,10 @@ pragma solidity 0.8.24;
 interface IAgentEventBus {
     enum Role { None, Scout, Architect, Sentinel, Operator }
 
+    /// @dev Sentinel's per-asset, per-tranche risk grade — the richer model behind the binary
+    ///      execution gate (isApproved). None = ungraded.
+    enum Rating { None, Green, Yellow, Red }
+
     struct Proposal {
         address proposer;
         uint64  proposedAt;
@@ -31,6 +35,9 @@ interface IAgentEventBus {
     /// @dev signalId points back to the HedgeSignalEmitted this fill responds to.
     event HedgeLogged(uint256 indexed signalId, address indexed agent, address indexed hedgedAsset, int256 netPosition, string executionProof);
     event RoleAssigned(address indexed agent, Role role);
+    /// @dev Sentinel grades each (tranche, asset) pair of a proposal green/yellow/red for the
+    ///      Transparency Dashboard; complements the binary isApproved gate.
+    event AssetRiskRated(uint256 indexed proposalId, uint8 indexed trancheId, address indexed asset, Rating rating, string noteCid);
 
     function setRole(address agent, Role r) external;
     function publishYieldMap(string calldata ipfsHash) external;
@@ -38,6 +45,8 @@ interface IAgentEventBus {
         uint256 proposalId, uint16 seniorBps, uint16 mezzBps, uint16 juniorBps, string calldata reasoningCid
     ) external;
     function issueRiskVerdict(uint256 proposalId, bool isApproved, string calldata conditionCid) external;
+    function setAssetRiskRating(uint256 proposalId, uint8 trancheId, address asset, Rating rating, string calldata noteCid) external;
+    function assetRiskRating(uint256 proposalId, uint8 trancheId, address asset) external view returns (Rating);
     function emitHedgeSignal(address underlyingAsset, int256 deltaSize, string calldata reasoningCid) external returns (uint256 signalId);
     function logHedge(uint256 signalId, address hedgedAsset, int256 netPosition, string calldata executionProof) external;
 
