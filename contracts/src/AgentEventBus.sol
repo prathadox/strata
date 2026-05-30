@@ -9,6 +9,7 @@ contract AgentEventBus is IAgentEventBus {
     error ProposalExists();
     error ProposalMissing();
     error VerdictExists();
+    error HedgeSignalMissing();
 
     uint16 internal constant BPS_DENOMINATOR = 10_000;
 
@@ -16,6 +17,10 @@ contract AgentEventBus is IAgentEventBus {
     mapping(address => Role) public roleOf;
     mapping(uint256 => Proposal) internal _proposals;
     mapping(uint256 => Verdict) internal _verdicts;
+
+    /// @notice monotonically increasing count of hedge signals; the latest id is also the total.
+    ///         A logHedge fill must reference an id in [1, hedgeSignalCount].
+    uint256 public hedgeSignalCount;
 
     constructor(address _owner) {
         owner = _owner;
@@ -67,15 +72,17 @@ contract AgentEventBus is IAgentEventBus {
     }
 
     function emitHedgeSignal(address underlyingAsset, int256 deltaSize, string calldata reasoningCid)
-        external onlyRole(Role.Sentinel)
+        external onlyRole(Role.Sentinel) returns (uint256 signalId)
     {
-        emit HedgeSignalEmitted(msg.sender, underlyingAsset, deltaSize, reasoningCid);
+        signalId = ++hedgeSignalCount;
+        emit HedgeSignalEmitted(signalId, msg.sender, underlyingAsset, deltaSize, reasoningCid);
     }
 
-    function logHedge(address hedgedAsset, int256 netPosition, string calldata executionProof)
+    function logHedge(uint256 signalId, address hedgedAsset, int256 netPosition, string calldata executionProof)
         external onlyRole(Role.Operator)
     {
-        emit HedgeLogged(msg.sender, hedgedAsset, netPosition, executionProof);
+        if (signalId == 0 || signalId > hedgeSignalCount) revert HedgeSignalMissing();
+        emit HedgeLogged(signalId, msg.sender, hedgedAsset, netPosition, executionProof);
     }
 
     function isProposalApproved(uint256 proposalId) external view returns (bool) {

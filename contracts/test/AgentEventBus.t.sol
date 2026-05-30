@@ -11,6 +11,7 @@ contract AgentEventBusTest is Test {
     address scout = address(0xBEEF);
     address architect = address(0xACED);
     address sentinel = address(0x5E47);
+    address operator = address(0x09E4);
 
     function setUp() public {
         vm.prank(owner);
@@ -19,6 +20,7 @@ contract AgentEventBusTest is Test {
         bus.setRole(scout, IAgentEventBus.Role.Scout);
         bus.setRole(architect, IAgentEventBus.Role.Architect);
         bus.setRole(sentinel, IAgentEventBus.Role.Sentinel);
+        bus.setRole(operator, IAgentEventBus.Role.Operator);
         vm.stopPrank();
     }
 
@@ -93,5 +95,32 @@ contract AgentEventBusTest is Test {
         vm.prank(architect);
         bus.proposeAllocation(6, 5000, 3000, 2000, "QmR");
         assertFalse(bus.isProposalApproved(6));
+    }
+
+    // ── hedge signal -> fill linkage (auditable Agentic-track chain) ─────────
+    function test_emitHedgeSignal_returnsIncrementingIdAndEmits() public {
+        vm.startPrank(sentinel);
+        vm.expectEmit(true, true, true, true);
+        emit IAgentEventBus.HedgeSignalEmitted(1, sentinel, address(0xABCD), -500, "QmS");
+        uint256 id1 = bus.emitHedgeSignal(address(0xABCD), -500, "QmS");
+        assertEq(id1, 1);
+        uint256 id2 = bus.emitHedgeSignal(address(0xABCD), 250, "QmS2");
+        assertEq(id2, 2);
+        vm.stopPrank();
+    }
+
+    function test_logHedge_linksToSignal() public {
+        vm.prank(sentinel);
+        uint256 id = bus.emitHedgeSignal(address(0xABCD), -500, "QmS");
+        vm.prank(operator);
+        vm.expectEmit(true, true, true, true);
+        emit IAgentEventBus.HedgeLogged(id, operator, address(0xABCD), -480, "QmProof");
+        bus.logHedge(id, address(0xABCD), -480, "QmProof");
+    }
+
+    function test_logHedge_rejectsUnknownSignal() public {
+        vm.prank(operator);
+        vm.expectRevert(AgentEventBus.HedgeSignalMissing.selector);
+        bus.logHedge(99, address(0xABCD), -480, "QmProof");
     }
 }

@@ -26,8 +26,10 @@ interface IAgentEventBus {
         uint256 seniorBps, uint256 mezzBps, uint256 juniorBps, string reasoningHash
     );
     event RiskVerdictIssued(uint256 indexed proposalId, address indexed agent, bool isApproved, string conditionHash);
-    event HedgeSignalEmitted(address indexed agent, address indexed underlyingAsset, int256 deltaSize, string reasoningHash);
-    event HedgeLogged(address indexed agent, address indexed hedgedAsset, int256 netPosition, string executionProof);
+    /// @dev signalId anchors the auditable signal->fill chain (see HedgeLogged.signalId).
+    event HedgeSignalEmitted(uint256 indexed signalId, address indexed agent, address indexed underlyingAsset, int256 deltaSize, string reasoningHash);
+    /// @dev signalId points back to the HedgeSignalEmitted this fill responds to.
+    event HedgeLogged(uint256 indexed signalId, address indexed agent, address indexed hedgedAsset, int256 netPosition, string executionProof);
     event RoleAssigned(address indexed agent, Role role);
 
     function setRole(address agent, Role r) external;
@@ -36,8 +38,8 @@ interface IAgentEventBus {
         uint256 proposalId, uint16 seniorBps, uint16 mezzBps, uint16 juniorBps, string calldata reasoningCid
     ) external;
     function issueRiskVerdict(uint256 proposalId, bool isApproved, string calldata conditionCid) external;
-    function emitHedgeSignal(address underlyingAsset, int256 deltaSize, string calldata reasoningCid) external;
-    function logHedge(address hedgedAsset, int256 netPosition, string calldata executionProof) external;
+    function emitHedgeSignal(address underlyingAsset, int256 deltaSize, string calldata reasoningCid) external returns (uint256 signalId);
+    function logHedge(uint256 signalId, address hedgedAsset, int256 netPosition, string calldata executionProof) external;
 
     function isProposalApproved(uint256 proposalId) external view returns (bool);
     function getProposal(uint256 proposalId) external view returns (Proposal memory);
