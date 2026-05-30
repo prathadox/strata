@@ -77,8 +77,21 @@ contract MortgageCMOSleeve is BaseYieldAdapter {
         if (prepaid > principalOutstanding) prepaid = principalOutstanding;
     }
 
+    /// @dev USDC held beyond what already backs principal + received cashflow — i.e. the seeded
+    ///      reserve still available to back simulated coupon. Guarantees the invariant
+    ///      `principalOutstanding + cashReceived <= USDC balance`, so NAV is always fully backed.
+    function _freeReserve() internal view returns (uint256) {
+        uint256 bal = IERC20(asset()).balanceOf(address(this));
+        uint256 claimed = principalOutstanding + cashReceived;
+        return bal > claimed ? bal - claimed : 0;
+    }
+
     function _accrue() internal {
         (uint256 interest, uint256 prepaid) = _pending();
+        // Simulated coupon is only recognized to the extent a seeded USDC reserve backs it;
+        // unbacked interest is dropped rather than inflating NAV with value it cannot pay.
+        uint256 backed = _freeReserve();
+        if (interest > backed) interest = backed;
         if (interest > 0 || prepaid > 0) {
             principalOutstanding -= prepaid;
             cashReceived += interest + prepaid;
@@ -102,9 +115,12 @@ contract MortgageCMOSleeve is BaseYieldAdapter {
         IERC20(asset()).safeTransfer(receiver, amount);
     }
 
-    /// @dev model value = outstanding principal + received cashflow + pending (unrealized) interest.
+    /// @dev model value = outstanding principal + received cashflow + pending (unrealized) interest,
+    ///      where pending interest is capped at the seeded reserve so NAV never exceeds USDC backing.
     function totalAssetsFor(address) external view override returns (uint256) {
         (uint256 interest, ) = _pending();
+        uint256 backed = _freeReserve();
+        if (interest > backed) interest = backed;
         return principalOutstanding + cashReceived + interest;
     }
 

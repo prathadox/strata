@@ -119,6 +119,40 @@ contract MortgageCMOSleeveTest is Test {
         assertApproxEqAbs(cmo.totalAssetsFor(controller), 800e6, 1); // value dropped -> Junior absorbs
     }
 
+    function test_unbackedInterestDoesNotInflateNAV() public {
+        // No seedReserve: the only USDC behind the sleeve is the deposited principal. Simulated
+        // coupon must NOT be recognized as value it cannot pay out -> NAV stays fully USDC-backed.
+        cmo = new MortgageCMOSleeve(address(usdc), owner, 600, 0); // 6% WAC, no prepay, no reserve
+        vm.prank(controller); usdc.approve(address(cmo), type(uint256).max);
+        vm.prank(controller); cmo.deposit(1_000e6);
+
+        vm.warp(block.timestamp + 365 days);
+        // pre-accrue view (pending interest path) must already be capped at USDC backing
+        assertEq(cmo.totalAssetsFor(controller), 1_000e6);
+        assertLe(cmo.totalAssetsFor(controller), usdc.balanceOf(address(cmo)));
+
+        cmo.accrue(); // realize: unbacked interest is dropped, not credited to cashReceived
+        assertEq(cmo.cashReceived(), 0);
+        assertEq(cmo.totalAssetsFor(controller), 1_000e6);
+        assertEq(cmo.totalAssetsFor(controller), usdc.balanceOf(address(cmo)));
+    }
+
+    function test_seededInterestIsRecognizedUpToReserve() public {
+        // Seed only enough to back ~half the year's coupon: interest is recognized but capped by reserve.
+        cmo = new MortgageCMOSleeve(address(usdc), owner, 600, 0);
+        vm.prank(controller); usdc.approve(address(cmo), type(uint256).max);
+        vm.prank(owner); usdc.approve(address(cmo), type(uint256).max);
+        vm.prank(controller); cmo.deposit(1_000e6);
+        vm.prank(owner); cmo.seedReserve(30e6); // backs at most 30 of the ~60 coupon
+
+        vm.warp(block.timestamp + 365 days);
+        cmo.accrue();
+        // recognized interest is capped at the 30 USDC reserve, never the full ~60
+        assertEq(cmo.cashReceived(), 30e6);
+        assertEq(cmo.totalAssetsFor(controller), 1_030e6);
+        assertLe(cmo.totalAssetsFor(controller), usdc.balanceOf(address(cmo)));
+    }
+
     function test_setPrepaymentSpeed_onlyOwner() public {
         vm.prank(address(0xBAD));
         vm.expectRevert(BaseYieldAdapter.NotOwner.selector);
