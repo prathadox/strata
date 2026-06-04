@@ -4,7 +4,7 @@ import { Ticker } from './Ticker';
 import { HEADLINES } from '@/lib/content';
 
 const HEADLINE_VARIANT = 'slice';
-const CTA_COPY = 'Request early access';
+const CTA_COPY = 'Launch app';
 
 export function Hero() {
   const h = HEADLINES[HEADLINE_VARIANT];
@@ -35,14 +35,15 @@ export function Hero() {
             </Reveal>
             <Reveal delay={220}>
               <div className="hero-cta">
-                <a href="#access" className="btn-cta">
+                <a href="/app" className="btn-cta">
                   {CTA_COPY}
                   <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
                     <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
                 </a>
                 <span className="cta-meta">
-                  <span className="live">●</span>&nbsp; Live on Mantle Sepolia
+                  <span className="live" aria-hidden="true" />
+                  Live on Mantle mainnet
                 </span>
               </div>
             </Reveal>
