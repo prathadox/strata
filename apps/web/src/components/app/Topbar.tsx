@@ -1,6 +1,8 @@
 'use client';
 
-import { useAccount, useConnect } from 'wagmi';
+import { useState } from 'react';
+import { useAccount } from 'wagmi';
+import { WalletPicker } from '@/components/WalletPicker';
 import { TITLES, type Route } from './shellTypes';
 
 function short(addr: string): string {
@@ -16,11 +18,7 @@ interface TopbarProps {
 export function Topbar({ route, onNav }: TopbarProps) {
   const t = TITLES[route] ?? TITLES.dashboard;
   const { address, isConnected } = useAccount();
-  const { connect, connectors, isPending } = useConnect();
-  const injected = connectors[0];
-  const handleConnect = () => {
-    if (injected) connect({ connector: injected });
-  };
+  const [pickerOpen, setPickerOpen] = useState(false);
 
   return (
     <div className="topbar">
@@ -39,14 +37,15 @@ export function Topbar({ route, onNav }: TopbarProps) {
             </svg>
           </button>
         ) : (
-          <button className="btn-app btn-ghost btn-sm" onClick={handleConnect} disabled={isPending}>
-            {isPending ? 'Opening…' : 'Connect MetaMask'}
+          <button className="btn-app btn-ghost btn-sm" onClick={() => setPickerOpen(true)}>
+            Connect wallet
           </button>
         )}
         {route !== 'deposit' && (
           <button className="btn-app btn-primary btn-sm" onClick={() => onNav('deposit')}>Deposit</button>
         )}
       </div>
+      <WalletPicker open={pickerOpen} onClose={() => setPickerOpen(false)} />
     </div>
   );
 }

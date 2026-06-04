@@ -22,3 +22,4 @@ contracts/broadcast/
 contracts/artifacts/
 contracts/typechain-types/
 .next/
+.vercel

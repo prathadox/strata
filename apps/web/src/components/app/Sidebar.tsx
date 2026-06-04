@@ -1,6 +1,8 @@
 'use client';
 
-import { useAccount, useConnect, useDisconnect } from 'wagmi';
+import { useState } from 'react';
+import { useAccount, useDisconnect } from 'wagmi';
+import { WalletPicker } from '@/components/WalletPicker';
 import { MarkMini } from '../Mark';
 import { Icon } from './Icon';
 import type { Route } from './shellTypes';
@@ -38,11 +40,7 @@ function short(addr: string): string {
 export function Sidebar({ route, onNav }: SidebarProps) {
   const { address, isConnected } = useAccount();
   const { disconnect } = useDisconnect();
-  const { connect, connectors, isPending, error } = useConnect();
-  const injected = connectors[0];
-  const handleConnect = () => {
-    if (injected) connect({ connector: injected });
-  };
+  const [pickerOpen, setPickerOpen] = useState(false);
 
   const renderItem = (n: NavItem) => (
     <button key={n.key} className={`sb-item ${route === n.key ? 'active' : ''}`} onClick={() => onNav(n.key)}>
@@ -87,13 +85,13 @@ export function Sidebar({ route, onNav }: SidebarProps) {
               <span className="meta">Mantle mainnet</span>
             </span>
           </div>
-          <button className="sb-connect" onClick={handleConnect} disabled={isPending}>
-            {isPending ? 'Opening MetaMask…' : 'Connect MetaMask'}
+          <button className="sb-connect" onClick={() => setPickerOpen(true)}>
+            Connect wallet
           </button>
-          {error && <div className="disc" style={{ color: 'var(--pink-soft)' }}>{error.message.slice(0, 80)}</div>}
-          {!error && <div className="disc">Read-only until connected</div>}
+          <div className="disc">Read-only until connected</div>
         </div>
       )}
+      <WalletPicker open={pickerOpen} onClose={() => setPickerOpen(false)} />
     </aside>
   );
 }
