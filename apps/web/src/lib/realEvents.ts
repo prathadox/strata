@@ -6,6 +6,78 @@
 import type { AgentEvent } from './appData';
 
 export const REAL_EVENTS: AgentEvent[] = [
+  // === Cycle 4 — first cycle emitted from Railway-deployed containers (baseline content) ===
+  {
+    id: 25,
+    agentKey: 'operator',
+    verb: 'filled',
+    obj: 'Hedge signal #4',
+    detail: '-$1,000 USDC net · Byreal Perps',
+    kind: 'exec',
+    verdict: 'exec',
+    hash: '0xce2c87b230f90bbc90065c52e6895f25673de56028a175c9ceafd970443ce462',
+    ts: 1780597515000,
+    doing: 'First fill from Railway-hosted Operator container'
+  },
+  {
+    id: 24,
+    agentKey: 'sentinel',
+    verb: 'emitted',
+    obj: 'Hedge signal #4',
+    detail: '$2,000 USDC delta · mezz mETH staleness',
+    kind: 'flag',
+    verdict: 'flag',
+    hash: '0x860e4d7c06c6939defa9f9976d504bfe56b60f1290a1212a3883661f2b58b8af',
+    ts: 1780597389000,
+    doing: 'Sentinel from Railway · $2k notional hedge'
+  },
+  {
+    id: 23,
+    agentKey: 'sentinel',
+    verb: 'rated',
+    obj: 'Senior · USDC',
+    detail: 'green · within budget',
+    kind: 'verdict',
+    verdict: 'clear',
+    hash: '0x55732bd98036fe5d8d55612eb5e28066cb8665a6a571c140cfa90301b5a2583a',
+    ts: 1780597381000,
+    doing: 'Per-asset risk rating from Railway'
+  },
+  {
+    id: 22,
+    agentKey: 'sentinel',
+    verb: 'cleared',
+    obj: 'Proposal #1780597343',
+    detail: 'verdict CLEAR · Junior yellow',
+    kind: 'verdict',
+    verdict: 'clear',
+    hash: '0xaef86dec1c4c2ad8ec66cd753d270f3db990ecf8b6ec202a3d7c471b6b66e88f',
+    ts: 1780597374000,
+    doing: 'First Sentinel verdict signed by Railway container'
+  },
+  {
+    id: 21,
+    agentKey: 'architect',
+    verb: 'proposed',
+    obj: 'Allocation #1780597343',
+    detail: 'Senior 60% · Mezz 30% · Junior 10% · baseline',
+    kind: 'propose',
+    hash: '0x6863fa8b6b4f6a1ec7a789ac595a19bdad725792206be6bdab618bef71c6d33a',
+    ts: 1780597349000,
+    doing: 'Architect cron-tick from Railway-hosted container'
+  },
+  {
+    id: 20,
+    agentKey: 'scout',
+    verb: 'published',
+    obj: 'Yield Map v4',
+    detail: 'first publish from Railway-hosted Scout',
+    kind: 'publish',
+    hash: '0x14974a613f899bfba9c54914c9d61799e26b8eff212c1fb5be192112ac44800e',
+    ts: 1780597357000,
+    doing: 'Scout cron-tick from Railway container'
+  },
+
   // === Cycle 3 — USDY spikes (T-bill move), tilt to senior, junior blocked ===
   {
     id: 19,
@@ -254,5 +326,11 @@ export const REAL_EVENT_CIDS: Record<number, string> = {
   16: 'QmPme4H5sNBMSMY2PZB34Q1A8mtV5X2L7HvCJWLutThcao',
   17: 'QmYfNfXKfCVvy4YsxfJ71qHmGjGmAyBSoZYW3BzeuvJUZ1',
   18: 'QmR8uFMZtwS5H8HJL92LYaus8GcmUwEeJjMd8Mo5bGv7Py',
-  19: 'QmaUqxZu7ytjfbWmn9GSDgp7UwVrDoKfLqAQEnHiBVRBw6'
+  19: 'QmaUqxZu7ytjfbWmn9GSDgp7UwVrDoKfLqAQEnHiBVRBw6',
+  20: 'QmSXhDm2kM4nawUJUcWVCh6BnA82HAPLWJ9hUCouyJDu3L',
+  21: 'Qmc4WciCQnRKmtELNP21jU8GFdBGNtvBdWQxw249AvJF1G',
+  22: 'QmSqHtf8Ukf2Ewv167yRCu3UZFfCuwLkgvGKGGpvQYk5fC',
+  23: 'QmXZLe8K7RD9ComJsTqdn5txohsxpCnBB9EUic9dn7eKXi',
+  24: 'QmVmCF93gnSxyDMmXT4NHg7zBYvkocuxdM96y7wnQstQvc',
+  25: 'QmQqZsyvGQVpzzkBJNHZZKdFKikPVFDyNk4uU4CJgzK3kS'
 };

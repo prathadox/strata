@@ -172,5 +172,63 @@ export const SEED_DOCS: Record<number, any> = {
     netPositionUsdc6dec: '125000000',
     venue: 'Byreal Perps (close-down)',
     fill: { side: 'short', sizeBase: '0.0', avgPriceUsd: '0.0', note: 'Partial fill: Sentinel told us to trim. Closed 3/4 of prior $500 short, kept $125 nominal as residual.' }
+  },
+
+  // ---------- Cycle 4: first cycle from Railway-deployed containers (baseline content) ----------
+  20: {
+    role: 'scout',
+    tokenId: 101,
+    methodology: 'first-principles RAAPY: apy - sum(p_i * alpha_i)',
+    source: 'Railway-deployed Scout container',
+    opportunities: [
+      { project: 'aave-v3',             asset: 'USDC',      chain: 'mantle', apy: 0.034, raapy: 0.033, expectedLoss: 0.001, confidence: 0.93, tranches: ['senior', 'mezzanine', 'junior'] },
+      { project: 'ondo-finance',        asset: 'USDY',      chain: 'mantle', apy: 0.046, raapy: 0.044, expectedLoss: 0.002, confidence: 0.88, tranches: ['senior', 'mezzanine'] },
+      { project: 'ethena',              asset: 'sUSDe',     chain: 'mantle', apy: 0.092, raapy: 0.072, expectedLoss: 0.020, confidence: 0.78, tranches: ['mezzanine', 'junior'] },
+      { project: 'agni-finance',        asset: 'USDC/USDe', chain: 'mantle', apy: 0.118, raapy: 0.080, expectedLoss: 0.038, confidence: 0.70, tranches: ['junior'] },
+      { project: 'mantle-staked-ether', asset: 'mETH',      chain: 'mantle', apy: 0.038, raapy: 0.031, expectedLoss: 0.007, confidence: 0.84, tranches: ['mezzanine'] }
+    ]
+  },
+  21: {
+    role: 'architect',
+    tokenId: 102,
+    proposalId: '1780597343',
+    sourceYieldMapCid: 'QmSXhDm2kM4nawUJUcWVCh6BnA82HAPLWJ9hUCouyJDu3L',
+    source: 'Railway-deployed Architect container',
+    allocations: {
+      senior:    { bps: 6000, targets: [{ adapter: 'AaveV3UsdcAdapter', bps: 7000 }, { adapter: 'OndoUsdyAdapter', bps: 3000 }] },
+      mezzanine: { bps: 3000, targets: [{ adapter: 'AaveV3UsdcAdapter', bps: 4000 }, { adapter: 'AgniLpUsdcUsdeAdapter', bps: 4000 }, { adapter: 'MethAdapter', bps: 2000 }] },
+      junior:    { bps: 1000, targets: [{ adapter: 'EthenaSusdeAdapter', bps: 6000 }, { adapter: 'PerpBasisEscrowAdapter', bps: 4000 }] }
+    },
+    rationale: 'Senior holds Aave + Ondo (trustless + RWA T-bill yield). Mezz mixes Aave with Agni LP and mETH for moderate FX-labeled exposure. Junior takes Ethena basis trade and perp-hedged spot.'
+  },
+  22: {
+    role: 'sentinel',
+    tokenId: 103,
+    proposalId: '1780597343',
+    decision: 'approved',
+    source: 'Railway-deployed Sentinel container',
+    perTranche: {
+      senior:    { rating: 'green',  reasons: ['Aave V3 trustless; Ondo oracle-fresh; size within Senior cap'] },
+      mezzanine: { rating: 'green',  reasons: ['Aave/Agni mix; mETH FX guarded by Chainlink staleness bound'] },
+      junior:    { rating: 'yellow', reasons: ['Ethena depeg tail risk; perp basis operator-custodied — labeled, not hidden'] }
+    }
+  },
+  23: { proposalId: '1780597343', asset: '0x09Bc4E0D864854c6aFB6eB9A9cdF58aC190D0dF9', ratings: [{ tranche: 0, rating: 'green' }, { tranche: 1, rating: 'green' }, { tranche: 2, rating: 'yellow' }] },
+  24: {
+    role: 'sentinel',
+    tokenId: 103,
+    underlyingAsset: '0x09Bc4E0D864854c6aFB6eB9A9cdF58aC190D0dF9',
+    deltaSizeUsdc6dec: '1000000000',
+    rationale: 'Mezzanine FX-labeled mETH leg crossed Chainlink staleness ceiling; hedging $1k notional via perp basis.'
+  },
+  25: {
+    role: 'operator',
+    tokenId: 104,
+    signalId: '4',
+    hedgedAsset: '0x09Bc4E0D864854c6aFB6eB9A9cdF58aC190D0dF9',
+    netPositionUsdc6dec: '500000000',
+    venue: 'Byreal Perps (Hyperliquid settlement)',
+    source: 'Railway-deployed Operator container',
+    fill: { side: 'short', sizeBase: '0.0', avgPriceUsd: '0.0', note: 'First Operator fill from Railway. Spot leg escrowed; perp leg reported off-chain via PerpBasisEscrowAdapter.reportHedgeValue.' }
   }
 };
