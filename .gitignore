@@ -5,3 +5,20 @@ dist
 *.log
 coverage
 .DS_Store
+
+# Design handoffs (external bundles, not source of truth)
+design_handoff_strata_app*
+design_handoff_strata_landing*
+
+# Local plan/work-in-progress notes
+CLAUDE.md
+docs/superpowers/
+
+# Foundry / Hardhat artifacts beyond the per-dir ignores
+contracts/lib/
+contracts/out/
+contracts/cache/
+contracts/broadcast/
+contracts/artifacts/
+contracts/typechain-types/
+.next/
