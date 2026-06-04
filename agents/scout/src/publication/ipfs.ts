@@ -14,7 +14,7 @@ async function pinLighthouseRawOnce(jsonString: string, apiKey: string, filename
     jsonString + `\r\n` +
     `--${boundary}--\r\n`;
 
-  const res = await globalThis.fetch('https://node.lighthouse.storage/api/v0/add', {
+  const res = await globalThis.fetch('https://upload.lighthouse.storage/api/v0/add', {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${apiKey}`,

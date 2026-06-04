@@ -15,7 +15,7 @@ async function pinJson(json: string, apiKey: string): Promise<string> {
   const blob = new Blob([json], { type: 'application/json' });
   const form = new FormData();
   form.append('file', blob, 'allocation.json');
-  const res = await fetch('https://node.lighthouse.storage/api/v0/add', {
+  const res = await fetch('https://upload.lighthouse.storage/api/v0/add', {
     method: 'POST', headers: { Authorization: `Bearer ${apiKey}` }, body: form
   });
   if (!res.ok) throw new Error(`lighthouse ${res.status}: ${await res.text()}`);

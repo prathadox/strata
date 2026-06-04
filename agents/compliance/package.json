@@ -9,6 +9,7 @@
   },
   "scripts": {
     "build": "tsc -p .",
+    "demo": "tsx src/demo.ts",
     "dev:gate": "tsx src/gate.ts",
     "dev:publisher": "tsx src/publisher.ts",
     "inspect": "tsx scripts/inspect-compliance.ts",
