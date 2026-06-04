@@ -328,21 +328,45 @@ Each agent owns one ERC-8004 identity NFT and the matching role on `AgentEventBu
 | Operator | #104 | [`0xB342B41A…519E`](https://mantlescan.xyz/address/0xB342B41A68a3c6C36Efb8f224CDd252F90aD519E) | [`0x9fbbbc5a…50b37`](https://mantlescan.xyz/tx/0x9fbbbc5a8ec71051fb562ed370eaef20d69e79bfc28ad7c030679963b3650b37) |
 | Compliance | #105 | [`0x59767a3E…CA628`](https://mantlescan.xyz/address/0x59767a3E91998A07D11aBE13CD460Fa3249CA628) | EIP-712 verifier of `ComplianceRegistry` |
 
-### Seed cycle (2026-06-04, mainnet)
+### Seed cycles (2026-06-04, mainnet)
 
-Every agent's `pnpm demo` ran once against mainnet, producing one full end-to-end loop. These transactions are the static seed the dashboard reads from, and they are exactly what the 24h Railway cron reproduces on every cycle.
+Three full rebalance cycles ran end-to-end. Each agent's pinned doc differs cycle-to-cycle, so all 19 CIDs and JSON bodies are distinct. These are exactly the transactions the 24h Railway cron reproduces in production.
+
+**Cycle 1 — baseline (Senior 60 / Mezz 30 / Junior 10)**
 
 | Step | Agent | Tx | CID |
 |---|---|---|---|
-| 1 | Scout publishes Yield Map | [`0x4f2a1bf4…ded33`](https://mantlescan.xyz/tx/0x4f2a1bf4e0821ebb3d9ef224ad0423fea89eea6c43a6243dd738ef8b9c6ded33) | [`QmTMcLP2…Zjt1s`](https://gateway.lighthouse.storage/ipfs/QmTMcLP23Yzi4cpW5XaVpjo1zH5Kdq74hiNgs9racZjt1s) |
-| 2 | Architect proposes allocation #1780589901 | [`0xc4e23f8b…79970`](https://mantlescan.xyz/tx/0xc4e23f8b2cb889c2abbce09ad7957f902be37ed8e300807ccedc2d28b6679970) | [`QmTr1ekp…dQzyD`](https://gateway.lighthouse.storage/ipfs/QmTr1ekpVQE7tnADqnx2JKV26zwNEtDoJpRX2qdPMdQzyD) |
-| 3 | Sentinel issues risk verdict (CLEAR) | [`0x91250f67…761db`](https://mantlescan.xyz/tx/0x91250f676098d64e1d6b749f3aac0742ccf0f99c8c5538b6981edb43bd5761db) | [`QmY73bjz…tdgez`](https://gateway.lighthouse.storage/ipfs/QmY73bjzmW6sL3XrTBVKFmeGf5Usa8Cs3TLd4s4hktdgez) |
-| 4 | Sentinel rates Senior USDC = Green | [`0x1d05ee86…f0e4`](https://mantlescan.xyz/tx/0x1d05ee86ac141ef23225711d657cf756add26c807ea5bec95fc03ebb7f44f0e4) | [`QmPnpTBi…QvSL`](https://gateway.lighthouse.storage/ipfs/QmPnpTBiLC2CMc7bPx988LChKdvGBcQf9wgKXRYceCQvSL) |
-| 5 | Sentinel emits hedge signal #1 | [`0x92080627…83119`](https://mantlescan.xyz/tx/0x92080627f6e50ab4beee83339eedd124550bf52427277fc608ab57eea7383119) | [`Qma6GLpM…1nPvU`](https://gateway.lighthouse.storage/ipfs/Qma6GLpMwVP47qL5mSMoXDu8CTnyqU5dh1biesWSY1nPvU) |
-| 6 | Operator logs hedge fill against signal #1 | [`0x63b12b2e…9ee6`](https://mantlescan.xyz/tx/0x63b12b2e40933ffc446ded47a0bfa899f4da4fe98d58f374194b5b3b219e9ee6) | [`QmUcwKAk…eYxv`](https://gateway.lighthouse.storage/ipfs/QmUcwKAkxvARKecsBZTUsBTgBGWyp9kB3LuTCu5XRmeYxv) |
-| 7 | Compliance claims soulbound receipt #1 | [`0x3657ec9f…583e4`](https://mantlescan.xyz/tx/0x3657ec9f1a6121fe6d48b0d19a4cc316a07d3c275e96021a516a3a70768583e4) | [`QmUEVWAM…hDgX`](https://gateway.lighthouse.storage/ipfs/QmUEVWAMJz15BmppMCP2d9wcjKHW7iRHJx8GCvsCwEhDgX) |
+| 1 | Scout publishes Yield Map v1 | [`0x4f2a1bf4…ded33`](https://mantlescan.xyz/tx/0x4f2a1bf4e0821ebb3d9ef224ad0423fea89eea6c43a6243dd738ef8b9c6ded33) | `QmTMcLP2…Zjt1s` |
+| 2 | Architect proposes allocation #1780589901 | [`0xc4e23f8b…79970`](https://mantlescan.xyz/tx/0xc4e23f8b2cb889c2abbce09ad7957f902be37ed8e300807ccedc2d28b6679970) | `QmTr1ekp…dQzyD` |
+| 3 | Sentinel issues verdict CLEAR | [`0x91250f67…761db`](https://mantlescan.xyz/tx/0x91250f676098d64e1d6b749f3aac0742ccf0f99c8c5538b6981edb43bd5761db) | `QmY73bjz…tdgez` |
+| 4 | Sentinel rates Senior · USDC = Green | [`0x1d05ee86…f0e4`](https://mantlescan.xyz/tx/0x1d05ee86ac141ef23225711d657cf756add26c807ea5bec95fc03ebb7f44f0e4) | `QmPnpTBi…QvSL` |
+| 5 | Sentinel emits hedge signal #1 ($1k) | [`0x92080627…83119`](https://mantlescan.xyz/tx/0x92080627f6e50ab4beee83339eedd124550bf52427277fc608ab57eea7383119) | `Qma6GLpM…1nPvU` |
+| 6 | Operator fills signal #1 (-$500 net) | [`0x63b12b2e…9ee6`](https://mantlescan.xyz/tx/0x63b12b2e40933ffc446ded47a0bfa899f4da4fe98d58f374194b5b3b219e9ee6) | `QmUcwKAk…eYxv` |
+| 7 | Compliance claims soulbound receipt #1 | [`0x3657ec9f…583e4`](https://mantlescan.xyz/tx/0x3657ec9f1a6121fe6d48b0d19a4cc316a07d3c275e96021a516a3a70768583e4) | `QmUEVWAM…hDgX` |
 
-Mirror: [`agents/.demo-seed.json`](agents/.demo-seed.json).
+**Cycle 2 — sUSDe leads, tilt to mezz (Senior 55 / Mezz 35 / Junior 10)**
+
+| Step | Agent | Tx | CID |
+|---|---|---|---|
+| 1 | Scout publishes Yield Map v2 (sUSDe leads) | [`0x636bf573…ce688`](https://mantlescan.xyz/tx/0x636bf573b020c512bedfbe88307e4cfef891123958478d545b15edfeb8ace688) | `QmNuvY6M…m5B5` |
+| 2 | Architect proposes allocation #1780594730 | [`0x47021e64…08cc5`](https://mantlescan.xyz/tx/0x47021e647758e54aa2a44064b480383c0c75c6b27fa7b225c4cfc05305808cc5) | `Qmf32dWj…toWsV` |
+| 3 | Sentinel issues verdict CLEAR (all green) | [`0xb66c0a90…52ea8`](https://mantlescan.xyz/tx/0xb66c0a90f34052e2189993ead17fc744ebf5e2cabaa9e12476e90c654c952ea8) | `QmdqN8Lp…okVe` |
+| 4 | Sentinel rates Mezzanine · USDC = Green | [`0xe5e86f05…be3ec`](https://mantlescan.xyz/tx/0xe5e86f053e5b76a271259a284078f322cf7e31e50ab4ce440922c6ced5dbe3ec) | `QmUXBXBm…NaZgU` |
+| 5 | Sentinel emits hedge signal #2 ($2k) | [`0x1aa09fab…bd873`](https://mantlescan.xyz/tx/0x1aa09fabdd67a475bf8836064835b3d92c466ae215c8276fd8d50a51472bd873) | `QmQzvmcL…jBTWV` |
+| 6 | Operator fills signal #2 (-$1k net) | [`0xea01bfaa…659df`](https://mantlescan.xyz/tx/0xea01bfaa26fa43092a1f6d73b5bb0071ba3999b93167294ded1946ef087659df) | `QmZ1DT4M…VDMn` |
+
+**Cycle 3 — USDY spike, tilt to senior, junior BLOCKED (Senior 65 / Mezz 25 / Junior 10)**
+
+| Step | Agent | Tx | CID |
+|---|---|---|---|
+| 1 | Scout publishes Yield Map v3 (USDY leads) | [`0xc08decd3…1653d`](https://mantlescan.xyz/tx/0xc08decd3321d4379c41f592dd93902b4e3a564f09738d1fc8cdee3afdce1653d) | `QmXtvdoP…kvAi3` |
+| 2 | Architect proposes allocation #1780594769 | [`0xdf04a33a…7463b`](https://mantlescan.xyz/tx/0xdf04a33aebbc5d9ade92421caf00d37e787b70b194bb52551f269b7f2d37463b) | `QmQcbFuw…yo5h` |
+| 3 | Sentinel issues verdict BLOCKED | [`0xb7184d42…d65d1`](https://mantlescan.xyz/tx/0xb7184d42418a4f6034c6ce8d7b4dfe0ffbffe0f124395270389edc1e5b5d65d1) | `QmPme4H5…hcao` |
+| 4 | Sentinel rates Junior · USDC = Red | [`0x375e5b9b…03a82`](https://mantlescan.xyz/tx/0x375e5b9b04b8f3a0c1a06d72fbace8a1418c5d8ddc9ab022ade10e8c94003a82) | `QmYfNfXK…JUZ1` |
+| 5 | Sentinel emits hedge signal #3 ($500, defensive) | [`0x9b97a02a…27237`](https://mantlescan.xyz/tx/0x9b97a02a236d853c35be2806dacb068351e2c8854cf6a5af4909df3019927237) | `QmR8uFMZ…v7Py` |
+| 6 | Operator trims signal #3 (-$125 residual) | [`0xecbb2ecf…61ad99`](https://mantlescan.xyz/tx/0xecbb2ecffa19e4ee319db7b5b7d89af6d597fcbab235531cf4849d8ca861ad99) | `QmaUqxZu…RBw6` |
+
+Mirror: [`agents/.demo-seed.json`](agents/.demo-seed.json). All 19 CIDs are listed in [`apps/web/src/lib/realEvents.ts`](apps/web/src/lib/realEvents.ts).
 
 ## Running an agent cycle
 
