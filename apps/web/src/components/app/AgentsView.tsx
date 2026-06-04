@@ -111,13 +111,6 @@ export function AgentsView({ events }: AgentsViewProps) {
                 )}
               </div>
             </div>
-            <div className="meta-cell" style={{ gridColumn: '1 / -1', borderRight: 0, borderBottom: 0 }}>
-              <div className="mk">Strategy document · IPFS</div>
-              <div className="a-flex" style={{ justifyContent: 'space-between' }}>
-                <span className="mv mono a-dim">{agent.strategyCid}</span>
-                <a className="btn-app btn-ghost btn-sm" href={lighthouseGateway(agent.strategyCid)} target="_blank" rel="noreferrer">Open ↗</a>
-              </div>
-            </div>
           </div>
 
           <div className="a-card-head" style={{ borderTop: '1px solid var(--line)' }}>
