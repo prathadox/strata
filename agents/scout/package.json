@@ -12,6 +12,7 @@
   "scripts": {
     "build": "tsc -p .",
     "dev": "tsx src/index.ts",
+    "demo": "tsx src/demo.ts",
     "inspect": "tsx scripts/inspect-cycle.ts",
     "tranches": "tsx scripts/tranches-report.ts",
     "test": "vitest run",

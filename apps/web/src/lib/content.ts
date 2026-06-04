@@ -130,7 +130,7 @@ export const ECO: EcoCard[] = [
   {
     title: "Mantle",
     role: "Settlement layer",
-    items: ["Sepolia testnet", "Mainnet at v1"],
+    items: ["Mantle mainnet · chainid 5000", "Capped launch · $1k per adapter"],
   },
   {
     title: "Yield sources",

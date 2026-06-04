@@ -1,8 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { useAccount, useSignTypedData } from 'wagmi';
-import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { useEffect, useState } from 'react';
+import { useAccount, useConnect, useDisconnect, useSignTypedData } from 'wagmi';
 import { generateStubCredential } from '../../lib/stub';
 import { checkCompliance, decodeMask, type ComplianceResponse } from '../../lib/compliance';
 import { MarkMini } from '../../components/Mark';
@@ -38,7 +37,11 @@ const KYC_TIERS = [
 
 export default function DepositPage() {
   const { address, isConnected } = useAccount();
+  const { disconnect } = useDisconnect();
+  const { connect, connectors, isPending, error: connectError } = useConnect();
   const { signTypedDataAsync } = useSignTypedData();
+
+  const metaMask = connectors.find((c) => c.id === 'metaMaskSDK' || c.id === 'metaMask') ?? connectors[0];
 
   const [step, setStep] = useState<Step>('connect');
   const [jurisdiction, setJurisdiction] = useState('US');
@@ -47,14 +50,19 @@ export default function DepositPage() {
   const [error, setError] = useState<string | null>(null);
   const [processing, setProcessing] = useState(false);
 
-  if (isConnected && step === 'connect') {
-    setStep('verify');
-  }
-  if (!isConnected && step !== 'connect') {
-    setStep('connect');
-    setResult(null);
-    setError(null);
-  }
+  useEffect(() => {
+    if (isConnected && step === 'connect') {
+      setStep('verify');
+    } else if (!isConnected && step !== 'connect') {
+      setStep('connect');
+      setResult(null);
+      setError(null);
+    }
+  }, [isConnected, step]);
+
+  const handleConnect = () => {
+    if (metaMask) connect({ connector: metaMask });
+  };
 
   async function handleVerify() {
     if (!address) return;
@@ -106,7 +114,16 @@ export default function DepositPage() {
             <MarkMini />
             <span className="brand-word"><b>STRATA</b></span>
           </a>
-          <ConnectButton showBalance={false} chainStatus="icon" accountStatus="address" />
+          {isConnected && address ? (
+            <div className="deposit-nav-wallet">
+              <span className="deposit-nav-addr">{`${address.slice(0, 6)}…${address.slice(-4)}`}</span>
+              <button className="deposit-nav-disconnect" onClick={() => disconnect()}>Disconnect</button>
+            </div>
+          ) : (
+            <button className="btn-ghost" onClick={handleConnect} disabled={isPending}>
+              {isPending ? 'Opening MetaMask…' : 'Connect MetaMask'}
+            </button>
+          )}
         </div>
       </header>
 
@@ -125,7 +142,23 @@ export default function DepositPage() {
               <h2 className="deposit-title">Connect your wallet</h2>
               <p className="deposit-desc">Connect your wallet to begin the compliance verification process.</p>
               <div className="deposit-connect-wrap">
-                <ConnectButton />
+                {isConnected && address ? (
+                  <div className="deposit-nav-wallet">
+                    <span className="deposit-nav-addr">{`${address.slice(0, 6)}…${address.slice(-4)}`}</span>
+                    <button className="deposit-nav-disconnect" onClick={() => disconnect()}>Disconnect</button>
+                  </div>
+                ) : (
+                  <>
+                    <button className="btn-cta" onClick={handleConnect} disabled={isPending}>
+                      {isPending ? 'Opening MetaMask…' : 'Connect MetaMask'}
+                    </button>
+                    {connectError && (
+                      <div className="deposit-connect-error" style={{ color: 'var(--pink-soft)', fontSize: '0.85rem', marginTop: '0.5rem' }}>
+                        {connectError.message.slice(0, 120)}
+                      </div>
+                    )}
+                  </>
+                )}
               </div>
             </div>
           )}

@@ -1,0 +1,94 @@
+{
+  "_comment": "Static seed produced by running each agent's `pnpm demo` once on Mantle mainnet on 2026-06-04. In production this is what the 24h cron will reproduce per cycle. Source of truth for apps/web/src/lib/realEvents.ts.",
+  "network": "mantle",
+  "chainId": 5000,
+  "producedAt": "2026-06-04T22:03:00Z",
+  "events": [
+    {
+      "id": 1,
+      "agentKey": "scout",
+      "agentAddress": "0x7CAC071f0F59dEe64509ea1C3BD8245bE529fcdE",
+      "action": "publishYieldMap",
+      "cid": "QmTMcLP23Yzi4cpW5XaVpjo1zH5Kdq74hiNgs9racZjt1s",
+      "txHash": "0x4f2a1bf4e0821ebb3d9ef224ad0423fea89eea6c43a6243dd738ef8b9c6ded33",
+      "blockNumber": 96229733,
+      "tsSec": 1748988000
+    },
+    {
+      "id": 2,
+      "agentKey": "architect",
+      "agentAddress": "0xbFDb8d132358b2f46D3104Ef484048Bb916De714",
+      "action": "proposeAllocation",
+      "proposalId": "1780589901",
+      "bps": { "senior": 6000, "mezz": 3000, "junior": 1000 },
+      "cid": "QmTr1ekpVQE7tnADqnx2JKV26zwNEtDoJpRX2qdPMdQzyD",
+      "txHash": "0xc4e23f8b2cb889c2abbce09ad7957f902be37ed8e300807ccedc2d28b6679970",
+      "blockNumber": 96229798,
+      "tsSec": 1748988120
+    },
+    {
+      "id": 3,
+      "agentKey": "sentinel",
+      "agentAddress": "0xfE7EB19092F03E00B6eD0a248D38E80e0aA8708f",
+      "action": "issueRiskVerdict",
+      "proposalId": "1780589901",
+      "approved": true,
+      "cid": "QmY73bjzmW6sL3XrTBVKFmeGf5Usa8Cs3TLd4s4hktdgez",
+      "txHash": "0x91250f676098d64e1d6b749f3aac0742ccf0f99c8c5538b6981edb43bd5761db",
+      "blockNumber": 96229873,
+      "tsSec": 1748988200
+    },
+    {
+      "id": 4,
+      "agentKey": "sentinel",
+      "agentAddress": "0xfE7EB19092F03E00B6eD0a248D38E80e0aA8708f",
+      "action": "setAssetRiskRating",
+      "proposalId": "1780589901",
+      "tranche": "senior",
+      "rating": "green",
+      "cid": "QmPnpTBiLC2CMc7bPx988LChKdvGBcQf9wgKXRYceCQvSL",
+      "txHash": "0x1d05ee86ac141ef23225711d657cf756add26c807ea5bec95fc03ebb7f44f0e4",
+      "blockNumber": 96229905,
+      "tsSec": 1748988260
+    },
+    {
+      "id": 5,
+      "agentKey": "sentinel",
+      "agentAddress": "0xfE7EB19092F03E00B6eD0a248D38E80e0aA8708f",
+      "action": "emitHedgeSignal",
+      "signalId": "1",
+      "underlyingAsset": "0x09Bc4E0D864854c6aFB6eB9A9cdF58aC190D0dF9",
+      "deltaSizeUsdc6dec": "1000000000",
+      "cid": "Qma6GLpMwVP47qL5mSMoXDu8CTnyqU5dh1biesWSY1nPvU",
+      "txHash": "0x92080627f6e50ab4beee83339eedd124550bf52427277fc608ab57eea7383119",
+      "blockNumber": 96229956,
+      "tsSec": 1748988320
+    },
+    {
+      "id": 6,
+      "agentKey": "operator",
+      "agentAddress": "0xB342B41A68a3c6C36Efb8f224CDd252F90aD519E",
+      "action": "logHedge",
+      "signalId": "1",
+      "venue": "Byreal Perps (Hyperliquid settlement)",
+      "netPositionUsdc6dec": "500000000",
+      "cid": "QmUcwKAkxvARKecsBZTUsBTgBGWyp9kB3LuTCu5XRmeYxv",
+      "txHash": "0x63b12b2e40933ffc446ded47a0bfa899f4da4fe98d58f374194b5b3b219e9ee6",
+      "blockNumber": 96230104,
+      "tsSec": 1748988440
+    },
+    {
+      "id": 7,
+      "agentKey": "compliance",
+      "agentAddress": "0x59767a3E91998A07D11aBE13CD460Fa3249CA628",
+      "action": "claimReceipt",
+      "tokenId": "1",
+      "policyId": "STRATA-DEMO-2026-06",
+      "trancheMask": "0x07",
+      "cid": "QmUEVWAMJz15BmppMCP2d9wcjKHW7iRHJx8GCvsCwEhDgX",
+      "txHash": "0x3657ec9f1a6121fe6d48b0d19a4cc316a07d3c275e96021a516a3a70768583e4",
+      "blockNumber": 96230256,
+      "tsSec": 1748988560
+    }
+  ]
+}

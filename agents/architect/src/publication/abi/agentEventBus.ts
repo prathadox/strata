@@ -5,10 +5,10 @@ export const agentEventBusAbi = [
     stateMutability: 'nonpayable',
     inputs: [
       { name: 'proposalId', type: 'uint256' },
-      { name: 'seniorBps', type: 'uint256' },
-      { name: 'mezzBps', type: 'uint256' },
-      { name: 'juniorBps', type: 'uint256' },
-      { name: 'reasoningHash', type: 'string' }
+      { name: 'seniorBps', type: 'uint16' },
+      { name: 'mezzBps', type: 'uint16' },
+      { name: 'juniorBps', type: 'uint16' },
+      { name: 'reasoningCid', type: 'string' }
     ],
     outputs: []
   }
