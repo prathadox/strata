@@ -1,7 +1,8 @@
 'use client';
 
 import { relTime, type AgentEvent } from '@/lib/appData';
-import { AGENTS, CORE, VAULTS, ADAPTERS, agentByKey, explorer } from '@/lib/onchain';
+import { AGENTS, CORE, VAULTS, ADAPTERS, agentByKey, explorer, lighthouseGateway } from '@/lib/onchain';
+import { REAL_EVENT_CIDS } from '@/lib/realEvents';
 import { useTVL } from '@/hooks/useTVL';
 import type { Route } from './shellTypes';
 
@@ -17,6 +18,7 @@ function fmtUsd(n: number, dp: number = 2): string {
 
 function FeedRow({ evt }: { evt: AgentEvent }) {
   const a = agentByKey(evt.agentKey);
+  const cid = REAL_EVENT_CIDS[evt.id];
   return (
     <div className="feed-row">
       <div className="feed-ic" style={{ color: `var(${a?.color})` }}>{a?.glyph}</div>
@@ -30,7 +32,13 @@ function FeedRow({ evt }: { evt: AgentEvent }) {
         <div className="ln2">
           {evt.detail && <span>{evt.detail}</span>}
           {evt.detail && <span className="a-muted">·</span>}
-          <span className="hash">{evt.hash}</span>
+          <a className="hash" href={explorer.tx(evt.hash)} target="_blank" rel="noreferrer">{evt.hash.slice(0, 10)}…{evt.hash.slice(-6)}</a>
+          {cid && (
+            <>
+              <span className="a-muted">·</span>
+              <a className="hash" href={lighthouseGateway(cid)} target="_blank" rel="noreferrer">doc</a>
+            </>
+          )}
         </div>
       </div>
       <div className="feed-time">{relTime(evt.ts)}</div>

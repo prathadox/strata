@@ -1,8 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { AGENTS, agentByKey } from '@/lib/onchain';
+import { AGENTS, agentByKey, explorer, lighthouseGateway } from '@/lib/onchain';
 import { clockTime, relTime, type AgentEvent } from '@/lib/appData';
+import { REAL_EVENT_CIDS } from '@/lib/realEvents';
 
 interface ActivityViewProps {
   events: AgentEvent[];
@@ -54,7 +55,13 @@ export function ActivityView({ events }: ActivityViewProps) {
                     <div className="ln2">
                       {e.detail && <span>{e.detail}</span>}
                       {e.detail && <span className="a-muted">·</span>}
-                      <span className="hash">{e.hash}</span>
+                      <a className="hash" href={explorer.tx(e.hash)} target="_blank" rel="noreferrer">{e.hash.slice(0, 10)}…{e.hash.slice(-6)}</a>
+                      {REAL_EVENT_CIDS[e.id] && (
+                        <>
+                          <span className="a-muted">·</span>
+                          <a className="hash" href={lighthouseGateway(REAL_EVENT_CIDS[e.id])} target="_blank" rel="noreferrer">doc</a>
+                        </>
+                      )}
                     </div>
                   </div>
                   <div className="feed-time">

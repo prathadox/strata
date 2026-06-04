@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { AGENTS, explorer, lighthouseGateway } from '@/lib/onchain';
 import { relTime, type AgentEvent } from '@/lib/appData';
+import { REAL_EVENT_CIDS } from '@/lib/realEvents';
 import { CopyAddr } from './CopyAddr';
 
 function short(addr: string): string {
@@ -141,17 +142,23 @@ export function AgentsView({ events }: AgentsViewProps) {
                 <div className="a-muted">{AGENT_EMPTY_HINTS[agent.key]}</div>
               </div>
             ) : (
-              txs.map((e) => (
-                <div className="a-tx" key={e.id}>
-                  <span className="txic" style={{ color: `var(${agent.color})` }}>{agent.glyph}</span>
-                  <span className="txmain">
-                    <div className="t1">{e.verb} {e.obj}</div>
-                    <div className="t2">{e.detail || agent.shortRole} · {relTime(e.ts)}</div>
-                  </span>
-                  {e.verdict ? <span className={`verdict ${e.verdict}`}>{e.verdict}</span> : <span />}
-                  <span className="txhash">{e.hash}</span>
-                </div>
-              ))
+              txs.map((e) => {
+                const cid = REAL_EVENT_CIDS[e.id];
+                return (
+                  <div className="a-tx" key={e.id}>
+                    <span className="txic" style={{ color: `var(${agent.color})` }}>{agent.glyph}</span>
+                    <span className="txmain">
+                      <div className="t1">{e.verb} {e.obj}</div>
+                      <div className="t2">
+                        {e.detail || agent.shortRole} · {relTime(e.ts)}
+                        {cid && <> · <a href={lighthouseGateway(cid)} target="_blank" rel="noreferrer" style={{ color: 'var(--paper-dim)', textDecoration: 'underline dotted', textUnderlineOffset: 2 }}>doc ↗</a></>}
+                      </div>
+                    </span>
+                    {e.verdict ? <span className={`verdict ${e.verdict}`}>{e.verdict}</span> : <span />}
+                    <a className="txhash" href={explorer.tx(e.hash)} target="_blank" rel="noreferrer" style={{ textDecoration: 'none' }}>{shortHash(e.hash)}</a>
+                  </div>
+                );
+              })
             )}
           </div>
         </div>

@@ -204,9 +204,9 @@ export const AGENTS: Agent[] = [
     artifacts: [
       {
         label: 'Latest Yield Map',
-        detail: 'v412 · 24 opportunities scored · methodology hash 0x8f4c…',
-        cid: 'bafkreigh6scoutyieldmapdemoplaceholder000000000000000000',
-        txHash: '0x9a2c4f0e8b1d7a3e2f6c5b4a9d8c7e6f5a4b3c2d1e0f9a8b7c6d5e4f3a2b1c0d'
+        detail: '5 opportunities · RAAPY = apy - sum(p_i · alpha_i)',
+        cid: 'QmTMcLP23Yzi4cpW5XaVpjo1zH5Kdq74hiNgs9racZjt1s',
+        txHash: '0x4f2a1bf4e0821ebb3d9ef224ad0423fea89eea6c43a6243dd738ef8b9c6ded33'
       }
     ]
   },
@@ -233,9 +233,9 @@ export const AGENTS: Agent[] = [
     artifacts: [
       {
         label: 'Latest proposal',
-        detail: 'id #4128 · Senior 60% · Mezz 30% · Junior 10%',
-        cid: 'bafkreiarchitectallocationdemoplaceholder000000000000',
-        txHash: '0x4d1130a8f9c2b7d4e1a0c5b8e3d6f9a2c5b8e1d4f7a0c3b6e9d2f5a8b1c4e7d0'
+        detail: 'id #1780589901 · Senior 60% · Mezz 30% · Junior 10%',
+        cid: 'QmTr1ekpVQE7tnADqnx2JKV26zwNEtDoJpRX2qdPMdQzyD',
+        txHash: '0xc4e23f8b2cb889c2abbce09ad7957f902be37ed8e300807ccedc2d28b6679970'
       }
     ]
   },
@@ -262,9 +262,21 @@ export const AGENTS: Agent[] = [
     artifacts: [
       {
         label: 'Latest verdict',
-        detail: 'id #4128 · CLEAR · Senior green · Mezz green · Junior yellow',
-        cid: 'bafkreisentinelverdictdemoplaceholder0000000000000000',
-        txHash: '0x71f80c190a3b5d7e1f4a6c8b2d5e7f9a1c3b5d7e9f1a3c5b7d9e1f3a5b7c9d1e'
+        detail: 'id #1780589901 · CLEAR · Senior green · Mezz green · Junior yellow',
+        cid: 'QmY73bjzmW6sL3XrTBVKFmeGf5Usa8Cs3TLd4s4hktdgez',
+        txHash: '0x91250f676098d64e1d6b749f3aac0742ccf0f99c8c5538b6981edb43bd5761db'
+      },
+      {
+        label: 'Senior risk rating',
+        detail: 'USDC · Green · within budget',
+        cid: 'QmPnpTBiLC2CMc7bPx988LChKdvGBcQf9wgKXRYceCQvSL',
+        txHash: '0x1d05ee86ac141ef23225711d657cf756add26c807ea5bec95fc03ebb7f44f0e4'
+      },
+      {
+        label: 'Hedge signal #1',
+        detail: '$1,000 USDC delta · mETH staleness',
+        cid: 'Qma6GLpMwVP47qL5mSMoXDu8CTnyqU5dh1biesWSY1nPvU',
+        txHash: '0x92080627f6e50ab4beee83339eedd124550bf52427277fc608ab57eea7383119'
       }
     ]
   },
@@ -291,9 +303,9 @@ export const AGENTS: Agent[] = [
     artifacts: [
       {
         label: 'Latest hedge log',
-        detail: 'signalId #312 · -$50K MNT short · slippage 4 bps',
-        cid: 'bafkreioperatorhedgelogdemoplaceholder000000000000000',
-        txHash: '0xc3027e1209a3b5d7e1f4a6c8b2d5e7f9a1c3b5d7e9f1a3c5b7d9e1f3a5b7c9d1'
+        detail: 'signalId #1 · -$500 USDC net · Byreal Perps',
+        cid: 'QmUcwKAkxvARKecsBZTUsBTgBGWyp9kB3LuTCu5XRmeYxv',
+        txHash: '0x63b12b2e40933ffc446ded47a0bfa899f4da4fe98d58f374194b5b3b219e9ee6'
       }
     ]
   },
@@ -319,9 +331,9 @@ export const AGENTS: Agent[] = [
     artifacts: [
       {
         label: 'Latest receipt',
-        detail: '#2184 · EU-MiCA · Senior + Mezz + Junior · soulbound',
-        cid: 'bafkreicompliancereceiptdemoplaceholder0000000000000',
-        txHash: '0xee04b9a1f8d2a5c7e0b3d6f9a2c5b8e1d4f7a0c3b6e9d2f5a8b1c4e7d0a3c6b9'
+        detail: '#1 · STRATA-DEMO-2026-06 · Senior + Mezz + Junior · soulbound',
+        cid: 'QmUEVWAMJz15BmppMCP2d9wcjKHW7iRHJx8GCvsCwEhDgX',
+        txHash: '0x3657ec9f1a6121fe6d48b0d19a4cc316a07d3c275e96021a516a3a70768583e4'
       }
     ]
   }
