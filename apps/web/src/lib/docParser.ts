@@ -91,14 +91,34 @@ function classify(json: any): ParsedDoc['kind'] {
   return 'yieldMap';
 }
 
+// Inline seed first, gateway proxy as backup. The seed bodies are byte-equivalent
+// (minus signature + publishedAtSec) to what was pinned to Lighthouse — so the
+// parser always renders something real, even if IPFS gateways are slow.
+import { SEED_DOCS } from './seedDocs';
+
+export async function fetchDocByEventId(eventId: number, cid: string, signal?: AbortSignal): Promise<ParsedDoc> {
+  const seed = SEED_DOCS[eventId];
+  if (seed) return { ...seed, kind: classify(seed) } as ParsedDoc;
+  return fetchDoc(cid, signal);
+}
+
+// Browser fetches our server-side proxy at /api/doc/<cid>, which tries
+// gateway.lighthouse.storage, dweb.link, w3s.link, ipfs.io, pinata, and
+// nftstorage in sequence and returns the first hit. Avoids paywall + CORS pain.
 export async function fetchDoc(cid: string, signal?: AbortSignal): Promise<ParsedDoc> {
   const init: RequestInit = signal ? { signal } : {};
-  const res = await fetch(lighthouseGateway(cid), init);
-  if (!res.ok) throw new Error(`Lighthouse ${res.status} for ${cid}`);
+  const res = await fetch(`/api/doc/${cid}`, init);
+  if (!res.ok) {
+    const body = await res.text().catch(() => '');
+    throw new Error(`proxy ${res.status}${body ? ': ' + body.slice(0, 120) : ''}`);
+  }
   const json = await res.json();
   const kind = classify(json);
   return { ...json, kind } as ParsedDoc;
 }
+
+// Kept exported so views that just want to link out still work.
+export { lighthouseGateway };
 
 export function summarize(doc: ParsedDoc): string {
   switch (doc.kind) {

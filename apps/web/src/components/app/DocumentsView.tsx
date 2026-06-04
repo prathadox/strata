@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { REAL_EVENTS, REAL_EVENT_CIDS } from '@/lib/realEvents';
-import { fetchDoc, summarize, type ParsedDoc } from '@/lib/docParser';
+import { fetchDocByEventId, summarize, type ParsedDoc } from '@/lib/docParser';
 import { AGENTS, agentByKey, explorer, lighthouseGateway } from '@/lib/onchain';
 import { clockTime } from '@/lib/appData';
 
@@ -36,7 +36,7 @@ export function DocumentsView() {
     if (!row || docs[open]) return;
     setDocs((s) => ({ ...s, [open]: { state: 'loading' } }));
     const controller = new AbortController();
-    fetchDoc(row.cid, controller.signal)
+    fetchDocByEventId(row.id, row.cid, controller.signal)
       .then((doc) => setDocs((s) => ({ ...s, [open]: { state: 'ready', doc } })))
       .catch((err) => setDocs((s) => ({ ...s, [open]: { state: 'error', err: String(err) } })));
     return () => controller.abort();
