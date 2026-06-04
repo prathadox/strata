@@ -1,5 +1,5 @@
-artifacts/
+out/
 cache/
-typechain-types/
-node_modules/
+broadcast/
 .env
+lib/
