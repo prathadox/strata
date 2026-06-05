@@ -10,9 +10,14 @@ const BUS_ABI = parseAbi([
   'function logHedge(uint256 signalId, address hedgedAsset, int256 netPosition, string executionProof) external',
   'function hedgeSignalCount() view returns (uint256)'
 ]);
+const PERP_ADAPTER_ABI = parseAbi([
+  'function reportHedgeValue(int256 value, uint256 signalId) external'
+]);
 const HEDGE_SIGNAL_EMITTED = parseAbiItem('event HedgeSignalEmitted(uint256 indexed signalId, address indexed agent, address indexed underlyingAsset, int256 deltaSize, string reasoningCid)');
 
 const USDC = '0x09Bc4E0D864854c6aFB6eB9A9cdF58aC190D0dF9' as const;
+// perpAdapter from contracts/deployments/5000.json
+const PERP_ADAPTER = '0x55F90908eFe0E8e78a4CDE445d57a1EDB26d3f32' as const;
 
 async function pinJson(json: string, apiKey: string): Promise<string> {
   const blob = new Blob([json], { type: 'application/json' });
@@ -75,6 +80,7 @@ async function cycle() {
     hedgedAsset: upstream.asset,
     netPositionUsdc6dec: fillNotional.toString(),
     venue: 'Byreal Perps (Hyperliquid settlement)',
+    synthetic: true,
     fill: {
       side: 'short',
       sizeBase: '0.0',
@@ -94,6 +100,19 @@ async function cycle() {
   });
   const receipt = await publicClient.waitForTransactionReceipt({ hash });
   console.log(JSON.stringify({ agent: 'operator', stage: 'tx-mined', txHash: hash, signalId: upstream.signalId.toString(), block: Number(receipt.blockNumber), status: receipt.status, mantlescan: `https://mantlescan.xyz/tx/${hash}` }));
+
+  // Report off-chain perp mark to the adapter so NAV reflects the hedge.
+  // PerpBasisEscrowAdapter.reportHedgeValue(int256 value, uint256 signalId), onlyOwnerOrOperator.
+  try {
+    const perpHash = await walletClient.writeContract({
+      address: PERP_ADAPTER, abi: PERP_ADAPTER_ABI, functionName: 'reportHedgeValue',
+      args: [fillNotional, upstream.signalId]
+    });
+    const perpReceipt = await publicClient.waitForTransactionReceipt({ hash: perpHash });
+    console.log(JSON.stringify({ agent: 'operator', stage: 'perp-report-mined', txHash: perpHash, signalId: upstream.signalId.toString(), block: Number(perpReceipt.blockNumber), status: perpReceipt.status, mantlescan: `https://mantlescan.xyz/tx/${perpHash}` }));
+  } catch (err) {
+    console.error(JSON.stringify({ agent: 'operator', stage: 'perp-report-failed', signalId: upstream.signalId.toString(), error: err instanceof Error ? err.message : String(err) }));
+  }
 }
 
 async function main() {

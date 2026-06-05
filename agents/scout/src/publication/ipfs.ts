@@ -1,3 +1,4 @@
+// LEGACY: not imported by the Railway entrypoint (src/demo.ts). Kept for future "production" daemon path.
 import pRetry from 'p-retry';
 import { z } from 'zod';
 

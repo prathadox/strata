@@ -1,3 +1,4 @@
+// LEGACY: not imported by the Railway entrypoint (src/demo.ts). Kept for future "production" daemon path.
 import type { WalletClient, PublicClient, Account } from 'viem';
 import pRetry from 'p-retry';
 import { agentEventBusAbi } from './abi/agentEventBus.js';

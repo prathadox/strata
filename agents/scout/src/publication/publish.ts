@@ -1,3 +1,4 @@
+// LEGACY: not imported by the Railway entrypoint (src/demo.ts). Kept for future "production" daemon path.
 import { signYieldMap, type SignedMap } from './signer.js';
 import { pinYieldMap, type PinResult } from './ipfs.js';
 import type { WalletClient, PublicClient, Account } from 'viem';

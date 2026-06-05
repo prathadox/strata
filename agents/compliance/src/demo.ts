@@ -99,6 +99,41 @@ async function cycle() {
   const receipt = await publicClient.waitForTransactionReceipt({ hash });
   const tokenId = await publicClient.readContract({ address: registry, abi: REGISTRY_ABI, functionName: 'receiptOf', args: [account.address] });
   console.log(JSON.stringify({ agent: 'compliance', stage: 'tx-mined', txHash: hash, tokenId: (tokenId as bigint).toString(), block: Number(receipt.blockNumber), status: receipt.status, mantlescan: `https://mantlescan.xyz/tx/${hash}` }));
+
+  // Second block: also mint a receipt for an optional DEMO_USER_ADDRESS. claimReceipt mints to
+  // claim.user (not msg.sender), so the Compliance agent can submit on the user's behalf so long
+  // as its key remains the registry verifier.
+  const demoUserRaw = process.env.DEMO_USER_ADDRESS;
+  if (!demoUserRaw) {
+    console.log(JSON.stringify({ agent: 'compliance', stage: 'skip-demo-user', reason: 'no DEMO_USER_ADDRESS env' }));
+    return;
+  }
+  const demoUser = getAddress(demoUserRaw);
+  const existingDemo = await publicClient.readContract({ address: registry, abi: REGISTRY_ABI, functionName: 'receiptOf', args: [demoUser] });
+  if ((existingDemo as bigint) > 0n) {
+    console.log(JSON.stringify({ agent: 'compliance', stage: 'demo-user-already-has-receipt', user: demoUser, tokenId: (existingDemo as bigint).toString() }));
+    return;
+  }
+
+  const demoSignedAt = BigInt(Math.floor(Date.now() / 1000));
+  const demoExpiresAt = demoSignedAt + 365n * 24n * 3600n;
+  const demoClaim = {
+    user: demoUser,
+    trancheMask: 0x07,
+    expiresAt: demoExpiresAt,
+    policyId: policyDoc.policyId,
+    zkReceiptCid,
+    nonce: `0x${randomBytes(32).toString('hex')}` as `0x${string}`,
+    signedAt: demoSignedAt
+  };
+  const demoSig = await account.signTypedData({ domain, types: EIP712_TYPES, primaryType: 'ClaimData', message: demoClaim });
+  const demoHash = await walletClient.writeContract({
+    address: registry, abi: REGISTRY_ABI, functionName: 'claimReceipt',
+    args: [demoClaim, demoSig]
+  });
+  await publicClient.waitForTransactionReceipt({ hash: demoHash });
+  const demoTokenId = await publicClient.readContract({ address: registry, abi: REGISTRY_ABI, functionName: 'receiptOf', args: [demoUser] });
+  console.log(JSON.stringify({ agent: 'compliance', stage: 'demo-user-tx-mined', txHash: demoHash, user: demoUser, tokenId: (demoTokenId as bigint).toString() }));
 }
 
 async function main() {
