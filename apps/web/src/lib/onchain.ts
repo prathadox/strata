@@ -1,6 +1,9 @@
 // Live Mantle mainnet addresses for the Strata stack. Broadcast 2026-06-04 from deployer
 // 0x6Bce9223A8ee13B7FA4108e9E9F0B65574D27355. Mirrored in contracts/deployments/5000.json.
 
+import { createPublicClient, http } from 'viem';
+import { mantle } from 'viem/chains';
+
 export const MANTLE = {
   chainId: 5000,
   name: 'Mantle',
@@ -341,4 +344,81 @@ export const AGENTS: Agent[] = [
 
 export function agentByKey(key: string) {
   return AGENTS.find((a) => a.key === key);
+}
+
+// ---------- ERC-8004 Identity Registry: dynamic strategy CIDs ----------
+//
+// The static `strategyCid` field on each `Agent` above is a fallback only. The
+// source of truth lives on chain: `Identity.tokenURI(agentId)` returns an
+// `ipfs://<cid>` string per ERC-721 metadata. We resolve it lazily, cache the
+// parsed CID per agentId in module scope (page lifetime), and fall back to the
+// hardcoded constant if the registry read fails so the dashboard never breaks.
+
+const IDENTITY_REGISTRY_ADDRESS = '0x8004A169FB4a3325136EB29fA0ceB6D2e539a432' as const;
+
+const IDENTITY_ABI = [
+  {
+    type: 'function',
+    name: 'tokenURI',
+    stateMutability: 'view',
+    inputs: [{ name: 'tokenId', type: 'uint256' }],
+    outputs: [{ name: '', type: 'string' }]
+  }
+] as const;
+
+export const FALLBACK_STRATEGY_CIDS: Record<number, string> = {
+  101: 'bafybeih…scout412',
+  102: 'bafybeig…arch088',
+  103: 'bafybeik…sent229',
+  104: 'bafybeil…oper170',
+  105: 'bafybeim…comp054'
+};
+
+// `ipfs://Qm…` or `ipfs://bafy…` (path stripped). Returns just the CID.
+function parseTokenUri(uri: string): string | null {
+  if (!uri) return null;
+  const trimmed = uri.trim();
+  if (trimmed.startsWith('ipfs://')) {
+    const rest = trimmed.slice('ipfs://'.length);
+    return rest.split(/[/?#]/)[0] || null;
+  }
+  // gateway form: https://.../ipfs/<cid>
+  const ipfsIdx = trimmed.indexOf('/ipfs/');
+  if (ipfsIdx !== -1) {
+    const rest = trimmed.slice(ipfsIdx + '/ipfs/'.length);
+    return rest.split(/[/?#]/)[0] || null;
+  }
+  return null;
+}
+
+const strategyCidCache = new Map<number, string>();
+let identityClient: ReturnType<typeof createPublicClient> | null = null;
+
+function getIdentityClient() {
+  if (!identityClient) {
+    identityClient = createPublicClient({ chain: mantle, transport: http(MANTLE.rpc) });
+  }
+  return identityClient;
+}
+
+export async function fetchStrategyCid(agentId: number): Promise<string> {
+  const cached = strategyCidCache.get(agentId);
+  if (cached) return cached;
+  const fallback = FALLBACK_STRATEGY_CIDS[agentId] ?? '';
+  try {
+    const uri = (await getIdentityClient().readContract({
+      address: IDENTITY_REGISTRY_ADDRESS,
+      abi: IDENTITY_ABI,
+      functionName: 'tokenURI',
+      args: [BigInt(agentId)]
+    })) as string;
+    const cid = parseTokenUri(uri);
+    if (cid) {
+      strategyCidCache.set(agentId, cid);
+      return cid;
+    }
+    return fallback;
+  } catch {
+    return fallback;
+  }
 }

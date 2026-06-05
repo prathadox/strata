@@ -1,7 +1,9 @@
 # Railway / Nixpacks build for the Strata agent fleet.
-# One Nixpacks config shared by 5 services; each service sets AGENT_NAME
-# (scout | architect | sentinel | operator | compliance) and gets dispatched
-# to the matching @strata/<name> workspace package's `demo` script.
+# One Nixpacks config shared by 6 services; each service sets AGENT_NAME
+# (scout | architect | sentinel | operator | compliance | keeper) and gets
+# dispatched to the matching @strata/<name> workspace package's `demo` script.
+# The keeper service additionally needs `pnpm --filter @strata/keeper build`
+# in its build phase since its `demo` script runs the compiled output.
 
 providers = ["node"]
 
@@ -10,6 +12,9 @@ nixPkgs = ["nodejs_22", "pnpm-9_x"]
 
 [phases.install]
 cmds = ["pnpm install --no-frozen-lockfile"]
+
+[phases.build]
+cmds = ["if [ \"$AGENT_NAME\" = \"keeper\" ]; then pnpm --filter @strata/keeper build; fi"]
 
 [start]
 cmd = "pnpm --filter @strata/$AGENT_NAME demo"

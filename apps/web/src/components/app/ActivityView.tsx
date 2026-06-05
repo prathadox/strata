@@ -4,12 +4,52 @@ import { useState } from 'react';
 import { AGENTS, agentByKey, explorer, lighthouseGateway } from '@/lib/onchain';
 import { clockTime, relTime, type AgentEvent } from '@/lib/appData';
 import { REAL_EVENT_CIDS } from '@/lib/realEvents';
+import { SEED_DOCS } from '@/lib/seedDocs';
 
 interface ActivityViewProps {
   events: AgentEvent[];
 }
 
 type Filter = 'all' | 'scout' | 'architect' | 'sentinel' | 'operator' | 'compliance';
+
+const RATIONALE_PREVIEW = 200;
+
+function rationaleFor(eventId: number): string | null {
+  const doc = SEED_DOCS[eventId];
+  if (!doc || typeof doc.rationale !== 'string') return null;
+  const trimmed = doc.rationale.trim();
+  return trimmed.length > 0 ? trimmed : null;
+}
+
+function Rationale({ text }: { text: string }) {
+  const [open, setOpen] = useState(false);
+  const needsTruncate = text.length > RATIONALE_PREVIEW;
+  const shown = !needsTruncate || open ? text : text.slice(0, RATIONALE_PREVIEW).trimEnd() + '…';
+  return (
+    <div className="a-muted" style={{ fontSize: 12, lineHeight: 1.5, marginTop: 4 }}>
+      <span>{shown}</span>
+      {needsTruncate && (
+        <button
+          type="button"
+          onClick={() => setOpen((v) => !v)}
+          style={{
+            marginLeft: 6,
+            background: 'transparent',
+            border: 0,
+            padding: 0,
+            color: 'var(--paper-dim)',
+            font: 'inherit',
+            cursor: 'pointer',
+            textDecoration: 'underline dotted',
+            textUnderlineOffset: 2
+          }}
+        >
+          {open ? 'show less' : 'show more'}
+        </button>
+      )}
+    </div>
+  );
+}
 
 export function ActivityView({ events }: ActivityViewProps) {
   const [filter, setFilter] = useState<Filter>('all');
@@ -42,6 +82,9 @@ export function ActivityView({ events }: ActivityViewProps) {
           ) : (
             filtered.map((e) => {
               const a = agentByKey(e.agentKey);
+              const rationale = e.agentKey === 'architect' && e.kind === 'propose'
+                ? rationaleFor(e.id)
+                : null;
               return (
                 <div className="feed-row" key={e.id}>
                   <div className="feed-ic" style={{ color: `var(${a?.color})` }}>{a?.glyph}</div>
@@ -63,6 +106,7 @@ export function ActivityView({ events }: ActivityViewProps) {
                         </>
                       )}
                     </div>
+                    {rationale && <Rationale text={rationale} />}
                   </div>
                   <div className="feed-time">
                     <div>{clockTime(e.ts)}</div>

@@ -1,10 +1,48 @@
 'use client';
 
-// In-app Deposit view — gated behind a "coming soon · in beta" panel for the public preview.
-// The full tranche wizard + KYC + on-chain receipt path stays in the codebase; we just hide
-// it from the UI until the public release.
+// In-app Deposit view. Wallet not connected → "in beta · coming soon" panel.
+// Wallet connected with no ComplianceRegistry receipt → same panel + a "not whitelisted"
+// notice. Wallet connected with a receipt → minimal compliance-gated deposit form
+// against the live ERC-4626 vaults on Mantle.
+
+import { useAccount } from 'wagmi';
+import { useComplianceReceipt } from '@/hooks/useComplianceReceipt';
+import { DepositGate } from './DepositGate';
 
 export function DepositView(_props: { initialTier?: string | null }) {
+  const { address, isConnected } = useAccount();
+  const { tokenId, loading } = useComplianceReceipt(isConnected ? address : undefined);
+  const whitelisted = tokenId !== null && tokenId > 0n;
+
+  if (isConnected && address && whitelisted) {
+    return (
+      <div className="app-content narrow">
+        <div className="a-card" style={{ padding: '24px 22px', display: 'flex', flexDirection: 'column', gap: 14 }}>
+          <div style={{ textAlign: 'center' }}>
+            <span
+              className="chip"
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: 8,
+                padding: '6px 12px', borderRadius: 999,
+                background: 'color-mix(in srgb, var(--green) 14%, transparent)',
+                border: '1px solid color-mix(in srgb, var(--green) 40%, transparent)',
+                color: 'var(--green)', fontFamily: 'var(--mono)', fontSize: 11,
+                letterSpacing: '.08em', textTransform: 'uppercase'
+              }}
+            >
+              <span className="gdot" /> Receipt #{tokenId.toString()} · whitelisted
+            </span>
+            <h2 style={{ margin: '12px 0 4px', fontSize: 20, fontWeight: 500 }}>Deposit USDC</h2>
+            <p className="a-muted" style={{ maxWidth: 460, margin: '0 auto 14px', fontSize: 12.5, lineHeight: 1.55 }}>
+              Wallet {address.slice(0, 6)}…{address.slice(-4)} carries a soulbound Compliance Receipt. Pick a tranche and deposit.
+            </p>
+          </div>
+          <DepositGate wallet={address} />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="app-content narrow">
       <div
@@ -38,6 +76,11 @@ export function DepositView(_props: { initialTier?: string | null }) {
           The compliance flow and the on-chain deposit path are wired end-to-end but gated for the
           public preview. Watch the dashboard for live agent activity meanwhile.
         </p>
+        {isConnected && address && !loading && !whitelisted && (
+          <p className="a-muted mono" style={{ fontSize: 11.5, maxWidth: 460, lineHeight: 1.55, margin: 0 }}>
+            This wallet is not yet whitelisted for the beta deposit. Contact the team to be added.
+          </p>
+        )}
         <div style={{ display: 'flex', justifyContent: 'center', gap: 12, marginTop: 10, flexWrap: 'wrap' }}>
           <a href="/app" className="btn-app btn-primary">
             View live dashboard
@@ -48,7 +91,9 @@ export function DepositView(_props: { initialTier?: string | null }) {
           <a href="/" className="btn-app btn-ghost">Back to landing</a>
         </div>
         <p className="a-muted mono" style={{ fontSize: 11, marginTop: 8 }}>
-          You can still connect a wallet from the topbar to join the waitlist.
+          {isConnected
+            ? 'Connected wallet is on the waitlist.'
+            : 'You can still connect a wallet from the topbar to join the waitlist.'}
         </p>
       </div>
     </div>
