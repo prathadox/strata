@@ -1,0 +1,207 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "Deploy everything (skip path filter)"
+        required: false
+        default: "false"
+
+permissions:
+  contents: read
+
+jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      web:        ${{ steps.filter.outputs.web        || steps.force.outputs.force }}
+      scout:      ${{ steps.filter.outputs.scout      || steps.force.outputs.force }}
+      architect:  ${{ steps.filter.outputs.architect  || steps.force.outputs.force }}
+      sentinel:   ${{ steps.filter.outputs.sentinel   || steps.force.outputs.force }}
+      operator:   ${{ steps.filter.outputs.operator   || steps.force.outputs.force }}
+      compliance: ${{ steps.filter.outputs.compliance || steps.force.outputs.force }}
+      keeper:     ${{ steps.filter.outputs.keeper     || steps.force.outputs.force }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: force
+        run: |
+          if [ "${{ github.event.inputs.force }}" = "true" ]; then
+            echo "force=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "force=false" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            web:
+              - 'apps/web/**'
+              - 'pnpm-lock.yaml'
+              - 'pnpm-workspace.yaml'
+              - 'tsconfig.base.json'
+              - '.github/workflows/deploy.yml'
+            scout:
+              - 'agents/scout/**'
+              - 'nixpacks.toml'
+              - 'pnpm-lock.yaml'
+              - 'pnpm-workspace.yaml'
+              - 'tsconfig.base.json'
+              - '.github/workflows/deploy.yml'
+            architect:
+              - 'agents/architect/**'
+              - 'nixpacks.toml'
+              - 'pnpm-lock.yaml'
+              - 'pnpm-workspace.yaml'
+              - 'tsconfig.base.json'
+              - '.github/workflows/deploy.yml'
+            sentinel:
+              - 'agents/sentinel/**'
+              - 'nixpacks.toml'
+              - 'pnpm-lock.yaml'
+              - 'pnpm-workspace.yaml'
+              - 'tsconfig.base.json'
+              - '.github/workflows/deploy.yml'
+            operator:
+              - 'agents/operator/**'
+              - 'nixpacks.toml'
+              - 'pnpm-lock.yaml'
+              - 'pnpm-workspace.yaml'
+              - 'tsconfig.base.json'
+              - '.github/workflows/deploy.yml'
+            compliance:
+              - 'agents/compliance/**'
+              - 'nixpacks.toml'
+              - 'pnpm-lock.yaml'
+              - 'pnpm-workspace.yaml'
+              - 'tsconfig.base.json'
+              - '.github/workflows/deploy.yml'
+            keeper:
+              - 'agents/keeper/**'
+              - 'nixpacks.toml'
+              - 'pnpm-lock.yaml'
+              - 'pnpm-workspace.yaml'
+              - 'tsconfig.base.json'
+              - '.github/workflows/deploy.yml'
+
+  deploy-web:
+    needs: changes
+    if: needs.changes.outputs.web == 'true'
+    runs-on: ubuntu-latest
+    env:
+      VERCEL_ORG_ID:     ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Vercel CLI
+        run: npm install -g vercel@50
+      - name: Pull Vercel env
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+        working-directory: apps/web
+      - name: Build
+        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+        working-directory: apps/web
+      - name: Deploy
+        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
+        working-directory: apps/web
+
+  deploy-scout:
+    needs: changes
+    if: needs.changes.outputs.scout == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli
+      - name: Deploy scout (Railway service "elegant-charisma")
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: railway up --service elegant-charisma --detach
+
+  deploy-architect:
+    needs: changes
+    if: needs.changes.outputs.architect == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli
+      - name: Deploy architect
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: railway up --service architect --detach
+
+  deploy-sentinel:
+    needs: changes
+    if: needs.changes.outputs.sentinel == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli
+      - name: Deploy sentinel
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: railway up --service sentinel --detach
+
+  deploy-operator:
+    needs: changes
+    if: needs.changes.outputs.operator == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli
+      - name: Deploy operator
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: railway up --service operator --detach
+
+  deploy-compliance:
+    needs: changes
+    if: needs.changes.outputs.compliance == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli
+      - name: Deploy compliance
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: railway up --service compliance --detach
+
+  deploy-keeper:
+    needs: changes
+    if: needs.changes.outputs.keeper == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli
+      - name: Deploy keeper
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: railway up --service keeper --detach
