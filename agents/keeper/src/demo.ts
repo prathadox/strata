@@ -31,16 +31,36 @@ const IPFS_GATEWAYS = [
 // Adapter-name -> deployed address. Names come from the Architect's pinned JSON (allocations.*.targets[].adapter).
 // Addresses are hardcoded from contracts/deployments/5000.json (mainnet, Mantle chainId 5000).
 // If a new adapter ships, add an entry here. Unknown names are logged and skipped, never thrown.
-const ADAPTER_ADDRESSES: Record<string, `0x${string}`> = {
-  AaveV3UsdcAdapter:        '0xd8E4A25eab6de5D504E0A53d9Daec3687B3959a7',
-  OndoUsdyAdapter:          '0x0CDaea9582CF886Df9E359fD2435B86c9415Ba9b',
-  MethAdapter:              '0xd526DD02366F9DA22232Ed8cDD1db197bc51F2be',
-  AgniLpUsdcUsdeAdapter:    '0x755D0BA62C10dae194091F395c96E9d14CF879F2',
-  EthenaSusdeAdapter:       '0xfA8240669B9fC8A697F1595d7ceAe9e81c480663',
-  PerpBasisEscrowAdapter:   '0x55F90908eFe0E8e78a4CDE445d57a1EDB26d3f32'
-};
+const ADAPTER_ADDRESSES = {
+  AaveV3UsdcAdapter:        '0xd8E4A25eab6de5D504E0A53d9Daec3687B3959a7' as const,
+  OndoUsdyAdapter:          '0x0CDaea9582CF886Df9E359fD2435B86c9415Ba9b' as const,
+  MethAdapter:              '0xd526DD02366F9DA22232Ed8cDD1db197bc51F2be' as const,
+  AgniLpUsdcUsdeAdapter:    '0x755D0BA62C10dae194091F395c96E9d14CF879F2' as const,
+  EthenaSusdeAdapter:       '0xfA8240669B9fC8A697F1595d7ceAe9e81c480663' as const,
+  PerpBasisEscrowAdapter:   '0x55F90908eFe0E8e78a4CDE445d57a1EDB26d3f32' as const
+} satisfies Record<string, `0x${string}`>;
 
 type AdapterTarget = { adapter: `0x${string}`; bps: number };
+
+// Default adapter split when the Architect's IPFS pin is unfetchable. Matches the
+// canonical seed-cycle template (Aave 70 / Ondo 30 senior, Aave 40 / Agni 40 / mETH
+// 20 mezz, Ethena 60 / Perp 40 junior) so the keeper can still close the loop
+// without IPFS. Per-tranche bps sums to 10_000, which TrancheController requires.
+const DEFAULT_TARGETS: { senior: AdapterTarget[]; mezzanine: AdapterTarget[]; junior: AdapterTarget[] } = {
+  senior: [
+    { adapter: ADAPTER_ADDRESSES.AaveV3UsdcAdapter, bps: 7000 },
+    { adapter: ADAPTER_ADDRESSES.OndoUsdyAdapter,   bps: 3000 }
+  ],
+  mezzanine: [
+    { adapter: ADAPTER_ADDRESSES.AaveV3UsdcAdapter,     bps: 4000 },
+    { adapter: ADAPTER_ADDRESSES.AgniLpUsdcUsdeAdapter, bps: 4000 },
+    { adapter: ADAPTER_ADDRESSES.MethAdapter,           bps: 2000 }
+  ],
+  junior: [
+    { adapter: ADAPTER_ADDRESSES.EthenaSusdeAdapter,    bps: 6000 },
+    { adapter: ADAPTER_ADDRESSES.PerpBasisEscrowAdapter, bps: 4000 }
+  ]
+};
 
 async function fetchAllocation(cid: string): Promise<any | null> {
   for (const gw of IPFS_GATEWAYS) {
@@ -71,7 +91,7 @@ function buildTargets(trancheKey: string, proposalId: string, raw: unknown): Ada
     if (!t || typeof t !== 'object') continue;
     const name = String((t as any).adapter ?? '');
     const bps = Number((t as any).bps ?? 0);
-    const addr = ADAPTER_ADDRESSES[name];
+    const addr = (ADAPTER_ADDRESSES as Record<string, `0x${string}` | undefined>)[name];
     if (!addr) {
       console.warn(JSON.stringify({ agent: 'keeper', stage: 'unknown-adapter', proposalId, tranche: trancheKey, adapterName: name }));
       continue;
@@ -134,15 +154,22 @@ async function cycle(executed: Set<string>) {
       }
       const reasoningCid = prop.args.reasoningHash as string;
       const allocation = await fetchAllocation(reasoningCid);
-      if (!allocation) {
-        console.warn(JSON.stringify({ agent: 'keeper', stage: 'ipfs-fetch-failed', proposalId, cid: reasoningCid }));
-        continue;
+      let senior: AdapterTarget[]; let mezz: AdapterTarget[]; let junior: AdapterTarget[];
+      let allocSource: string;
+      if (allocation) {
+        const allocs = allocation.allocations ?? {};
+        senior = buildTargets('senior', proposalId, allocs.senior?.targets);
+        mezz = buildTargets('mezzanine', proposalId, allocs.mezzanine?.targets);
+        junior = buildTargets('junior', proposalId, allocs.junior?.targets);
+        allocSource = 'ipfs';
+      } else {
+        senior = DEFAULT_TARGETS.senior;
+        mezz = DEFAULT_TARGETS.mezzanine;
+        junior = DEFAULT_TARGETS.junior;
+        allocSource = 'default-template';
+        console.warn(JSON.stringify({ agent: 'keeper', stage: 'ipfs-fetch-failed-using-default', proposalId, cid: reasoningCid }));
       }
-      const allocs = allocation.allocations ?? {};
-      const senior = buildTargets('senior', proposalId, allocs.senior?.targets);
-      const mezz = buildTargets('mezzanine', proposalId, allocs.mezzanine?.targets);
-      const junior = buildTargets('junior', proposalId, allocs.junior?.targets);
-      console.log(JSON.stringify({ agent: 'keeper', stage: 'targets-built', proposalId, seniorCount: senior.length, mezzCount: mezz.length, juniorCount: junior.length }));
+      console.log(JSON.stringify({ agent: 'keeper', stage: 'targets-built', proposalId, source: allocSource, seniorCount: senior.length, mezzCount: mezz.length, juniorCount: junior.length }));
 
       const hash = await walletClient.writeContract({
         address: controller, abi: CONTROLLER_ABI, functionName: 'executeAllocation',
