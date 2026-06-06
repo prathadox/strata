@@ -37,7 +37,8 @@ const ADAPTER_ADDRESSES = {
   MethAdapter:              '0xd526DD02366F9DA22232Ed8cDD1db197bc51F2be' as const,
   AgniLpUsdcUsdeAdapter:    '0x755D0BA62C10dae194091F395c96E9d14CF879F2' as const,
   EthenaSusdeAdapter:       '0xfA8240669B9fC8A697F1595d7ceAe9e81c480663' as const,
-  PerpBasisEscrowAdapter:   '0x55F90908eFe0E8e78a4CDE445d57a1EDB26d3f32' as const
+  PerpBasisEscrowAdapter:   '0x55F90908eFe0E8e78a4CDE445d57a1EDB26d3f32' as const,
+  MortgageCMOSleeve:        '0x4419b92B9437872a8Ba8DCE915876166c9020f3c' as const
 } satisfies Record<string, `0x${string}`>;
 
 type AdapterTarget = { adapter: `0x${string}`; bps: number };
@@ -57,8 +58,9 @@ const DEFAULT_TARGETS: { senior: AdapterTarget[]; mezzanine: AdapterTarget[]; ju
     { adapter: ADAPTER_ADDRESSES.MethAdapter,           bps: 2000 }
   ],
   junior: [
-    { adapter: ADAPTER_ADDRESSES.EthenaSusdeAdapter,    bps: 6000 },
-    { adapter: ADAPTER_ADDRESSES.PerpBasisEscrowAdapter, bps: 4000 }
+    { adapter: ADAPTER_ADDRESSES.EthenaSusdeAdapter,     bps: 5000 },
+    { adapter: ADAPTER_ADDRESSES.PerpBasisEscrowAdapter, bps: 3000 },
+    { adapter: ADAPTER_ADDRESSES.MortgageCMOSleeve,      bps: 2000 }
   ]
 };
 
