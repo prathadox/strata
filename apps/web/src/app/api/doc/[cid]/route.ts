@@ -1,10 +1,12 @@
 // Server-side proxy that fetches an IPFS CID and returns the JSON body.
-// Lighthouse's free gateway 402s on most CIDs and public gateways are flaky on
-// freshly pinned content, so we try a sequence of them and return the first hit.
-// The browser hits /api/doc/<cid> instead of any gateway directly, so we control
-// the timeout + fallback order.
+// Lighthouse's free gateway 402s on every pinned CID and public gateways are
+// flaky / timeout on fresh content. We consult a local CID->doc index first
+// (covers every seeded agent cycle), then fall back to gateways for anything
+// the seed table doesn't know about. The browser and the keeper both hit
+// /api/doc/<cid> so the fallback order is centralized.
 
 import { NextResponse } from 'next/server';
+import { getDocByCid } from '@/lib/cidIndex';
 
 const GATEWAYS = [
   (cid: string) => `https://gateway.lighthouse.storage/ipfs/${cid}`,
@@ -38,12 +40,22 @@ export async function GET(_: Request, { params }: { params: { cid: string } }) {
     return NextResponse.json({ error: 'bad cid' }, { status: 400 });
   }
 
+  const seeded = getDocByCid(cid);
+  if (seeded) {
+    return NextResponse.json(seeded, {
+      headers: {
+        'cache-control': 'public, max-age=86400, s-maxage=86400, immutable',
+        'x-strata-source': 'seed'
+      }
+    });
+  }
+
   for (const make of GATEWAYS) {
     const url = make(cid);
     const doc = await tryGateway(url, 8000);
     if (doc) {
       return NextResponse.json(doc, {
-        headers: { 'cache-control': 'public, max-age=300, s-maxage=86400' }
+        headers: { 'cache-control': 'public, max-age=300, s-maxage=86400', 'x-strata-source': 'gateway' }
       });
     }
   }

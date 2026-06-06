@@ -16,7 +16,13 @@ const CONTROLLER_ABI = parseAbi([
 const RISK_VERDICT_ISSUED = parseAbiItem('event RiskVerdictIssued(uint256 indexed proposalId, address indexed agent, bool isApproved, string conditionHash)');
 const ALLOCATION_PROPOSED = parseAbiItem('event AllocationProposed(uint256 indexed proposalId, address indexed agent, uint256 seniorBps, uint256 mezzBps, uint256 juniorBps, string reasoningHash)');
 
+// Web app proxy is consulted first because it hits a local CID->doc map for every
+// seeded agent cycle (Lighthouse free-tier 402s on every gateway URL even with an
+// API key, so this is the only path that actually returns content for our pins).
+// Anonymous public gateways stay as last-resort fallbacks for non-seed CIDs.
+const WEB_PROXY_URL = process.env.WEB_PROXY_URL?.replace(/\/+$/, '') || 'https://strata-web-orcin.vercel.app';
 const IPFS_GATEWAYS = [
+  `${WEB_PROXY_URL}/api/doc/`,
   'https://gateway.lighthouse.storage/ipfs/',
   'https://w3s.link/ipfs/',
   'https://ipfs.io/ipfs/'
@@ -42,9 +48,12 @@ async function fetchAllocation(cid: string): Promise<any | null> {
     const t = setTimeout(() => ctrl.abort(), 8_000);
     try {
       const res = await fetch(`${gw}${cid}`, { signal: ctrl.signal });
-      clearTimeout(t);
       if (res.ok) {
-        try { return await res.json(); } catch { /* try next gw */ }
+        try {
+          const doc = await res.json();
+          console.log(JSON.stringify({ agent: 'keeper', stage: 'ipfs-hit', cid, gateway: gw, source: res.headers.get('x-strata-source') ?? 'unknown' }));
+          return doc;
+        } catch { /* try next gw */ }
       }
     } catch { /* timeout or net err, try next gw */ }
     finally { clearTimeout(t); }
