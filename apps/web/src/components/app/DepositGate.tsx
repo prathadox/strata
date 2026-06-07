@@ -10,6 +10,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { parseUnits, formatUnits } from 'viem';
 import { useReadContract, useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
 import { VAULTS, explorer } from '@/lib/onchain';
+import { appendDemoDeposit, isDemoDepositsEnabled, totalByTranche, type DemoDeposit, type TrancheKey as DemoTrancheKey } from '@/lib/demoDeposits';
 
 // Mirrors contracts/deployments/5000.json; kept inline so the Vercel build doesn't
 // need to reach outside apps/web (its tsconfig include is src-only).
@@ -67,9 +68,17 @@ interface DepositGateProps {
 }
 
 export function DepositGate({ wallet }: DepositGateProps) {
+  const demoMode = isDemoDepositsEnabled();
   const [tranche, setTranche] = useState<TrancheKey>('senior');
-  const [amount, setAmount] = useState<string>('0.01');
+  const [amount, setAmount] = useState<string>(demoMode ? '10' : '0.01');
   const [error, setError] = useState<string | null>(null);
+  const [demoTotals, setDemoTotals] = useState<Record<DemoTrancheKey, number>>({ senior: 0, mezz: 0, junior: 0 });
+  const [lastDemo, setLastDemo] = useState<DemoDeposit | null>(null);
+
+  useEffect(() => {
+    if (!demoMode) return;
+    setDemoTotals(totalByTranche());
+  }, [demoMode, lastDemo]);
 
   const vault = VAULT_ADDRESSES[tranche];
 
@@ -135,6 +144,11 @@ export function DepositGate({ wallet }: DepositGateProps) {
   function handleDeposit() {
     setError(null);
     if (!parsedAmount) { setError('Enter a positive USDC amount.'); return; }
+    if (demoMode) {
+      const entry = appendDemoDeposit({ tranche: tranche as DemoTrancheKey, amountUsdc: amount.trim() });
+      setLastDemo(entry);
+      return;
+    }
     deposit.writeContract({
       address: vault,
       abi: VAULT_ABI,
@@ -176,21 +190,27 @@ export function DepositGate({ wallet }: DepositGateProps) {
       </label>
 
       <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-        <button
-          type="button"
-          className="btn-app btn-ghost"
-          disabled={disabled || approveBusy || !needsApproval}
-          onClick={handleApprove}
-        >
-          {approveBusy ? 'Approving…' : needsApproval ? 'Approve USDC' : 'Approved'}
-        </button>
+        {!demoMode && (
+          <button
+            type="button"
+            className="btn-app btn-ghost"
+            disabled={disabled || approveBusy || !needsApproval}
+            onClick={handleApprove}
+          >
+            {approveBusy ? 'Approving…' : needsApproval ? 'Approve USDC' : 'Approved'}
+          </button>
+        )}
         <button
           type="button"
           className="btn-app btn-primary"
-          disabled={disabled || depositBusy || needsApproval}
+          disabled={disabled || (!demoMode && (depositBusy || needsApproval))}
           onClick={handleDeposit}
         >
-          {depositBusy ? 'Depositing…' : `Deposit to ${TRANCHE_LABEL[tranche]}`}
+          {demoMode
+            ? `Simulate deposit to ${TRANCHE_LABEL[tranche]}`
+            : depositBusy
+              ? 'Depositing…'
+              : `Deposit to ${TRANCHE_LABEL[tranche]}`}
         </button>
       </div>
 
@@ -201,12 +221,24 @@ export function DepositGate({ wallet }: DepositGateProps) {
       <div className="deposit-note" style={{ textAlign: 'left', marginTop: 6 }}>
         <div>
           Vault: <a className="hash" href={explorer.address(vault)} target="_blank" rel="noreferrer">{VAULT_META[tranche].short}</a>
-          {' · '}
-          Allowance: {allowance !== undefined ? formatUnits(allowance as bigint, USDC_DECIMALS) : '…'} USDC
+          {!demoMode && (
+            <>
+              {' · '}
+              Allowance: {allowance !== undefined ? formatUnits(allowance as bigint, USDC_DECIMALS) : '…'} USDC
+            </>
+          )}
         </div>
         <div>
-          Your shares: {shares !== undefined ? formatUnits(shares as bigint, USDC_DECIMALS) : '…'} {VAULT_META[tranche].short}
+          Your shares:{' '}
+          {demoMode
+            ? `${demoTotals[tranche as DemoTrancheKey].toFixed(4)} ${VAULT_META[tranche].short} (sim)`
+            : `${shares !== undefined ? formatUnits(shares as bigint, USDC_DECIMALS) : '…'} ${VAULT_META[tranche].short}`}
         </div>
+        {demoMode && lastDemo && (
+          <div>
+            sim tx: <span className="hash">{lastDemo.txHash.slice(0, 10)}…{lastDemo.txHash.slice(-6)}</span> · recorded
+          </div>
+        )}
         {approve.data && (
           <div>
             approve tx: <a className="hash" href={explorer.tx(approve.data)} target="_blank" rel="noreferrer">{approve.data.slice(0, 10)}…{approve.data.slice(-6)}</a>

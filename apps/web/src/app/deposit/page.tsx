@@ -6,6 +6,9 @@ import { WalletPicker } from '../../components/WalletPicker';
 import { MarkMini } from '../../components/Mark';
 import { useComplianceReceipt } from '@/hooks/useComplianceReceipt';
 import { DepositGate } from '@/components/app/DepositGate';
+import { isDemoDepositsEnabled } from '@/lib/demoDeposits';
+
+const DEMO_WALLET = '0x000000000000000000000000000000000000dEaD' as const;
 
 export default function DepositPage() {
   const { address, isConnected } = useAccount();
@@ -14,6 +17,9 @@ export default function DepositPage() {
 
   const { tokenId, loading } = useComplianceReceipt(isConnected ? address : undefined);
   const whitelisted = tokenId !== null && tokenId > 0n;
+  const demoMode = isDemoDepositsEnabled();
+  const effectiveWallet = (isConnected && address ? address : DEMO_WALLET) as `0x${string}`;
+  const showGate = demoMode || (isConnected && address && whitelisted);
 
   const handleConnect = () => setPickerOpen(true);
 
@@ -40,7 +46,7 @@ export default function DepositPage() {
 
       <main className="wrap deposit-main">
         <div className="deposit-card">
-          {isConnected && address && whitelisted ? (
+          {showGate ? (
             <div className="deposit-section" style={{ padding: '12px 4px 8px' }}>
               <div style={{ textAlign: 'center', marginBottom: 18 }}>
                 <span
@@ -48,20 +54,28 @@ export default function DepositPage() {
                   style={{
                     display: 'inline-flex', alignItems: 'center', gap: 8,
                     padding: '6px 12px', borderRadius: 999,
-                    background: 'color-mix(in srgb, var(--green) 14%, transparent)',
-                    border: '1px solid color-mix(in srgb, var(--green) 40%, transparent)',
-                    color: 'var(--green)', fontFamily: 'var(--mono)', fontSize: 11,
+                    background: demoMode
+                      ? 'color-mix(in srgb, var(--accent) 14%, transparent)'
+                      : 'color-mix(in srgb, var(--green) 14%, transparent)',
+                    border: demoMode
+                      ? '1px solid color-mix(in srgb, var(--accent) 40%, transparent)'
+                      : '1px solid color-mix(in srgb, var(--green) 40%, transparent)',
+                    color: demoMode ? 'var(--accent)' : 'var(--green)',
+                    fontFamily: 'var(--mono)', fontSize: 11,
                     letterSpacing: '.08em', textTransform: 'uppercase'
                   }}
                 >
-                  <span className="gdot" /> Receipt #{tokenId.toString()} · whitelisted
+                  <span className="gdot" />
+                  {demoMode ? 'Demo mode · simulated deposit' : `Receipt #${tokenId?.toString()} · whitelisted`}
                 </span>
                 <h2 className="deposit-title" style={{ marginTop: 10 }}>Deposit USDC</h2>
                 <p className="deposit-desc" style={{ maxWidth: 460, margin: '4px auto 0' }}>
-                  Pick a tranche and deposit. Allowance, deposit, and post-tx shares are all live reads.
+                  {demoMode
+                    ? 'No wallet or USDC required. Synthetic deposit, recorded locally, appears in the activity feed.'
+                    : 'Pick a tranche and deposit. Allowance, deposit, and post-tx shares are all live reads.'}
                 </p>
               </div>
-              <DepositGate wallet={address} />
+              <DepositGate wallet={effectiveWallet} />
             </div>
           ) : (
             <div className="deposit-section deposit-center" style={{ padding: '12px 4px 8px', textAlign: 'center' }}>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { ToastProvider } from '@/components/app/Toast';
 import { Sidebar } from '@/components/app/Sidebar';
 import { Topbar } from '@/components/app/Topbar';
@@ -12,16 +12,35 @@ import { VerifyView } from '@/components/app/VerifyView';
 import { DepositView } from '@/components/app/DepositView';
 import { REAL_EVENTS } from '@/lib/realEvents';
 import { AGENTS } from '@/lib/onchain';
+import { demoDepositsToEvents, isDemoDepositsEnabled } from '@/lib/demoDeposits';
 import type { Route } from '@/components/app/shellTypes';
+import type { AgentEvent } from '@/lib/appData';
 
 function AppInner() {
   const [route, setRoute] = useState<Route>('dashboard');
   const [depTier, setDepTier] = useState<string | null>(null);
+  const [demoEvents, setDemoEvents] = useState<AgentEvent[]>([]);
 
-  // Events are sourced exclusively from /lib/realEvents.ts — no mock engine, no random churn.
-  // Empty by default; populated when the on-chain indexer subscription is wired or when txs
-  // are pasted into realEvents.ts by the demo script.
-  const events = REAL_EVENTS;
+  useEffect(() => {
+    if (!isDemoDepositsEnabled()) return;
+    const refresh = () => setDemoEvents(demoDepositsToEvents());
+    refresh();
+    window.addEventListener('strata:demo-deposit', refresh);
+    window.addEventListener('storage', refresh);
+    return () => {
+      window.removeEventListener('strata:demo-deposit', refresh);
+      window.removeEventListener('storage', refresh);
+    };
+  }, []);
+
+  // Events are sourced from /lib/realEvents.ts (no mock engine, no random churn). When
+  // NEXT_PUBLIC_DEMO_DEPOSITS=1, synthetic deposit entries from localStorage are merged in
+  // newest-first so the dashboard can demo the full deposit -> propose -> verify -> allocate
+  // loop without needing real USDC on chain.
+  const events = useMemo<AgentEvent[]>(
+    () => [...demoEvents].sort((a, b) => b.ts - a.ts).concat(REAL_EVENTS),
+    [demoEvents]
+  );
   const statuses = Object.fromEntries(
     AGENTS.map((a) => [a.key, { status: a.status, doing: a.doing }])
   ) as Record<string, { status: 'working' | 'idle'; doing: string }>;

@@ -8,11 +8,46 @@
 import { useAccount } from 'wagmi';
 import { useComplianceReceipt } from '@/hooks/useComplianceReceipt';
 import { DepositGate } from './DepositGate';
+import { isDemoDepositsEnabled } from '@/lib/demoDeposits';
+
+const DEMO_WALLET = '0x000000000000000000000000000000000000dEaD' as const;
 
 export function DepositView(_props: { initialTier?: string | null }) {
   const { address, isConnected } = useAccount();
   const { tokenId, loading } = useComplianceReceipt(isConnected ? address : undefined);
   const whitelisted = tokenId !== null && tokenId > 0n;
+  const demoMode = isDemoDepositsEnabled();
+
+  if (demoMode) {
+    const wallet = (isConnected && address ? address : DEMO_WALLET) as `0x${string}`;
+    return (
+      <div className="app-content narrow">
+        <div className="a-card" style={{ padding: '24px 22px', display: 'flex', flexDirection: 'column', gap: 14 }}>
+          <div style={{ textAlign: 'center' }}>
+            <span
+              className="chip"
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: 8,
+                padding: '6px 12px', borderRadius: 999,
+                background: 'color-mix(in srgb, var(--accent) 14%, transparent)',
+                border: '1px solid color-mix(in srgb, var(--accent) 40%, transparent)',
+                color: 'var(--accent)', fontFamily: 'var(--mono)', fontSize: 11,
+                letterSpacing: '.08em', textTransform: 'uppercase'
+              }}
+            >
+              <span className="gdot" /> Demo mode · simulated deposit
+            </span>
+            <h2 style={{ margin: '12px 0 4px', fontSize: 20, fontWeight: 500 }}>Deposit USDC</h2>
+            <p className="a-muted" style={{ maxWidth: 460, margin: '0 auto 14px', fontSize: 12.5, lineHeight: 1.55 }}>
+              No wallet or USDC required. The form records a simulated deposit locally and pushes a synthetic
+              entry into the activity feed.
+            </p>
+          </div>
+          <DepositGate wallet={wallet} />
+        </div>
+      </div>
+    );
+  }
 
   if (isConnected && address && whitelisted) {
     return (
