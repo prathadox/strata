@@ -33,7 +33,14 @@ loadEnv(join(ROOT, 'scout', '.env'));
 
 const RPC = process.env.MANTLE_RPC_URL ?? 'https://rpc.mantle.xyz';
 const BUS = (process.env.AGENT_EVENT_BUS_ADDRESS ?? '0x0E6F30bC6D9b08cD20d422D634d565d3300D0A62') as `0x${string}`;
-const HOURS = Number(process.argv.find((a) => a.startsWith('--hours='))?.split('=')[1] ?? process.argv[process.argv.indexOf('--hours') + 1] ?? 24);
+function numArg(name: string, fallback: number): number {
+  const eq = process.argv.find((a) => a.startsWith(`${name}=`))?.split('=')[1];
+  if (eq !== undefined) return Number(eq);
+  const i = process.argv.indexOf(name);
+  if (i >= 0 && i + 1 < process.argv.length) return Number(process.argv[i + 1]);
+  return fallback;
+}
+const HOURS = numArg('--hours', 24);
 const MANTLE_BLOCK_TIME_S = 2;
 
 const EVENTS = {

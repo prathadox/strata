@@ -48,8 +48,15 @@ for (const a of ['scout', 'architect', 'sentinel', 'operator']) loadEnv(join(ROO
 const argv = process.argv;
 const WATCH_ONLY = argv.includes('--watch-only');
 const PUPPETEER = argv.includes('--puppeteer');
-const BUDGET_S = Number(argv.find((a) => a.startsWith('--budget='))?.split('=')[1] ?? argv[argv.indexOf('--budget') + 1] ?? 45);
-const STAGE_TIMEOUT_S = Number(argv.find((a) => a.startsWith('--stage-timeout='))?.split('=')[1] ?? argv[argv.indexOf('--stage-timeout') + 1] ?? 15);
+function numArg(name: string, fallback: number): number {
+  const eq = argv.find((a) => a.startsWith(`${name}=`))?.split('=')[1];
+  if (eq !== undefined) return Number(eq);
+  const i = argv.indexOf(name);
+  if (i >= 0 && i + 1 < argv.length) return Number(argv[i + 1]);
+  return fallback;
+}
+const BUDGET_S = numArg('--budget', 45);
+const STAGE_TIMEOUT_S = numArg('--stage-timeout', 15);
 const POLL_MS = 1500;
 
 if (WATCH_ONLY && PUPPETEER) {

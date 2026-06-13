@@ -52,8 +52,20 @@ const ROOT = join(process.cwd().endsWith('strata') ? process.cwd() : join(proces
 for (const a of ['scout', 'architect', 'sentinel', 'operator']) loadEnv(join(ROOT, a, '.env'));
 
 const argv = process.argv;
-const MODE = (argv.find((a) => a.startsWith('--mode='))?.split('=')[1] ?? argv[argv.indexOf('--mode') + 1] ?? 'observe') as 'puppeteer' | 'observe';
-const STAGE_TIMEOUT_S = Number(argv.find((a) => a.startsWith('--stage-timeout='))?.split('=')[1] ?? argv[argv.indexOf('--stage-timeout') + 1] ?? 120);
+function strArg(name: string, fallback: string): string {
+  const eq = argv.find((a) => a.startsWith(`${name}=`))?.split('=')[1];
+  if (eq !== undefined) return eq;
+  const i = argv.indexOf(name);
+  if (i >= 0 && i + 1 < argv.length) return argv[i + 1];
+  return fallback;
+}
+function numArg(name: string, fallback: number): number {
+  const v = strArg(name, String(fallback));
+  const n = Number(v);
+  return Number.isFinite(n) ? n : fallback;
+}
+const MODE = strArg('--mode', 'observe') as 'puppeteer' | 'observe';
+const STAGE_TIMEOUT_S = numArg('--stage-timeout', 120);
 
 if (MODE !== 'puppeteer' && MODE !== 'observe') {
   console.error(`unknown mode: ${MODE}. use puppeteer or observe.`);
