@@ -76,8 +76,8 @@ const OP_PK = process.env.OPERATOR_PRIVATE_KEY as `0x${string}` | undefined;
 
 const BUS_ABI = parseAbi([
   'function publishYieldMap(string ipfsHash) external',
-  'function proposeAllocation(uint256 proposalId, uint256 seniorBps, uint256 mezzBps, uint256 juniorBps, string reasoningHash) external',
-  'function issueRiskVerdict(uint256 proposalId, bool isApproved, string conditionHash) external',
+  'function proposeAllocation(uint256 proposalId, uint16 seniorBps, uint16 mezzBps, uint16 juniorBps, string reasoningCid) external',
+  'function issueRiskVerdict(uint256 proposalId, bool isApproved, string conditionCid) external',
   'function setAssetRiskRating(uint256 proposalId, uint8 trancheId, address asset, uint8 rating, string noteCid) external',
   'function emitHedgeSignal(address underlyingAsset, int256 deltaSize, string reasoningHash) external returns (uint256)',
   'function logHedge(uint256 signalId, address hedgedAsset, int256 netPosition, string executionProof) external',
