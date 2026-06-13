@@ -402,6 +402,24 @@ Junior is the highest-variance tranche: first-loss position, last on yield distr
 
 Junior is not the tranche nobody wants. It is the tranche where the most interesting things happen — and where the protocol generates its distribution.
 
+## Revenue model and token rationale
+
+Strata has three fee layers, all collected on-chain through the waterfall contract.
+
+**Management fee — 0.50% per year on gross TVL.** Accrued every harvest cycle (every 24 hours) and deducted before yield is distributed to depositors. This is the protocol's baseline revenue — it runs regardless of performance and scales linearly with TVL. At $10M TVL it produces ~$50k/yr. At $100M it produces ~$500k/yr.
+
+**Junior performance carry — 10% of excess returns above the senior hurdle rate.** The hurdle is the senior tranche target (5–6%). The carry only applies when the junior tranche exceeds that hurdle, and it is subject to a high-watermark — no carry is charged on returns that merely recover prior losses. This aligns the protocol's incentive with junior depositors: Strata earns more only when they earn more.
+
+**Sentinel oracle subscriptions and Compliance Policy NFT licensing — v2.** Once Sentinel has a ≥ 30-day on-chain risk track record, external RWA protocols on Mantle can subscribe to its risk verdicts ($50–$500/month per protocol). Separately, every Jurisdiction Policy NFT Strata publishes (e.g. "US-Permissioned-Senior-Policy-v1") can be adopted by other protocols for a one-time mint fee plus optional annual renewal. The compliance work the protocol does for itself becomes billable infrastructure. This is the highest-margin revenue line and the hardest for a competitor to replicate, because it compounds with the length of Sentinel's on-chain history.
+
+**Why there is no STRATA governance token in v1.** The three tranche tokens (sSTRATA, mSTRATA, jSTRATA) are yield-bearing receipt tokens — they represent a claim on the waterfall, not a vote. Launching a governance token before the protocol has meaningful TVL, a live risk track record, and a clear regulatory path would create legal risk and dilute execution focus. The agents earn credibility through on-chain ERC-8004 reputation, not token incentives. That is a more durable moat than liquidity mining.
+
+A governance token becomes appropriate in v2 when: (1) Sentinel has ≥ 90 days of live on-chain risk decisions, (2) TVL exceeds $10M, and (3) the compliance layer is cleared in at least two jurisdictions. At that point, token holders vote on fee parameters, new asset integrations, and Sentinel risk model upgrades — decisions that require legitimacy, not just technical execution.
+
+**Post-hackathon path.** Phase 1 (0–3 months): grow TVL to $1M through Mantle ecosystem DAO treasury outreach, build the Sentinel 90-day risk record, complete zkPass integration, deploy Compliance Policy NFT v1. Phase 2 (3–9 months): launch Sentinel oracle subscriptions to 3–5 external Mantle protocols, integrate real RWA collateral (Centrifuge, Maple, or Figure) to replace the demo mortgage sleeve, ship Battle mode, target $10M TVL. Phase 3 (9–18 months): governance token launch, Sentinel becomes a standalone licensed product, Compliance Policy NFTs adopted as a quiet standard across 10+ Mantle protocols.
+
+The breakeven point on gas and agent infrastructure costs is approximately $5M TVL — reachable in Phase 1 without any external funding.
+
 ## License and disclaimers
 
 Not investment advice. The mortgage CMO sleeve in the Junior tranche is a labeled demo, seeded with realistic prepayment behavior for stress testing. Real RWA integrations come in v2.
