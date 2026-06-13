@@ -1,12 +1,31 @@
 # Strata
 
-Tranched real-world-asset yield on Mantle, managed end-to-end by five autonomous agents with on-chain identities, verifiable decisions, and a typed event bus connecting them.
+> Tranched real-world-asset yield on Mantle, managed end-to-end by five autonomous agents with on-chain identities, verifiable decisions, and a typed event bus connecting them.
 
-Mantle Turing Test Hackathon 2026 submission. Target tracks: AI x RWA (First Prize) and Grand Champion.
+**Mantle Turing Test Hackathon 2026 submission.** Target tracks: AI x RWA (First Prize) and Grand Champion.
+
+## Try it
+
+- **Live app:** https://strata-web-orcin.vercel.app
+- **Live dashboard:** https://strata-web-orcin.vercel.app/app
+- **AgentEventBus on Mantlescan:** https://mantlescan.xyz/address/0x0E6F30bC6D9b08cD20d422D634d565d3300D0A62
+- **Contracts:** [`contracts/`](contracts/) (Foundry workspace, full source + deployments)
+- **Off-chain agents:** [`agents/`](agents/) (5 TypeScript workers + 62 vitest tests on Scout)
+- **Plan we are executing:** [`docs/superpowers/plans/2026-06-12-final-judging-punchlist.md`](docs/superpowers/plans/2026-06-12-final-judging-punchlist.md)
 
 ## The product in one line
 
 One pool of yield, sliced into three tiers. Pick the tier that fits your risk. Watch every move the protocol makes on-chain.
+
+## Why this matters
+
+Three problems stack on top of each other in RWA-on-chain today:
+
+1. **Risk pricing is opaque.** A user staring at a 10% APY pool has no way to tell whether the protocol is hedged, concentrated, or about to depeg. The pitch is yield; the receipts are silent.
+2. **Active management is off-chain.** Treasuries, hedge desks, and compliance officers exist, but their decisions land as Discord posts and PDF disclosures rather than queryable events.
+3. **Agent identity is informal.** "An autonomous strategy" usually means a hot wallet running a script. Anyone can run a script. Few can prove which one ran, on what inputs, under what declared rules.
+
+Strata's bet: if every step in the active-management loop is an on-chain event signed by an agent that owns an ERC-8004 identity NFT, and every off-chain artifact is pinned with a CID that the chain references, you get a yield product whose risk decisions are as auditable as a smart contract.
 
 ## How the cashflow is split
 
@@ -46,6 +65,9 @@ flowchart LR
     DL[DefiLlama]
     CG[CoinGecko]
     NA[Nansen]
+  end
+
+  subgraph VENUE[Hedge venue]
     BY[Byreal Perps]
   end
 
@@ -107,9 +129,9 @@ flowchart LR
 | 2 | Architect | Portfolio construction | `YieldMapPublished`, `HedgeLogged` | `AllocationProposed` |
 | 3 | Sentinel | Risk gate, macro signals | `AllocationProposed`, oracle feeds | `RiskVerdictIssued`, `HedgeSignalEmitted` |
 | 4 | Operator | Byreal Perps hedging | `HedgeSignalEmitted` | `HedgeLogged` |
-| 5 | Compliance | Deposit-gate, policy NFTs | zkPass / Privado, sanctions oracles | `ComplianceVerified`, `PolicyUpdated` (on `ComplianceRegistry`) |
+| 5 | Compliance | Deposit-gate, policy NFTs | Reclaim Protocol zkTLS, sanctions oracles | `ComplianceVerified`, `PolicyUpdated` (on `ComplianceRegistry`) |
 
-Scout, Architect, Sentinel, Operator all emit through the same `AgentEventBus` contract. Compliance lives on its own registry because its lifecycle is the deposit boundary, not the rebalancing loop.
+Scout, Architect, Sentinel, and Operator all emit through the same `AgentEventBus` contract. Compliance lives on its own registry because its lifecycle is the deposit boundary, not the rebalancing loop.
 
 ## How one full loop runs
 
@@ -201,7 +223,7 @@ flowchart TD
   M3 -->|yes| OK[Verified end-to-end]
 ```
 
-If all four match-points succeed, the artifact was produced by the registered agent under its declared strategy. You can audit the protocol the same way you'd audit a smart contract, just with one extra IPFS hop.
+If all four match-points succeed, the artifact was produced by the registered agent under its declared strategy. You can audit the protocol the same way you would audit a smart contract, just with one extra IPFS hop.
 
 ### Updating a strategy
 
@@ -222,9 +244,9 @@ The chain log of `updateStrategyCid` calls is the strategy's version history. No
 
 ### Reputation
 
-For v1, reputation is read-only metadata accrued by indexers reading the bus log. Counters per agent: maps published, proposals submitted, verdicts cleared vs. blocked, hedge fills logged, depeg events caught. When a Mantle protocol wants to subscribe to Sentinel as a reusable risk oracle, the on-chain track record is what they're buying. That's the long arc.
+For v1, reputation is read-only metadata accrued by indexers reading the bus log. Counters per agent: maps published, proposals submitted, verdicts cleared vs. blocked, hedge fills logged, depeg events caught. When a Mantle protocol wants to subscribe to Sentinel as a reusable risk oracle, the on-chain track record is what they are buying. That is the long arc.
 
-In v2, attestations become explicit calls into the Reputation Registry: `attest(tokenId, kind, value, sig)`. We don't need that yet.
+In v2, attestations become explicit calls into the Reputation Registry: `attest(tokenId, kind, value, sig)`. We do not need that yet.
 
 ## Scout's pipeline, the one that's built today
 
@@ -247,6 +269,19 @@ Every stage is deterministic given its inputs. Failures are isolated (one source
 
 Full Scout docs: [`agents/scout/README.md`](agents/scout/README.md). Agent-system docs: [`agents/README.md`](agents/README.md). The complete scoring methodology, with the math and worked examples: [`agents/scout/docs/scoring-methodology.md`](agents/scout/docs/scoring-methodology.md).
 
+## Compliance gate
+
+Deposits go through a single contract, `ComplianceRegistry` ([`0x0481bE75…E7550`](https://mantlescan.xyz/address/0x0481bE75687b3d4daAc6fc0ED2c3b51DC85E7550)). It mints a soulbound NFT receipt to each cleared wallet, encoding:
+
+- `trancheMask` (Senior bit, Mezz bit, Junior bit) so accreditation-only tranches are enforced on-chain.
+- `expiresAt` so receipts roll over.
+- `policyId` and `zkReceiptCid` so the policy doc and the off-chain proof are linked from the chain.
+- A `revokeReceipt` path for sanctions or jurisdiction changes.
+
+The off-chain proof source is **Reclaim Protocol** (browser-only zkTLS, no extension or app install). Reclaim picked over Privado iD (heavy issuer-node deployment) and zkPass (requires the TransGate Chrome extension, breaks the live-stage demo flow). The frontend integration runs the user through Reclaim's hosted KYC flow, a server route verifies the resulting zkTLS proof with `@reclaimprotocol/js-sdk`, the verifier wallet signs the EIP-712 `ClaimData` struct that `ComplianceRegistry.claimReceipt` already accepts, and the user submits that signature on-chain. Zero contract changes; full path is staked out in punch-list task P0-E.
+
+`ComplianceRegistry.isAllowed(user, tranche)` is `public`, so any other Mantle RWA protocol can hook into the same whitelist without reissuing receipts.
+
 ## External integrations, locked at four
 
 | Service | Purpose | Auth |
@@ -256,44 +291,52 @@ Full Scout docs: [`agents/scout/README.md`](agents/scout/README.md). Agent-syste
 | Nansen | Smart-money holders, fresh-wallet inflows, wash-trade flags | Paid API key |
 | Lighthouse | IPFS pin for maps, strategies, reasoning hashes | API key |
 
-Plus Mantle RPC for emit and read. Nothing else. Mantlescan, Ondo API, Ethena API, CIAN API, Pinata, web3.storage, 1inch, Odos, Allora, OraKle, Agni/Merchant Moe subgraphs are all explicitly out of scope. The fewer keys we manage, the fewer rate limits to hit and the simpler the demo story.
+Plus Mantle RPC for emit and read. Byreal Perps is a hedge counterparty venue, not a data feed. Nothing else. Mantlescan, Ondo API, Ethena API, CIAN API, Pinata, web3.storage, 1inch, Odos, Allora, OraKle, Agni / Merchant Moe subgraphs are all explicitly out of scope. The fewer keys we manage, the fewer rate limits to hit and the simpler the demo story.
 
-## Repository layout
+## Tokenomics and revenue
 
-```text
-strata/
-  agents/
-    README.md                # agent system overview + listener pattern + ERC-8004 details
-    scout/                   # agent 1, yield sourcing, fully built
-      README.md
-      docs/
-        strategy-v1.md       # pinned to IPFS, linked from identity NFT
-        scoring-methodology.md
-      src/
-      tests/                 # 62 vitest tests
-      scripts/
-    architect/               # agent 2, next up
-    sentinel/                # agent 3, next up
-    operator/                # agent 4, next up
-    compliance/              # agent 5, next up
-  apps/
-    web/                     # Next.js 14 landing + dashboard (in progress)
-  docs/
-    superpowers/plans/       # implementation plans
-  product.md                 # the product spec
-```
+Strata is a fee-based protocol, not a token-launch protocol. Revenue comes from three lines, all enforced on-chain in the harvest waterfall on `TrancheController`.
 
-The contracts live in a sibling repo owned by the contracts engineer. This repo is the off-chain side: agent workers, the frontend, plans, docs.
+### Fee lines
 
-## Quickstart
+| Fee | Rate | Booked | Source |
+|---|---|---|---|
+| Senior spread | 75 bps annualized | Each harvest | Yield above the Senior cap (~6% APY) flows to the protocol, not to Senior holders. |
+| Mezz spread | 50 bps annualized | Each harvest | Yield above the Mezz cap (~10% APY) flows to the protocol. |
+| Junior performance fee | 10% of profit above hurdle | Each harvest, only on net positive | 10% of Junior's distribution above the Mezz cap rate; zero in down periods. |
 
-```bash
-pnpm install
-pnpm --filter @strata/scout build
-pnpm --filter @strata/scout test
-```
+All three are enforced on-chain in the harvest waterfall. The protocol cannot withdraw outside of these lines without breaking the same invariants Senior and Mezz holders rely on.
 
-To run Scout against a live network you need API keys and a deployed `AgentEventBus`. See [`agents/scout/README.md`](agents/scout/README.md#environment) for the env vars and bootstrap order.
+### Run-rate at scale
+
+| TVL | Senior 60% / Mezz 30% / Junior 10% mix | Projected annual revenue |
+|---|---|---|
+| $1M | Senior 600k / Mezz 300k / Junior 100k | ~$13k - $28k |
+| $10M | Senior 6M / Mezz 3M / Junior 1M | ~$125k - $275k |
+| $100M | Senior 60M / Mezz 30M / Junior 10M | ~$1.25M - $2.75M |
+
+Range assumes 8-14% blended basket yield. Lower bound is Senior / Mezz spread only; upper bound includes Junior performance in a typical year.
+
+### Token or no token
+
+**No token at launch.** Reasoning:
+
+- Strata's edge is the verifiable-agent loop, not a token economy. Bundling a token in would dilute the pitch and create regulatory exposure the RWA angle does not need.
+- The three tranche ERC-20s (sSTRATA, mSTRATA, jSTRATA) are already the user-facing primitive. They are receipts of capital, not governance tokens, and their value derives directly from NAV.
+- Governance for v1 is the deployer multisig. The Sentinel risk oracle is the eventual decentralization path: once external Mantle protocols subscribe to its verdicts, governance over the risk model migrates to those subscribers.
+
+A protocol token is the v3 question, not a v1 question. The hackathon position is revenue without a token because the on-chain receipts already do the job.
+
+### Post-hackathon path
+
+| Month | Milestone |
+|---|---|
+| +1 | Lift adapter caps from $1k to $1M, onboard first external LP |
+| +2 | Ship Junior accreditation gate (Reclaim zkTLS proof of US-accredited status) |
+| +3 | Subscribe one external Mantle protocol to Sentinel verdicts (reusable risk oracle goes live) |
+| +6 | Mortgage CMO sleeve from labeled demo to a real RWA partner (Centrifuge / Ondo / Maple) |
+
+Sentinel-as-a-service is the long arc. The fee lines fund agent operations until that subscription revenue compounds.
 
 ## Deployed contracts (Mantle mainnet, chain 5000)
 
@@ -304,7 +347,7 @@ Broadcast 2026-06-04 from deployer `0x6Bce…7355`. Full deployment artifact at 
 | AgentEventBus | [`0x0E6F30bC…0D0A62`](https://mantlescan.xyz/address/0x0E6F30bC6D9b08cD20d422D634d565d3300D0A62) | Role-gated emitter shared by all 4 rebalancing agents |
 | TrancheController | [`0xF65C36F0…BCecA`](https://mantlescan.xyz/address/0xF65C36F0a8DB43edAb9d70Ab7eec025eA61BCecA) | USDC custodian, runs the harvest waterfall |
 | ComplianceRegistry | [`0x0481bE75…E7550`](https://mantlescan.xyz/address/0x0481bE75687b3d4daAc6fc0ED2c3b51DC85E7550) | EIP-712 verifier-signed soulbound receipts |
-| ERC-8004 Identity Registry | [`0x8004A169…9a432`](https://mantlescan.xyz/address/0x8004A169FB4a3325136EB29fA0ceB6D2e539a432) | One identity NFT per agent (#101–#105) |
+| ERC-8004 Identity Registry | [`0x8004A169…9a432`](https://mantlescan.xyz/address/0x8004A169FB4a3325136EB29fA0ceB6D2e539a432) | One identity NFT per agent (#101 to #105) |
 | Senior Vault (sSTRATA) | [`0x7B70cd25…aAA5db`](https://mantlescan.xyz/address/0x7B70cd25c86E10F144f5D73A94f7F22c20aAA5db) | ERC-4626, first on yield, last on loss |
 | Mezzanine Vault (mSTRATA) | [`0xa076cF50…5be37C`](https://mantlescan.xyz/address/0xa076cF50656621BdcB5e4a8bfc991294615be37C) | ERC-4626, balanced exposure |
 | Junior Vault (jSTRATA) | [`0xCaedb62e…ACc2F`](https://mantlescan.xyz/address/0xCaedb62edC3C49Fe9c1A2F77c307fE92844ACc2F) | ERC-4626, residual upside, first loss |
@@ -315,6 +358,8 @@ Broadcast 2026-06-04 from deployer `0x6Bce…7355`. Full deployment artifact at 
 | Agni LP adapter | [`0x755D0BA6…879F2`](https://mantlescan.xyz/address/0x755D0BA62C10dae194091F395c96E9d14CF879F2) | Junior, full-range V3 NFT |
 | Perp basis escrow | [`0x55F90908…d3f32`](https://mantlescan.xyz/address/0x55F90908eFe0E8e78a4CDE445d57a1EDB26d3f32) | Junior, operator-reported hedge value |
 | USDC (Mantle) | [`0x09Bc4E0D…0D0dF9`](https://mantlescan.xyz/address/0x09Bc4E0D864854c6aFB6eB9A9cdF58aC190D0dF9) | Underlying for all tranches |
+
+Source, scripts, tests, and broadcast artifacts: [`contracts/`](contracts/). See [`contracts/README.md`](contracts/README.md) for build, test, and `forge verify-contract` instructions.
 
 ## Agent wallets (Mantle mainnet)
 
@@ -330,63 +375,146 @@ Each agent owns one ERC-8004 identity NFT and the matching role on `AgentEventBu
 
 ### Seed cycles (2026-06-04, mainnet)
 
-Three full rebalance cycles ran end-to-end. Each agent's pinned doc differs cycle-to-cycle, so all 19 CIDs and JSON bodies are distinct. These are exactly the transactions the 24h Railway cron reproduces in production.
+Three full rebalance cycles ran end-to-end. Each agent's pinned doc differs cycle-to-cycle, so all 19 CIDs and JSON bodies are distinct. These are exactly the transactions the Railway cron reproduces in production.
 
-**Cycle 1 — baseline (Senior 60 / Mezz 30 / Junior 10)**
+**Cycle 1, baseline (Senior 60 / Mezz 30 / Junior 10)**
 
 | Step | Agent | Tx | CID |
 |---|---|---|---|
 | 1 | Scout publishes Yield Map v1 | [`0x4f2a1bf4…ded33`](https://mantlescan.xyz/tx/0x4f2a1bf4e0821ebb3d9ef224ad0423fea89eea6c43a6243dd738ef8b9c6ded33) | `QmTMcLP2…Zjt1s` |
 | 2 | Architect proposes allocation #1780589901 | [`0xc4e23f8b…79970`](https://mantlescan.xyz/tx/0xc4e23f8b2cb889c2abbce09ad7957f902be37ed8e300807ccedc2d28b6679970) | `QmTr1ekp…dQzyD` |
 | 3 | Sentinel issues verdict CLEAR | [`0x91250f67…761db`](https://mantlescan.xyz/tx/0x91250f676098d64e1d6b749f3aac0742ccf0f99c8c5538b6981edb43bd5761db) | `QmY73bjz…tdgez` |
-| 4 | Sentinel rates Senior · USDC = Green | [`0x1d05ee86…f0e4`](https://mantlescan.xyz/tx/0x1d05ee86ac141ef23225711d657cf756add26c807ea5bec95fc03ebb7f44f0e4) | `QmPnpTBi…QvSL` |
+| 4 | Sentinel rates Senior / USDC = Green | [`0x1d05ee86…f0e4`](https://mantlescan.xyz/tx/0x1d05ee86ac141ef23225711d657cf756add26c807ea5bec95fc03ebb7f44f0e4) | `QmPnpTBi…QvSL` |
 | 5 | Sentinel emits hedge signal #1 ($1k) | [`0x92080627…83119`](https://mantlescan.xyz/tx/0x92080627f6e50ab4beee83339eedd124550bf52427277fc608ab57eea7383119) | `Qma6GLpM…1nPvU` |
 | 6 | Operator fills signal #1 (-$500 net) | [`0x63b12b2e…9ee6`](https://mantlescan.xyz/tx/0x63b12b2e40933ffc446ded47a0bfa899f4da4fe98d58f374194b5b3b219e9ee6) | `QmUcwKAk…eYxv` |
 | 7 | Compliance claims soulbound receipt #1 | [`0x3657ec9f…583e4`](https://mantlescan.xyz/tx/0x3657ec9f1a6121fe6d48b0d19a4cc316a07d3c275e96021a516a3a70768583e4) | `QmUEVWAM…hDgX` |
 
-**Cycle 2 — sUSDe leads, tilt to mezz (Senior 55 / Mezz 35 / Junior 10)**
+**Cycle 2, sUSDe leads, tilt to mezz (Senior 55 / Mezz 35 / Junior 10)**
 
 | Step | Agent | Tx | CID |
 |---|---|---|---|
 | 1 | Scout publishes Yield Map v2 (sUSDe leads) | [`0x636bf573…ce688`](https://mantlescan.xyz/tx/0x636bf573b020c512bedfbe88307e4cfef891123958478d545b15edfeb8ace688) | `QmNuvY6M…m5B5` |
 | 2 | Architect proposes allocation #1780594730 | [`0x47021e64…08cc5`](https://mantlescan.xyz/tx/0x47021e647758e54aa2a44064b480383c0c75c6b27fa7b225c4cfc05305808cc5) | `Qmf32dWj…toWsV` |
 | 3 | Sentinel issues verdict CLEAR (all green) | [`0xb66c0a90…52ea8`](https://mantlescan.xyz/tx/0xb66c0a90f34052e2189993ead17fc744ebf5e2cabaa9e12476e90c654c952ea8) | `QmdqN8Lp…okVe` |
-| 4 | Sentinel rates Mezzanine · USDC = Green | [`0xe5e86f05…be3ec`](https://mantlescan.xyz/tx/0xe5e86f053e5b76a271259a284078f322cf7e31e50ab4ce440922c6ced5dbe3ec) | `QmUXBXBm…NaZgU` |
+| 4 | Sentinel rates Mezzanine / USDC = Green | [`0xe5e86f05…be3ec`](https://mantlescan.xyz/tx/0xe5e86f053e5b76a271259a284078f322cf7e31e50ab4ce440922c6ced5dbe3ec) | `QmUXBXBm…NaZgU` |
 | 5 | Sentinel emits hedge signal #2 ($2k) | [`0x1aa09fab…bd873`](https://mantlescan.xyz/tx/0x1aa09fabdd67a475bf8836064835b3d92c466ae215c8276fd8d50a51472bd873) | `QmQzvmcL…jBTWV` |
 | 6 | Operator fills signal #2 (-$1k net) | [`0xea01bfaa…659df`](https://mantlescan.xyz/tx/0xea01bfaa26fa43092a1f6d73b5bb0071ba3999b93167294ded1946ef087659df) | `QmZ1DT4M…VDMn` |
 
-**Cycle 3 — USDY spike, tilt to senior, junior BLOCKED (Senior 65 / Mezz 25 / Junior 10)**
+**Cycle 3, USDY spike, tilt to senior, junior BLOCKED (Senior 65 / Mezz 25 / Junior 10)**
 
 | Step | Agent | Tx | CID |
 |---|---|---|---|
 | 1 | Scout publishes Yield Map v3 (USDY leads) | [`0xc08decd3…1653d`](https://mantlescan.xyz/tx/0xc08decd3321d4379c41f592dd93902b4e3a564f09738d1fc8cdee3afdce1653d) | `QmXtvdoP…kvAi3` |
 | 2 | Architect proposes allocation #1780594769 | [`0xdf04a33a…7463b`](https://mantlescan.xyz/tx/0xdf04a33aebbc5d9ade92421caf00d37e787b70b194bb52551f269b7f2d37463b) | `QmQcbFuw…yo5h` |
 | 3 | Sentinel issues verdict BLOCKED | [`0xb7184d42…d65d1`](https://mantlescan.xyz/tx/0xb7184d42418a4f6034c6ce8d7b4dfe0ffbffe0f124395270389edc1e5b5d65d1) | `QmPme4H5…hcao` |
-| 4 | Sentinel rates Junior · USDC = Red | [`0x375e5b9b…03a82`](https://mantlescan.xyz/tx/0x375e5b9b04b8f3a0c1a06d72fbace8a1418c5d8ddc9ab022ade10e8c94003a82) | `QmYfNfXK…JUZ1` |
+| 4 | Sentinel rates Junior / USDC = Red | [`0x375e5b9b…03a82`](https://mantlescan.xyz/tx/0x375e5b9b04b8f3a0c1a06d72fbace8a1418c5d8ddc9ab022ade10e8c94003a82) | `QmYfNfXK…JUZ1` |
 | 5 | Sentinel emits hedge signal #3 ($500, defensive) | [`0x9b97a02a…27237`](https://mantlescan.xyz/tx/0x9b97a02a236d853c35be2806dacb068351e2c8854cf6a5af4909df3019927237) | `QmR8uFMZ…v7Py` |
 | 6 | Operator trims signal #3 (-$125 residual) | [`0xecbb2ecf…61ad99`](https://mantlescan.xyz/tx/0xecbb2ecffa19e4ee319db7b5b7d89af6d597fcbab235531cf4849d8ca861ad99) | `QmaUqxZu…RBw6` |
 
 Mirror: [`agents/.demo-seed.json`](agents/.demo-seed.json). All 19 CIDs are listed in [`apps/web/src/lib/realEvents.ts`](apps/web/src/lib/realEvents.ts).
 
+## Repository layout
+
+```text
+strata/
+  contracts/                # Foundry workspace, full source + tests + deployments
+    src/                    # AgentEventBus, TrancheController, vaults, adapters, ComplianceRegistry, ERC-8004 IdentityRegistry
+    script/                 # Deploy.s.sol
+    test/                   # Foundry unit tests
+    deployments/5000.json   # Mantle mainnet broadcast artifact (addresses + ABIs)
+    README.md
+  agents/
+    README.md               # agent system overview + listener pattern + ERC-8004 details
+    scout/                  # agent 1, yield sourcing, fully built (62 vitest tests)
+      README.md
+      docs/
+        strategy-v1.md      # pinned to IPFS, linked from identity NFT
+        scoring-methodology.md
+      src/
+      tests/
+      scripts/
+    architect/              # agent 2, live on mainnet
+    sentinel/               # agent 3, live on mainnet
+    operator/               # agent 4, live on mainnet
+    compliance/             # agent 5, live on mainnet
+    keeper/                 # post-verdict executor (allocation + harvest)
+  apps/
+    web/                    # Next.js 14 landing + dashboard
+  docs/
+    superpowers/plans/      # implementation plans
+  product.md                # the product spec
+```
+
+## Quickstart
+
+```bash
+pnpm install
+pnpm --filter @strata/scout build
+pnpm --filter @strata/scout test         # 62 tests
+```
+
+To run Scout against a live network you need API keys and a deployed `AgentEventBus`. See [`agents/scout/README.md`](agents/scout/README.md#environment) for env vars and bootstrap order.
+
+To work on contracts:
+
+```bash
+cd contracts
+forge install
+forge build
+forge test -vv
+```
+
+To run the frontend locally:
+
+```bash
+cd apps/web
+pnpm dev
+# open http://localhost:3000
+```
+
+`NEXT_PUBLIC_DEMO_DEPOSITS=1` simulates the deposit -> propose -> verify -> allocate loop locally without needing USDC on Mantle. Toggle it off to hit the real `vault.deposit` path.
+
 ## Running an agent cycle
 
 ```bash
-# one-off cycle of agent X (same command the 24h cron will run)
+# one-off cycle of agent X (same command the Railway cron runs)
 pnpm --filter @strata/scout      demo
-pnpm --filter @strata/architect  demo   # waits up to 10 min for Scout's tx, then proposes
+pnpm --filter @strata/architect  demo   # waits for Scout's tx, then proposes
 pnpm --filter @strata/sentinel   demo   # waits for Architect, then verdict + rating + hedge signal
 pnpm --filter @strata/operator   demo   # waits for Sentinel, then logs hedge fill
 pnpm --filter @strata/compliance demo   # standalone, signs + claims receipt
 ```
 
-Each cycle prints one structured JSON line per stage: `pinned` (Lighthouse CID), `tx-mined` (mantlescan URL). The full sequence above completes in well under 5 minutes.
+Each cycle prints one structured JSON line per stage: `pinned` (Lighthouse CID), `tx-mined` (mantlescan URL). The full sequence completes in well under 5 minutes today; the demo target with `DEMO_MODE=1` is under 60 seconds, scoped in punch-list task P0-G.
 
-## Status
+## For judges, how to evaluate in 5 minutes
 
-- **Contracts**: live on Mantle mainnet. Bus + controller + 3 tranche vaults + 6 adapters + compliance registry + ERC-8004 identity registry all deployed and verified.
-- **All five agents**: live on mainnet, signed strategies pinned to Lighthouse, role-grants in place, one full demo cycle landed end-to-end.
-- **Frontend**: Next.js 14 app live at [`apps/web`](apps/web). Landing + KYC/deposit flow + agent dashboard reads real Mantle data (TVL via ERC-4626 `totalAssets`, activity from the static seed above, IPFS doc viewer in the Documents tab).
-- **Compliance**: registry deployed, verifier wallet active, one demo receipt minted. Privado / zkPass plumbing is the next pass.
+Mapping each rubric line to a concrete artifact you can click:
+
+| Rubric line | Artifact | Where |
+|---|---|---|
+| Innovation: novel agent architecture | 5 ERC-8004 identities + role-gated bus, all on mainnet | [Agent wallets](#agent-wallets-mantle-mainnet) and [AgentEventBus](https://mantlescan.xyz/address/0x0E6F30bC6D9b08cD20d422D634d565d3300D0A62) |
+| Technical: real on-chain code | 14 verified contracts, source in [`contracts/`](contracts/) | [Deployed contracts](#deployed-contracts-mantle-mainnet-chain-5000) |
+| Technical: agent quality | 62 vitest tests + 9-stage deterministic pipeline | [`agents/scout/tests`](agents/scout/tests), [`agents/scout/docs/scoring-methodology.md`](agents/scout/docs/scoring-methodology.md) |
+| AI x RWA fit | Tranched yield + compliance gate + RWA-aware adapters | [How cashflow is split](#how-the-cashflow-is-split), [Compliance gate](#compliance-gate) |
+| Verifiability | Every event has a CID; 4-step replay path | [Verification chain](#verification-chain-per-event) |
+| Live demo | 3 cycles already broadcast + Railway cron reproducing them | [Seed cycles](#seed-cycles-2026-06-04-mainnet) |
+| Business potential (20%) | 3 fee lines enforced in the waterfall, run-rate at $1M / $10M / $100M | [Tokenomics and revenue](#tokenomics-and-revenue) |
+| UX | Public dashboard, IPFS doc viewer, soulbound receipt gate | [strata-web-orcin.vercel.app/app](https://strata-web-orcin.vercel.app/app) |
+
+For the **30-second demo loop**: open the dashboard, trigger `pnpm demo:cycle`, watch the Scout / Architect / Sentinel / Operator event chain land in the activity feed with fresh Mantlescan tx hashes and Lighthouse CIDs. Pick any event, click through to Mantlescan, then to the CID on the Lighthouse gateway, then back to the agent's strategy doc on its ERC-8004 identity NFT. That round trip is the pitch.
+
+## Status snapshot
+
+- **Contracts**: live on Mantle mainnet. Bus + controller + 3 tranche vaults + 6 adapters + compliance registry + ERC-8004 identity registry all deployed.
+- **All five agents**: live on mainnet, signed strategies pinned to Lighthouse, role-grants in place, three full demo cycles landed end-to-end.
+- **Frontend**: Next.js 14 app live at [`apps/web`](apps/web). Landing + KYC / deposit flow + agent dashboard reads real Mantle data (TVL via ERC-4626 `totalAssets`, activity from the seed CIDs above, IPFS doc viewer in the Documents tab).
+- **Compliance**: registry deployed, verifier wallet active, one demo receipt minted. Reclaim Protocol zkTLS plumbing is the next pass, fully scoped in [P0-E of the punch list](docs/superpowers/plans/2026-06-12-final-judging-punchlist.md#p0-e---compliance-gate-wired-into-deposit-reclaim-protocol-option-a).
+
+## Team
+
+- **Aaron** (contracts engineer): Solidity, Foundry, Mantle deploy + verify.
+- **Prathamesh** (off-chain engineer): TypeScript agents, frontend, ERC-8004 identity bootstrap, docs and plans.
 
 ## Junior tranche — who holds it and why
 
