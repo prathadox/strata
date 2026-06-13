@@ -129,16 +129,51 @@ async function main() {
   }
 
   console.log('');
-  const allLive = results.every((r) => r.status === 'LIVE');
   const yieldMap = results.find((r) => r.name === 'YieldMapPublished');
-  const stalenessOk = yieldMap?.lastAgeS !== null && (yieldMap?.lastAgeS ?? Infinity) < 6 * 3600;
-  console.log(allLive && stalenessOk ? 'overall: HEALTHY' : 'overall: ATTENTION');
+  const alloc = results.find((r) => r.name === 'AllocationProposed');
+  const verdict = results.find((r) => r.name === 'RiskVerdictIssued');
+  const hedgeLog = results.find((r) => r.name === 'HedgeLogged');
+
+  console.log('architecture: Scout is the only cron-driven agent. Architect, Sentinel, Operator are bus subscribers.');
+  console.log('');
+  console.log('Scout cron (publishes YieldMapPublished):');
   if (yieldMap && yieldMap.gaps.length >= 2) {
     const avgGap = yieldMap.gaps.reduce((a, b) => a + b, 0) / yieldMap.gaps.length;
-    console.log(`scout cron interval (inferred from last ${yieldMap.gaps.length} gaps): ~${ageString(Math.round(avgGap))}`);
+    console.log(`  interval (inferred): ~${ageString(Math.round(avgGap))}, last fire: ${yieldMap.lastAgeS ? ageString(yieldMap.lastAgeS) : 'never'} ago`);
+  } else if (yieldMap) {
+    console.log(`  fires in window: ${yieldMap.count}, last fire: ${yieldMap.lastAgeS ? ageString(yieldMap.lastAgeS) : 'never'} ago (need >=3 fires to infer interval)`);
   }
+
+  console.log('Subscriber reaction rate (each vs its own upstream event):');
+  const yieldCount = yieldMap?.count ?? 0;
+  const hedgeSignal = results.find((r) => r.name === 'HedgeSignalEmitted');
+  function reactionLine(name: string, ownerEvent: any, listensFor: string, upstreamCount: number) {
+    if (!ownerEvent) return;
+    const missed = Math.max(0, upstreamCount - ownerEvent.count);
+    const last = ownerEvent.lastAgeS ? ageString(ownerEvent.lastAgeS) : 'never';
+    console.log(`  ${name.padEnd(10)} (listens for ${listensFor}): ${ownerEvent.count}/${upstreamCount} reactions, last: ${last} ago${missed > 0 ? ` MISSED ${missed}` : ''}`);
+  }
+  reactionLine('Architect', alloc,      'YieldMapPublished',  yieldCount);
+  reactionLine('Sentinel',  verdict,    'AllocationProposed', alloc?.count ?? 0);
+  reactionLine('Operator',  hedgeLog,   'HedgeSignalEmitted', hedgeSignal?.count ?? 0);
+
+  console.log('');
+  const stalenessOk = yieldMap?.lastAgeS !== null && (yieldMap?.lastAgeS ?? Infinity) < 6 * 3600;
+  const reactionsHealthy = yieldCount === 0 || (alloc && verdict && hedgeLog && alloc.count === yieldCount && verdict.count === yieldCount && hedgeLog.count === yieldCount);
+  const allOk = stalenessOk && reactionsHealthy;
+  console.log(allOk ? 'overall: HEALTHY' : 'overall: ATTENTION');
+
   if (yieldMap && yieldMap.lastAgeS !== null && yieldMap.lastAgeS > 6 * 3600) {
-    console.log(`WARNING: last YieldMapPublished was ${ageString(yieldMap.lastAgeS)} ago. Cron may be dead.`);
+    console.log(`  - Scout cron stale: ${ageString(yieldMap.lastAgeS)} since last fire. Restart Scout on Railway.`);
+  }
+  if (yieldCount > 0 && alloc && alloc.count < yieldCount) {
+    console.log(`  - Architect listener missed ${yieldCount - alloc.count}/${yieldCount} Scout fires. Restart Architect on Railway.`);
+  }
+  if (yieldCount > 0 && verdict && verdict.count < (alloc?.count ?? yieldCount)) {
+    console.log(`  - Sentinel listener missed ${(alloc?.count ?? yieldCount) - verdict.count} of Architect's allocations. Restart Sentinel on Railway.`);
+  }
+  if (yieldCount > 0 && hedgeLog && hedgeLog.count < (verdict?.count ?? yieldCount)) {
+    console.log(`  - Operator listener missed hedge signals. Restart Operator on Railway.`);
   }
 }
 

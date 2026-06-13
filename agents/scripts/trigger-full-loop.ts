@@ -1,25 +1,33 @@
-// One-shot trigger of the full agent loop on Mantle.
+// On-demand trigger of the agent loop on Mantle.
+//
+// Architecture reminder: Scout is the only cron-driven agent. Architect, Sentinel,
+// and Operator are bus subscribers - they listen for the upstream event and react.
+// Inter-agent communication happens through the bus, not through this script.
 //
 // Two modes:
 //
-//   --mode puppeteer   (default) Drives all 4 stages (Scout, Architect, Sentinel,
-//                      Operator) from this process using each agent's private key.
-//                      Fast, deterministic, ~25-35s end to end. Proves the bus +
-//                      contract wiring works. Does NOT prove subscriptions work.
+//   --mode observe     (default) Only Scout publishes a yield map. Then we watch
+//                      the bus for the downstream events (AllocationProposed,
+//                      RiskVerdictIssued, HedgeLogged) to fire on their own. This
+//                      is the production flow. Requires Architect, Sentinel,
+//                      Operator to be RUNNING as bus subscribers (Railway services
+//                      up, or local pnpm dev in each agent dir). 120s per-stage
+//                      timeout. If a downstream event never fires, that listener
+//                      daemon is dead - restart it, do not switch to puppeteer.
 //
-//   --mode observe     Only Scout publishes. Then watch the bus for the downstream
-//                      events (AllocationProposed, RiskVerdictIssued, HedgeLogged)
-//                      to fire on their own. This is the genuine "chain reaction"
-//                      flow and requires Architect/Sentinel/Operator to be RUNNING
-//                      (Railway services up, or local pnpm dev in each agent dir).
-//                      Default per-stage timeout is 120s.
+//   --mode puppeteer   Demo-day fallback. This process directly signs and submits
+//                      all 4 stages using each agent's private key, bypassing the
+//                      bus subscription pattern entirely. Use ONLY when you need
+//                      deterministic timing (e.g. live demo) and you accept that
+//                      the loop is not proving the listener daemons work. Fast,
+//                      ~25-35s wall time.
 //
 // Output: one JSON line per stage, plus a final summary block.
 //
 // Usage:
-//   pnpm tsx agents/scripts/trigger-full-loop.ts
-//   pnpm tsx agents/scripts/trigger-full-loop.ts --mode observe
-//   pnpm tsx agents/scripts/trigger-full-loop.ts --mode observe --stage-timeout 180
+//   pnpm tsx agents/scripts/trigger-full-loop.ts                           # observe, default
+//   pnpm tsx agents/scripts/trigger-full-loop.ts --stage-timeout 180       # observe, longer wait
+//   pnpm tsx agents/scripts/trigger-full-loop.ts --mode puppeteer          # demo fallback only
 
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -44,7 +52,7 @@ const ROOT = join(process.cwd().endsWith('strata') ? process.cwd() : join(proces
 for (const a of ['scout', 'architect', 'sentinel', 'operator']) loadEnv(join(ROOT, a, '.env'));
 
 const argv = process.argv;
-const MODE = (argv.find((a) => a.startsWith('--mode='))?.split('=')[1] ?? argv[argv.indexOf('--mode') + 1] ?? 'puppeteer') as 'puppeteer' | 'observe';
+const MODE = (argv.find((a) => a.startsWith('--mode='))?.split('=')[1] ?? argv[argv.indexOf('--mode') + 1] ?? 'observe') as 'puppeteer' | 'observe';
 const STAGE_TIMEOUT_S = Number(argv.find((a) => a.startsWith('--stage-timeout='))?.split('=')[1] ?? argv[argv.indexOf('--stage-timeout') + 1] ?? 120);
 
 if (MODE !== 'puppeteer' && MODE !== 'observe') {
@@ -240,10 +248,10 @@ async function observeForEvent(name: string, event: any, fromBlock: bigint, scou
 }
 
 async function main() {
-  if (MODE === 'puppeteer') {
-    console.log(`mode: puppeteer (this process drives all 4 stages)`);
+  if (MODE === 'observe') {
+    console.log(`mode: observe (Scout publishes, then watch the bus for Architect/Sentinel/Operator subscriber reactions; ${STAGE_TIMEOUT_S}s per stage)`);
   } else {
-    console.log(`mode: observe (this process triggers Scout, then watches the bus for downstream events; ${STAGE_TIMEOUT_S}s per stage)`);
+    console.log(`mode: puppeteer (DEMO FALLBACK - this process bypasses the bus subscription pattern and signs all 4 stages directly)`);
   }
   console.log(`bus: ${BUS}`);
   console.log('');
