@@ -103,7 +103,13 @@ function walletFor(pk: `0x${string}`) {
 }
 
 function canonical(obj: unknown) {
-  return JSON.stringify(obj, Object.keys(obj as object).sort());
+  const go = (v: unknown): string => {
+    if (v === null || typeof v !== "object") return JSON.stringify(v);
+    if (Array.isArray(v)) return `[${v.map(go).join(",")}]`;
+    const o = v as Record<string, unknown>;
+    return `{${Object.keys(o).sort().map((k) => `${JSON.stringify(k)}:${go(o[k])}`).join(",")}}`;
+  };
+  return go(obj);
 }
 
 async function pin(json: string, name: string): Promise<string> {

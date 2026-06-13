@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { YieldMapSchema, type YieldMap } from '@strata/scout/types';
 
 const GATEWAYS = [
+  'https://gateway.pinata.cloud/ipfs/',
   'https://gateway.lighthouse.storage/ipfs/',
   'https://ipfs.io/ipfs/',
   'https://dweb.link/ipfs/'

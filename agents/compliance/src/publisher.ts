@@ -4,7 +4,7 @@ import { parseArgs } from 'node:util';
 import pino from 'pino';
 import { z } from 'zod';
 import { keccak256, toBytes, encodePacked } from 'viem';
-import { pinJsonToLighthouse } from '@strata/scout/ipfs';
+import { pinJsonToPinata } from '@strata/scout/ipfs';
 import { JurisdictionPolicySchema } from './types.js';
 import { interpretPolicy, getPromptHash } from './llm/policyInterpreter.js';
 
@@ -106,7 +106,7 @@ async function main(): Promise<void> {
       aiInterpretationHash = '0x' + createHash('sha256').update(draftJson).digest('hex');
 
       if (!dryRun) {
-        aiInterpretationCid = await pinJsonToLighthouse(draftJson, apiKey);
+        aiInterpretationCid = await pinJsonToPinata(draftJson, apiKey);
         log.info({ aiInterpretationCid }, 'AI draft pinned to Lighthouse');
       }
     }
@@ -160,7 +160,7 @@ async function main(): Promise<void> {
     return;
   }
 
-  const cid = await pinJsonToLighthouse(JSON.stringify(policy), apiKey);
+  const cid = await pinJsonToPinata(JSON.stringify(policy), apiKey);
   log.info({ cid, jurisdictionCodeHash, policyHash }, 'policy pinned to Lighthouse');
 
   console.log(JSON.stringify({ cid, jurisdictionCodeHash, policyHash, sourceTextHash, aiInterpretationCid, aiInterpretationHash }, null, 2));

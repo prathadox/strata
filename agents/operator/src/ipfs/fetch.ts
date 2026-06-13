@@ -22,6 +22,7 @@ export const HedgeSignalSchema = z.object({
 export type HedgeSignal = z.infer<typeof HedgeSignalSchema>;
 
 const GATEWAYS = [
+  'https://gateway.pinata.cloud/ipfs/',
   'https://gateway.lighthouse.storage/ipfs/',
   'https://ipfs.io/ipfs/',
   'https://dweb.link/ipfs/'

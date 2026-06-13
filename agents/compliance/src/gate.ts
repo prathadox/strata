@@ -10,7 +10,7 @@ import { createStubPolicyResolver, createLivePolicyResolver } from './pipeline/p
 import { GateOrchestrator } from './pipeline/gateOrchestrator.js';
 import { makePublisher } from './publication/publish.js';
 import { readActiveReceipt } from './chain/onchain.js';
-import { pinJsonToLighthouse } from '@strata/scout/ipfs';
+import { pinJsonToPinata } from '@strata/scout/ipfs';
 import { makeHealth } from './monitor/health.js';
 import { makeMetrics } from './monitor/metrics.js';
 import { buildServer } from './api/server.js';
@@ -70,7 +70,7 @@ async function main(): Promise<void> {
     sanctionsOracle,
     policyResolver,
     publisher,
-    pinEvidence: (data, apiKey) => pinJsonToLighthouse(data, apiKey),
+    pinEvidence: (data, apiKey) => pinJsonToPinata(data, apiKey),
     pinataJwt: cfg.ipfs.pinataJwt,
     publisherAddress: clients.account.address,
     identityNFT: cfg.compliance.identityNFT,

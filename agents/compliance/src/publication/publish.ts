@@ -1,6 +1,6 @@
 import type { WalletClient, PublicClient } from 'viem';
 import type { LocalAccount } from 'viem/accounts';
-import { pinJsonToLighthouse } from '@strata/scout/ipfs';
+import { pinJsonToPinata } from '@strata/scout/ipfs';
 import { signComplianceReceipt } from '../signing/eip712.js';
 import { mintComplianceReceiptOnChain } from '../chain/onchain.js';
 import type { ComplianceReceipt } from '../types.js';
@@ -23,7 +23,7 @@ export interface PublishReceiptResult {
 }
 
 export function makePublisher(args: MakePublisherArgs) {
-  const pin = args.pinOverride ?? pinJsonToLighthouse;
+  const pin = args.pinOverride ?? pinJsonToPinata;
   const mint = args.mintOverride ?? mintComplianceReceiptOnChain;
 
   async function publishReceipt(

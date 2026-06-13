@@ -1,7 +1,7 @@
 import { keccak256, toBytes } from 'viem';
 import type { WalletClient, PublicClient, Account } from 'viem';
 import { canonicalStringify } from '@strata/scout/signer';
-import { pinJsonToLighthouse } from '@strata/scout/ipfs';
+import { pinJsonToPinata } from '@strata/scout/ipfs';
 import type { HedgeIntent } from '../types.js';
 import { logHedgeOnChain } from './onchain.js';
 
@@ -26,7 +26,7 @@ function notionalToUsdcUnits(notionalUsdDecimal: string): bigint {
 }
 
 export function makePublisher(args: MakePublisherArgs) {
-  const pin = args.pinOverride ?? pinJsonToLighthouse;
+  const pin = args.pinOverride ?? pinJsonToPinata;
   const onChain = args.onChainOverride ?? logHedgeOnChain;
 
   async function publishIntent(draft: Omit<HedgeIntent, 'signature'>): Promise<PublishedIntent> {

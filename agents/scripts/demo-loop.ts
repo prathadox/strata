@@ -105,7 +105,13 @@ function walletFor(pk: `0x${string}`) {
 }
 
 function canonical(obj: unknown) {
-  return JSON.stringify(obj, Object.keys(obj as object).sort());
+  const go = (v: unknown): string => {
+    if (v === null || typeof v !== "object") return JSON.stringify(v);
+    if (Array.isArray(v)) return `[${v.map(go).join(",")}]`;
+    const o = v as Record<string, unknown>;
+    return `{${Object.keys(o).sort().map((k) => `${JSON.stringify(k)}:${go(o[k])}`).join(",")}}`;
+  };
+  return go(obj);
 }
 
 async function pin(json: string, name: string): Promise<string> {
@@ -205,7 +211,8 @@ async function puppeteerDownstream(scoutCid: string) {
     publishedAtSec: Math.floor(Date.now() / 1000)
   };
   const archCid = await pin(canonical({ ...archDraft, signature: await sign(ARCH_PK, archDraft) }), 'allocation');
-  await walletFor(ARCH_PK).writeContract({ address: BUS, abi: BUS_ABI, functionName: 'proposeAllocation', args: [proposalId, 5500n, 3500n, 1000n, archCid] });
+  const archTx = await walletFor(ARCH_PK).writeContract({ address: BUS, abi: BUS_ABI, functionName: 'proposeAllocation', args: [proposalId, 5500n, 3500n, 1000n, archCid] });
+  await publicClient.waitForTransactionReceipt({ hash: archTx });
 
   // Sentinel verdict
   const sentAcct = privateKeyToAccount(SENT_PK);
@@ -220,7 +227,8 @@ async function puppeteerDownstream(scoutCid: string) {
     publishedAtSec: Math.floor(Date.now() / 1000)
   };
   const verdictCid = await pin(canonical({ ...verdictDraft, signature: await sign(SENT_PK, verdictDraft) }), 'verdict');
-  await walletFor(SENT_PK).writeContract({ address: BUS, abi: BUS_ABI, functionName: 'issueRiskVerdict', args: [proposalId, true, verdictCid] });
+  const verdictTx = await walletFor(SENT_PK).writeContract({ address: BUS, abi: BUS_ABI, functionName: 'issueRiskVerdict', args: [proposalId, true, verdictCid] });
+  await publicClient.waitForTransactionReceipt({ hash: verdictTx });
 
   // Sentinel hedge signal
   const deltaSize = 2_000_000_000n;

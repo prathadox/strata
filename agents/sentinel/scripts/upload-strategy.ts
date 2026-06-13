@@ -6,7 +6,7 @@
 
 import { readFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
-import { pinJsonToLighthouse } from '@strata/scout/ipfs';
+import { pinJsonToPinata } from '@strata/scout/ipfs';
 
 async function main(): Promise<void> {
   const apiKey = process.env.PINATA_JWT;
@@ -17,11 +17,11 @@ async function main(): Promise<void> {
 
   const methodologyHash = '0x' + createHash('sha256').update(methodologyMd).digest('hex');
 
-  const strategyCid = await pinJsonToLighthouse(
+  const strategyCid = await pinJsonToPinata(
     JSON.stringify({ kind: 'sentinel-strategy', version: 'v1', body: strategyMd, methodologyHash }),
     apiKey
   );
-  const methodologyCid = await pinJsonToLighthouse(
+  const methodologyCid = await pinJsonToPinata(
     JSON.stringify({ kind: 'sentinel-risk-methodology', version: 'v1', body: methodologyMd }),
     apiKey
   );
