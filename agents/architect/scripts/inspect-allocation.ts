@@ -118,7 +118,7 @@ async function main(): Promise<void> {
   const proposal = { ...unsigned, signature: signed.signature };
 
   process.stderr.write('pinning proposal to Lighthouse...\n');
-  const pinned = await pinYieldMap(proposal, { lighthouseApiKey: cfg.ipfs.lighthouseApiKey });
+  const pinned = await pinYieldMap(proposal, { pinataJwt: cfg.ipfs.pinataJwt });
   process.stderr.write(`pinned: ${pinned.cid}\n`);
 
   // Build markdown report.

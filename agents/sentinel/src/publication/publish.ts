@@ -10,7 +10,7 @@ export interface MakePublisherArgs {
   publicClient: PublicClient;
   account: Account;
   eventBus: `0x${string}`;
-  lighthouseApiKey: string;
+  pinataJwt: string;
   dryRun: boolean;
   pinOverride?: (json: string, key: string) => Promise<string>;
   issueOnChainOverride?: typeof issueRiskVerdictOnChain;
@@ -36,7 +36,7 @@ export function makePublisher(args: MakePublisherArgs) {
   async function publishVerdict(draft: Omit<RiskVerdict, 'signature'>): Promise<PublishedVerdict> {
     const signature = await signArtifact(draft as unknown as Record<string, unknown>);
     const verdict: RiskVerdict = { ...draft, signature };
-    const cid = await pin(canonicalStringify(verdict), args.lighthouseApiKey);
+    const cid = await pin(canonicalStringify(verdict), args.pinataJwt);
     if (args.dryRun) return { cid, verdict };
     const txHash = await issueOnChain({
       wallet: args.wallet,
@@ -55,7 +55,7 @@ export function makePublisher(args: MakePublisherArgs) {
   async function publishHedgeSignal(draft: Omit<HedgeSignal, 'signature'>): Promise<PublishedHedgeSignal> {
     const signature = await signArtifact(draft as unknown as Record<string, unknown>);
     const signal: HedgeSignal = { ...draft, signature };
-    const cid = await pin(canonicalStringify(signal), args.lighthouseApiKey);
+    const cid = await pin(canonicalStringify(signal), args.pinataJwt);
     if (args.dryRun) return { cid, signal };
     const txHash = await emitHedgeOnChain({
       wallet: args.wallet,

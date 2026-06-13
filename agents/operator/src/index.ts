@@ -41,7 +41,7 @@ async function main(): Promise<void> {
     publicClient,
     account,
     eventBus: cfg.operator.eventBus,
-    lighthouseApiKey: cfg.ipfs.lighthouseApiKey,
+    pinataJwt: cfg.ipfs.pinataJwt,
     dryRun: cfg.operator.dryRun
   });
 

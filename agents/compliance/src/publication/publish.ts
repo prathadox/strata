@@ -10,7 +10,7 @@ export interface MakePublisherArgs {
   publicClient: PublicClient;
   account: LocalAccount;
   registryAddress: `0x${string}`;
-  lighthouseApiKey: string;
+  pinataJwt: string;
   dryRun: boolean;
   pinOverride?: (json: string, key: string) => Promise<string>;
   mintOverride?: typeof mintComplianceReceiptOnChain;
@@ -47,7 +47,7 @@ export function makePublisher(args: MakePublisherArgs) {
     const receipt: ComplianceReceipt = { ...draft, signature };
 
     const receiptJson = JSON.stringify(receipt);
-    const receiptCid = await pin(receiptJson, args.lighthouseApiKey);
+    const receiptCid = await pin(receiptJson, args.pinataJwt);
 
     if (args.dryRun) {
       return { receiptCid, receipt };

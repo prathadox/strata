@@ -7,7 +7,7 @@ describe('loadConfig', () => {
     process.env.ARCHITECT_PRIVATE_KEY = '0x' + '1'.repeat(64);
     process.env.AGENT_EVENT_BUS_ADDRESS = '0x' + '2'.repeat(40);
     process.env.IDENTITY_REGISTRY_ADDRESS = '0x' + '3'.repeat(40);
-    process.env.LIGHTHOUSE_API_KEY = 'lh-key';
+    process.env.PINATA_JWT = 'lh-key';
     delete process.env.ARCHITECT_DRY_RUN;
     delete process.env.GEMINI_API_KEY;
   });
@@ -21,7 +21,7 @@ describe('loadConfig', () => {
     const cfg = loadConfig();
     expect(cfg.chain.id).toBe(5000);
     expect(cfg.cycleIntervalMs).toBeGreaterThan(0);
-    expect(cfg.ipfs.lighthouseApiKey).toBe('lh-key');
+    expect(cfg.ipfs.pinataJwt).toBe('lh-key');
     expect(cfg.architect.dryRun).toBe(false);
   });
 

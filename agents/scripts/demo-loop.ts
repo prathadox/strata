@@ -66,7 +66,7 @@ if (WATCH_ONLY && PUPPETEER) {
 
 const RPC = process.env.MANTLE_RPC_URL ?? 'https://rpc.mantle.xyz';
 const BUS = (process.env.AGENT_EVENT_BUS_ADDRESS ?? '0x0E6F30bC6D9b08cD20d422D634d565d3300D0A62') as `0x${string}`;
-const LK = process.env.LIGHTHOUSE_API_KEY;
+const LK = process.env.PINATA_JWT;
 const USDC = '0x09Bc4E0D864854c6aFB6eB9A9cdF58aC190D0dF9' as const;
 
 const SCOUT_PK = process.env.SCOUT_PRIVATE_KEY as `0x${string}` | undefined;
@@ -109,14 +109,14 @@ function canonical(obj: unknown) {
 }
 
 async function pin(json: string, name: string): Promise<string> {
-  if (!LK) throw new Error('LIGHTHOUSE_API_KEY missing');
+  if (!LK) throw new Error('PINATA_JWT missing');
   const form = new FormData();
   form.append('file', new Blob([json], { type: 'application/json' }), `${name}.json`);
-  const res = await fetch('https://upload.lighthouse.storage/api/v0/add', {
+  const res = await fetch('https://api.pinata.cloud/pinning/pinFileToIPFS', {
     method: 'POST', headers: { Authorization: `Bearer ${LK}` }, body: form
   });
-  if (!res.ok) throw new Error(`lighthouse ${res.status}: ${await res.text()}`);
-  return (await res.json()).Hash;
+  if (!res.ok) throw new Error(`pinata ${res.status}: ${await res.text()}`);
+  return (await res.json()).IpfsHash;
 }
 
 async function sign(pk: `0x${string}`, draft: object): Promise<string> {

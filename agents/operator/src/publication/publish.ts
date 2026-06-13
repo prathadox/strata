@@ -10,7 +10,7 @@ export interface MakePublisherArgs {
   publicClient: PublicClient;
   account: Account;
   eventBus: `0x${string}`;
-  lighthouseApiKey: string;
+  pinataJwt: string;
   dryRun: boolean;
   pinOverride?: (json: string, key: string) => Promise<string>;
   onChainOverride?: typeof logHedgeOnChain;
@@ -34,7 +34,7 @@ export function makePublisher(args: MakePublisherArgs) {
     const hash = keccak256(toBytes(unsigned));
     const signature = await (args.account as any).signMessage({ message: { raw: hash } });
     const intent: HedgeIntent = { ...draft, signature };
-    const cid = await pin(canonicalStringify(intent), args.lighthouseApiKey);
+    const cid = await pin(canonicalStringify(intent), args.pinataJwt);
     if (args.dryRun) return { cid, intent };
     const netPosition = notionalToUsdcUnits(intent.notionalUsd);
     const txHash = await onChain({

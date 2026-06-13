@@ -1,5 +1,5 @@
 // Re-pin the 25 cycle docs from apps/web/src/lib/seedDocs.ts to Lighthouse under
-// whichever account LIGHTHOUSE_API_KEY points at (intended: the public-readable account).
+// whichever account PINATA_JWT points at (intended: the public-readable account).
 //
 // Strategy + methodology docs (10 files under agents/*/docs/) are NOT handled here.
 // Those use each agent's own scripts/upload-strategy.ts and scripts/repin-strategy.ts.
@@ -24,13 +24,13 @@ async function pinJson(json: string, apiKey: string): Promise<string> {
   const blob = new Blob([json], { type: 'application/json' });
   const form = new FormData();
   form.append('file', blob, 'doc.json');
-  const res = await fetch('https://upload.lighthouse.storage/api/v0/add', {
+  const res = await fetch('https://api.pinata.cloud/pinning/pinFileToIPFS', {
     method: 'POST',
     headers: { Authorization: `Bearer ${apiKey}` },
     body: form
   });
-  if (!res.ok) throw new Error(`lighthouse ${res.status}: ${await res.text()}`);
-  const { Hash } = await res.json();
+  if (!res.ok) throw new Error(`pinata ${res.status}: ${await res.text()}`);
+  const { IpfsHash: Hash } = await res.json();
   return Hash as string;
 }
 
@@ -42,8 +42,8 @@ function agentForEntry(body: any, index: number): string {
 }
 
 async function main(): Promise<void> {
-  const apiKey = process.env.LIGHTHOUSE_API_KEY;
-  if (!apiKey) throw new Error('missing env: LIGHTHOUSE_API_KEY');
+  const apiKey = process.env.PINATA_JWT;
+  if (!apiKey) throw new Error('missing env: PINATA_JWT');
 
   const indices = Object.keys(SEED_DOCS)
     .map((k) => Number(k))

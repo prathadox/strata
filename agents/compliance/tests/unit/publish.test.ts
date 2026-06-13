@@ -45,7 +45,7 @@ function makeArgs(overrides: { dryRun: boolean }) {
     publicClient: {} as any,
     account,
     registryAddress: ('0x' + 'cc'.repeat(20)) as `0x${string}`,
-    lighthouseApiKey: 'test-key',
+    pinataJwt: 'test-key',
     dryRun: overrides.dryRun,
     pinOverride: mockPin,
     mintOverride: mockMint,

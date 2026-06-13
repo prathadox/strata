@@ -6,7 +6,7 @@ const Env = z.object({
   SCOUT_PRIVATE_KEY: z.string().regex(/^0x[a-fA-F0-9]{64}$/),
   // Optional when SCOUT_DRY_RUN is true (contracts not deployed yet).
   AGENT_EVENT_BUS_ADDRESS: z.string().regex(/^0x[a-fA-F0-9]{40}$/).optional(),
-  LIGHTHOUSE_API_KEY: z.string().min(1),
+  PINATA_JWT: z.string().min(1),
   NANSEN_API_KEY: z.string().min(1),
   // Optional. When set, depeg history fetches from CoinGecko Demo (preferred:
   // longer history, cleaner data). When unset, falls back to DefiLlama's keyless
@@ -39,7 +39,7 @@ export function loadConfig() {
       eventBus: eventBus ?? ('0x0000000000000000000000000000000000000000' as `0x${string}`),
       dryRun
     },
-    ipfs: { lighthouseApiKey: env.LIGHTHOUSE_API_KEY },
+    ipfs: { pinataJwt: env.PINATA_JWT },
     apis: {
       nansen: env.NANSEN_API_KEY,
       coingecko: env.COINGECKO_API_KEY

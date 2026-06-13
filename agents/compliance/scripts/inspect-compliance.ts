@@ -57,7 +57,7 @@ async function main(): Promise<void> {
     policyResolver: createStubPolicyResolver(),
     publisher: stubPublisher,
     pinEvidence: stubPin,
-    lighthouseApiKey: 'stub-key',
+    pinataJwt: 'stub-key',
     publisherAddress: complianceAccount.address,
     identityNFT: 'ipfs://placeholder',
     methodologyHash,

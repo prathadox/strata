@@ -15,7 +15,7 @@ describe('pinYieldMap (lighthouse)', () => {
         HttpResponse.json({ Name: 'data', Hash: 'bafkreigh2akiscaildc...', Size: '42' })
       )
     );
-    const result = await pinYieldMap({ foo: 'bar' }, { lighthouseApiKey: 'lh-key' });
+    const result = await pinYieldMap({ foo: 'bar' }, { pinataJwt: 'lh-key' });
     expect(result.cid).toBe('bafkreigh2akiscaildc...');
   });
 
@@ -28,7 +28,7 @@ describe('pinYieldMap (lighthouse)', () => {
         return HttpResponse.json({ Name: 'data', Hash: 'bafkrei-retry', Size: '0' });
       })
     );
-    const result = await pinYieldMap({ x: 1 }, { lighthouseApiKey: 'lh-key' });
+    const result = await pinYieldMap({ x: 1 }, { pinataJwt: 'lh-key' });
     expect(result.cid).toBe('bafkrei-retry');
     expect(calls).toBe(2);
   });
@@ -39,7 +39,7 @@ describe('pinYieldMap (lighthouse)', () => {
         new HttpResponse(null, { status: 503 })
       )
     );
-    await expect(pinYieldMap({ x: 1 }, { lighthouseApiKey: 'lh-key' })).rejects.toThrow(/lighthouse/);
+    await expect(pinYieldMap({ x: 1 }, { pinataJwt: 'lh-key' })).rejects.toThrow(/lighthouse/);
   });
 
   it('throws on unexpected response shape', async () => {
@@ -48,6 +48,6 @@ describe('pinYieldMap (lighthouse)', () => {
         HttpResponse.json({ unrelated: 'shape' })
       )
     );
-    await expect(pinYieldMap({ x: 1 }, { lighthouseApiKey: 'lh-key' })).rejects.toThrow();
+    await expect(pinYieldMap({ x: 1 }, { pinataJwt: 'lh-key' })).rejects.toThrow();
   });
 }, { timeout: 15_000 });

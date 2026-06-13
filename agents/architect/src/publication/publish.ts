@@ -17,7 +17,7 @@ export interface PublisherDeps {
   wallet: WalletClient;
   publicClient: PublicClient;
   account: Account;
-  lighthouseApiKey: string;
+  pinataJwt: string;
   eventBus: `0x${string}`;
   dryRun: boolean;
   geminiApiKey?: string;
@@ -31,7 +31,7 @@ export function makePublisher(deps: PublisherDeps): Publisher {
       const withNarrative = { ...unsigned, narrative };
       const signed = await signYieldMap(withNarrative, deps.wallet, deps.account);
       const proposal = { ...withNarrative, signature: signed.signature } as AllocationProposal;
-      const pinned = await pinYieldMap(proposal, { lighthouseApiKey: deps.lighthouseApiKey });
+      const pinned = await pinYieldMap(proposal, { pinataJwt: deps.pinataJwt });
 
       if (deps.dryRun) {
         return { proposal, cid: pinned.cid, txHash: null };

@@ -15,13 +15,13 @@ async function pinJson(json: string, apiKey: string): Promise<string> {
   const blob = new Blob([json], { type: 'application/json' });
   const form = new FormData();
   form.append('file', blob, 'yieldmap.json');
-  const res = await fetch('https://upload.lighthouse.storage/api/v0/add', {
+  const res = await fetch('https://api.pinata.cloud/pinning/pinFileToIPFS', {
     method: 'POST',
     headers: { Authorization: `Bearer ${apiKey}` },
     body: form
   });
-  if (!res.ok) throw new Error(`lighthouse ${res.status}: ${await res.text()}`);
-  const { Hash } = await res.json();
+  if (!res.ok) throw new Error(`pinata ${res.status}: ${await res.text()}`);
+  const { IpfsHash: Hash } = await res.json();
   return Hash;
 }
 
@@ -33,8 +33,8 @@ async function cycle() {
   const pk = process.env.SCOUT_PRIVATE_KEY as `0x${string}`;
   const rpc = process.env.MANTLE_RPC_URL!;
   const bus = process.env.AGENT_EVENT_BUS_ADDRESS as `0x${string}`;
-  const lighthouseKey = process.env.LIGHTHOUSE_API_KEY!;
-  if (!pk || !rpc || !bus || !lighthouseKey) throw new Error('missing env: SCOUT_PRIVATE_KEY, MANTLE_RPC_URL, AGENT_EVENT_BUS_ADDRESS, LIGHTHOUSE_API_KEY');
+  const pinataJwt = process.env.PINATA_JWT!;
+  if (!pk || !rpc || !bus || !pinataJwt) throw new Error('missing env: SCOUT_PRIVATE_KEY, MANTLE_RPC_URL, AGENT_EVENT_BUS_ADDRESS, PINATA_JWT');
 
   const account = privateKeyToAccount(pk);
   const publicClient = createPublicClient({ chain: mantle, transport: http(rpc) });
@@ -58,8 +58,8 @@ async function cycle() {
   const signature = await account.signMessage({ message: { raw: unsignedHash } });
   const signedJson = canonicalStringify({ ...draft, signature });
 
-  const cid = await pinJson(signedJson, lighthouseKey);
-  console.log(JSON.stringify({ agent: 'scout', stage: 'pinned', cid, gateway: `https://gateway.lighthouse.storage/ipfs/${cid}` }));
+  const cid = await pinJson(signedJson, pinataJwt);
+  console.log(JSON.stringify({ agent: 'scout', stage: 'pinned', cid, gateway: `https://gateway.pinata.cloud/ipfs/${cid}` }));
 
   const hash = await walletClient.writeContract({
     address: bus,

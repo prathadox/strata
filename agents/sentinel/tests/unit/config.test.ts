@@ -4,7 +4,7 @@ import { loadConfig } from '../../src/config.js';
 const baseEnv = {
   MANTLE_RPC_URL: 'https://rpc.mantle.xyz',
   SENTINEL_PRIVATE_KEY: '0x' + '1'.repeat(64),
-  LIGHTHOUSE_API_KEY: 'lh-key',
+  PINATA_JWT: 'lh-key',
   SENTINEL_DRY_RUN: 'true'
 };
 

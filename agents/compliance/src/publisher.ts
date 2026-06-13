@@ -36,7 +36,7 @@ async function main(): Promise<void> {
 
   const policyFile = values['policy-file'];
   const sourceTextFile = values['source-text'];
-  const apiKey = values['lighthouse-api-key'] ?? process.env.LIGHTHOUSE_API_KEY;
+  const apiKey = values['lighthouse-api-key'] ?? process.env.PINATA_JWT;
   const shouldInterpret = values['interpret'] ?? false;
   const dryRun = values['dry-run'] ?? true;
 
@@ -46,7 +46,7 @@ async function main(): Promise<void> {
   }
 
   if (!apiKey) {
-    console.error('LIGHTHOUSE_API_KEY required (env or --lighthouse-api-key)');
+    console.error('PINATA_JWT required (env or --lighthouse-api-key)');
     process.exit(1);
   }
 

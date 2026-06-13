@@ -7,7 +7,7 @@ const Env = z.object({
   AGENT_EVENT_BUS_ADDRESS: z.string().regex(/^0x[a-fA-F0-9]{40}$/).optional(),
   IDENTITY_REGISTRY_ADDRESS: z.string().regex(/^0x[a-fA-F0-9]{40}$/).optional(),
   SENTINEL_ADDRESS: z.string().regex(/^0x[a-fA-F0-9]{40}$/).optional(),
-  LIGHTHOUSE_API_KEY: z.string().min(1),
+  PINATA_JWT: z.string().min(1),
   COINGECKO_API_KEY: z.string().min(1),
   LOG_LEVEL: z.enum(['debug', 'info', 'warn', 'error']).default('info'),
   OPERATOR_DRY_RUN: z.enum(['true', 'false']).default('false').transform((v) => v === 'true'),
@@ -38,7 +38,7 @@ export function loadConfig() {
       dryRun: env.OPERATOR_DRY_RUN,
       healthPort: env.OPERATOR_HEALTH_PORT
     },
-    ipfs: { lighthouseApiKey: env.LIGHTHOUSE_API_KEY },
+    ipfs: { pinataJwt: env.PINATA_JWT },
     market: { coingeckoApiKey: env.COINGECKO_API_KEY },
     logLevel: env.LOG_LEVEL
   } as const;

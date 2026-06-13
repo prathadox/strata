@@ -43,7 +43,7 @@ async function main(): Promise<void> {
     publicClient,
     account,
     eventBus: cfg.sentinel.eventBus,
-    lighthouseApiKey: cfg.ipfs.lighthouseApiKey,
+    pinataJwt: cfg.ipfs.pinataJwt,
     dryRun: cfg.sentinel.dryRun
   });
 

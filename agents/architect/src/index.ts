@@ -70,7 +70,7 @@ async function main(): Promise<void> {
     wallet: clients.walletClient,
     publicClient: clients.publicClient,
     account: clients.account,
-    lighthouseApiKey: cfg.ipfs.lighthouseApiKey,
+    pinataJwt: cfg.ipfs.pinataJwt,
     eventBus: cfg.architect.eventBus,
     dryRun: cfg.architect.dryRun,
     ...(cfg.llm.geminiApiKey !== undefined && { geminiApiKey: cfg.llm.geminiApiKey }),

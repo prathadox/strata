@@ -6,7 +6,7 @@ describe('loadConfig', () => {
     process.env.MANTLE_RPC_URL = 'https://rpc.mantle.xyz';
     process.env.SCOUT_PRIVATE_KEY = '0x' + '1'.repeat(64);
     process.env.AGENT_EVENT_BUS_ADDRESS = '0x' + '2'.repeat(40);
-    process.env.LIGHTHOUSE_API_KEY = 'lh-key';
+    process.env.PINATA_JWT = 'lh-key';
     process.env.NANSEN_API_KEY = 'nansen-key';
     delete process.env.SCOUT_DRY_RUN;
   });
@@ -19,7 +19,7 @@ describe('loadConfig', () => {
     const cfg = loadConfig();
     expect(cfg.chain.id).toBe(5000);
     expect(cfg.cycleIntervalMs).toBeGreaterThan(0);
-    expect(cfg.ipfs.lighthouseApiKey).toBe('lh-key');
+    expect(cfg.ipfs.pinataJwt).toBe('lh-key');
     expect(cfg.apis.nansen).toBe('nansen-key');
     expect(cfg.scout.dryRun).toBe(false);
   });

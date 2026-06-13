@@ -8,7 +8,7 @@ const Env = z.object({
   IDENTITY_REGISTRY_ADDRESS: z.string().regex(/^0x[a-fA-F0-9]{40}$/).optional(),
   ARCHITECT_ADDRESS: z.string().regex(/^0x[a-fA-F0-9]{40}$/).optional(),
   SCOUT_ADDRESS: z.string().regex(/^0x[a-fA-F0-9]{40}$/).optional(),
-  LIGHTHOUSE_API_KEY: z.string().min(1),
+  PINATA_JWT: z.string().min(1),
   LOG_LEVEL: z.enum(['debug', 'info', 'warn', 'error']).default('info'),
   SENTINEL_DRY_RUN: z.enum(['true', 'false']).default('false').transform((v) => v === 'true'),
   SENTINEL_IDENTITY_NFT: z.string().default('ipfs://placeholder'),
@@ -41,7 +41,7 @@ export function loadConfig() {
       healthPort: env.SENTINEL_HEALTH_PORT,
       totalDepositsBaselineUsd: env.TOTAL_DEPOSITS_USD_BASELINE
     },
-    ipfs: { lighthouseApiKey: env.LIGHTHOUSE_API_KEY },
+    ipfs: { pinataJwt: env.PINATA_JWT },
     logLevel: env.LOG_LEVEL
   } as const;
 }

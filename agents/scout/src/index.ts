@@ -76,7 +76,7 @@ async function main(): Promise<void> {
     wallet: clients.walletClient,
     publicClient: clients.publicClient,
     account: clients.account,
-    lighthouseApiKey: cfg.ipfs.lighthouseApiKey,
+    pinataJwt: cfg.ipfs.pinataJwt,
     publishOnChain: cfg.scout.dryRun ? dryOnChain : liveOnChain
   });
 

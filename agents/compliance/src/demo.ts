@@ -30,11 +30,11 @@ async function pinJson(json: string, apiKey: string): Promise<string> {
   const blob = new Blob([json], { type: 'application/json' });
   const form = new FormData();
   form.append('file', blob, 'compliance-claim.json');
-  const res = await fetch('https://upload.lighthouse.storage/api/v0/add', {
+  const res = await fetch('https://api.pinata.cloud/pinning/pinFileToIPFS', {
     method: 'POST', headers: { Authorization: `Bearer ${apiKey}` }, body: form
   });
-  if (!res.ok) throw new Error(`lighthouse ${res.status}: ${await res.text()}`);
-  return (await res.json()).Hash;
+  if (!res.ok) throw new Error(`pinata ${res.status}: ${await res.text()}`);
+  return (await res.json()).IpfsHash;
 }
 
 function canonicalStringify(obj: unknown): string {
@@ -45,8 +45,8 @@ async function cycle() {
   const pk = process.env.COMPLIANCE_PRIVATE_KEY as `0x${string}`;
   const rpc = process.env.MANTLE_RPC_URL!;
   const registry = process.env.COMPLIANCE_REGISTRY_ADDRESS as `0x${string}`;
-  const lighthouseKey = process.env.LIGHTHOUSE_API_KEY!;
-  if (!pk || !rpc || !registry || !lighthouseKey) throw new Error('missing env');
+  const pinataJwt = process.env.PINATA_JWT!;
+  if (!pk || !rpc || !registry || !pinataJwt) throw new Error('missing env');
 
   const account = privateKeyToAccount(pk);
   const publicClient = createPublicClient({ chain: mantle, transport: http(rpc) });
@@ -68,8 +68,8 @@ async function cycle() {
     sources: ['Self-attestation for hackathon demo; not production KYC'],
     publishedAtSec: Math.floor(Date.now() / 1000)
   };
-  const zkReceiptCid = await pinJson(canonicalStringify(policyDoc), lighthouseKey);
-  console.log(JSON.stringify({ agent: 'compliance', stage: 'pinned', cid: zkReceiptCid, gateway: `https://gateway.lighthouse.storage/ipfs/${zkReceiptCid}` }));
+  const zkReceiptCid = await pinJson(canonicalStringify(policyDoc), pinataJwt);
+  console.log(JSON.stringify({ agent: 'compliance', stage: 'pinned', cid: zkReceiptCid, gateway: `https://gateway.pinata.cloud/ipfs/${zkReceiptCid}` }));
 
   if ((existing as bigint) > 0n) {
     // Just produce the CID; don't re-claim (contract reverts AlreadyHasReceipt).

@@ -13,7 +13,7 @@ describe('publishIntent (dry-run)', () => {
         signMessage: vi.fn().mockResolvedValue('0xsig')
       } as any,
       eventBus: '0xbus',
-      lighthouseApiKey: 'k',
+      pinataJwt: 'k',
       dryRun: true,
       pinOverride: pin,
       onChainOverride: onchain

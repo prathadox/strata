@@ -8,7 +8,7 @@ const Env = z.object({
   COMPLIANCE_REGISTRY_ADDRESS: z.string().regex(/^0x[a-fA-F0-9]{40}$/).optional(),
   JURISDICTION_POLICY_NFT_ADDRESS: z.string().regex(/^0x[a-fA-F0-9]{40}$/).optional(),
   POLICY_REVOCATION_REGISTRY_ADDRESS: z.string().regex(/^0x[a-fA-F0-9]{40}$/).optional(),
-  LIGHTHOUSE_API_KEY: z.string().min(1),
+  PINATA_JWT: z.string().min(1),
   COMPLIANCE_HEALTH_PORT: z.coerce.number().int().min(1).max(65535).default(9094),
   COMPLIANCE_IDENTITY_NFT: z.string().default('ipfs://placeholder'),
   LOG_LEVEL: z.enum(['debug', 'info', 'warn', 'error']).default('info')
@@ -40,7 +40,7 @@ export function loadConfig() {
       policyNftAddress: (env.JURISDICTION_POLICY_NFT_ADDRESS ?? '0x0000000000000000000000000000000000000000') as `0x${string}`,
       revocationRegistryAddress: (env.POLICY_REVOCATION_REGISTRY_ADDRESS ?? '0x0000000000000000000000000000000000000000') as `0x${string}`
     },
-    ipfs: { lighthouseApiKey: env.LIGHTHOUSE_API_KEY },
+    ipfs: { pinataJwt: env.PINATA_JWT },
     logLevel: env.LOG_LEVEL
   } as const;
 }

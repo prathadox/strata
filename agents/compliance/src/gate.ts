@@ -61,7 +61,7 @@ async function main(): Promise<void> {
     publicClient,
     account: clients.account,
     registryAddress: cfg.compliance.registryAddress,
-    lighthouseApiKey: cfg.ipfs.lighthouseApiKey,
+    pinataJwt: cfg.ipfs.pinataJwt,
     dryRun: cfg.compliance.dryRun
   });
 
@@ -71,7 +71,7 @@ async function main(): Promise<void> {
     policyResolver,
     publisher,
     pinEvidence: (data, apiKey) => pinJsonToLighthouse(data, apiKey),
-    lighthouseApiKey: cfg.ipfs.lighthouseApiKey,
+    pinataJwt: cfg.ipfs.pinataJwt,
     publisherAddress: clients.account.address,
     identityNFT: cfg.compliance.identityNFT,
     methodologyHash,

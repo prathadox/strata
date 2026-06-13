@@ -14,11 +14,11 @@ async function pinJson(json: string, apiKey: string): Promise<string> {
   const blob = new Blob([json], { type: 'application/json' });
   const form = new FormData();
   form.append('file', blob, 'compliance-policy.json');
-  const res = await fetch('https://upload.lighthouse.storage/api/v0/add', {
+  const res = await fetch('https://api.pinata.cloud/pinning/pinFileToIPFS', {
     method: 'POST', headers: { Authorization: `Bearer ${apiKey}` }, body: form
   });
-  if (!res.ok) throw new Error(`lighthouse ${res.status}: ${await res.text()}`);
-  return (await res.json()).Hash;
+  if (!res.ok) throw new Error(`pinata ${res.status}: ${await res.text()}`);
+  return (await res.json()).IpfsHash;
 }
 
 function canonicalStringify(obj: unknown): string {
@@ -29,10 +29,10 @@ async function main() {
   const pk = process.env.DEPLOYER_PRIVATE_KEY as `0x${string}`;
   const rpc = process.env.MANTLE_RPC_URL!;
   const registry = process.env.COMPLIANCE_REGISTRY_ADDRESS as `0x${string}`;
-  const lighthouseKey = process.env.LIGHTHOUSE_API_KEY!;
+  const pinataJwt = process.env.PINATA_JWT!;
   const policyId = process.env.POLICY_ID ?? 'STRATA-DEMO-2026-06';
   const jurisdictionCode = process.env.JURISDICTION_CODE ?? 'GLOBAL';
-  if (!pk || !rpc || !registry || !lighthouseKey) throw new Error('missing env: DEPLOYER_PRIVATE_KEY, MANTLE_RPC_URL, COMPLIANCE_REGISTRY_ADDRESS, LIGHTHOUSE_API_KEY');
+  if (!pk || !rpc || !registry || !pinataJwt) throw new Error('missing env: DEPLOYER_PRIVATE_KEY, MANTLE_RPC_URL, COMPLIANCE_REGISTRY_ADDRESS, PINATA_JWT');
 
   const account = privateKeyToAccount(pk);
   const publicClient = createPublicClient({ chain: mantle, transport: http(rpc) });
@@ -46,8 +46,8 @@ async function main() {
     sources: ['Self-attestation for hackathon demo; not production KYC'],
     publishedAtSec: Math.floor(Date.now() / 1000)
   };
-  const cid = await pinJson(canonicalStringify(policyDoc), lighthouseKey);
-  console.log(JSON.stringify({ script: 'publish-policy', stage: 'pinned', policyId, cid, gateway: `https://gateway.lighthouse.storage/ipfs/${cid}` }));
+  const cid = await pinJson(canonicalStringify(policyDoc), pinataJwt);
+  console.log(JSON.stringify({ script: 'publish-policy', stage: 'pinned', policyId, cid, gateway: `https://gateway.pinata.cloud/ipfs/${cid}` }));
 
   const hash = await walletClient.writeContract({
     address: registry, abi: REGISTRY_ABI, functionName: 'publishPolicy',

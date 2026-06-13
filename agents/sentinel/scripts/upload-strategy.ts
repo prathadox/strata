@@ -9,8 +9,8 @@ import { createHash } from 'node:crypto';
 import { pinJsonToLighthouse } from '@strata/scout/ipfs';
 
 async function main(): Promise<void> {
-  const apiKey = process.env.LIGHTHOUSE_API_KEY;
-  if (!apiKey) throw new Error('LIGHTHOUSE_API_KEY is required');
+  const apiKey = process.env.PINATA_JWT;
+  if (!apiKey) throw new Error('PINATA_JWT is required');
 
   const strategyMd = await readFile(new URL('../docs/strategy-v1.md', import.meta.url), 'utf8');
   const methodologyMd = await readFile(new URL('../docs/risk-methodology.md', import.meta.url), 'utf8');

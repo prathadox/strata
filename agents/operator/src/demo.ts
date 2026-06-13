@@ -23,11 +23,11 @@ async function pinJson(json: string, apiKey: string): Promise<string> {
   const blob = new Blob([json], { type: 'application/json' });
   const form = new FormData();
   form.append('file', blob, 'hedge-log.json');
-  const res = await fetch('https://upload.lighthouse.storage/api/v0/add', {
+  const res = await fetch('https://api.pinata.cloud/pinning/pinFileToIPFS', {
     method: 'POST', headers: { Authorization: `Bearer ${apiKey}` }, body: form
   });
-  if (!res.ok) throw new Error(`lighthouse ${res.status}: ${await res.text()}`);
-  return (await res.json()).Hash;
+  if (!res.ok) throw new Error(`pinata ${res.status}: ${await res.text()}`);
+  return (await res.json()).IpfsHash;
 }
 
 function canonicalStringify(obj: unknown): string {
@@ -54,9 +54,9 @@ async function cycle() {
   const pk = process.env.OPERATOR_PRIVATE_KEY as `0x${string}`;
   const rpc = process.env.MANTLE_RPC_URL!;
   const bus = process.env.AGENT_EVENT_BUS_ADDRESS as `0x${string}`;
-  const lighthouseKey = process.env.LIGHTHOUSE_API_KEY!;
+  const pinataJwt = process.env.PINATA_JWT!;
   const sentinelAddress = (process.env.SENTINEL_ADDRESS ?? '0xfE7EB19092F03E00B6eD0a248D38E80e0aA8708f') as `0x${string}`;
-  if (!pk || !rpc || !bus || !lighthouseKey) throw new Error('missing env');
+  if (!pk || !rpc || !bus || !pinataJwt) throw new Error('missing env');
 
   const account = privateKeyToAccount(pk);
   const publicClient = createPublicClient({ chain: mantle, transport: http(rpc) });
@@ -91,8 +91,8 @@ async function cycle() {
     publishedAtSec: Math.floor(Date.now() / 1000)
   };
   const sig = await account.signMessage({ message: { raw: keccak256(toBytes(canonicalStringify({ ...draft, signature: '' }))) } });
-  const cid = await pinJson(canonicalStringify({ ...draft, signature: sig }), lighthouseKey);
-  console.log(JSON.stringify({ agent: 'operator', stage: 'pinned', cid, gateway: `https://gateway.lighthouse.storage/ipfs/${cid}` }));
+  const cid = await pinJson(canonicalStringify({ ...draft, signature: sig }), pinataJwt);
+  console.log(JSON.stringify({ agent: 'operator', stage: 'pinned', cid, gateway: `https://gateway.pinata.cloud/ipfs/${cid}` }));
 
   const hash = await walletClient.writeContract({
     address: bus, abi: BUS_ABI, functionName: 'logHedge',

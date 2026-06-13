@@ -18,11 +18,11 @@ async function main(): Promise<void> {
 
   const strategyPin = await pinYieldMap(
     { kind: 'scout-strategy', version: 'v1', body: strategyMd, methodologyHash },
-    { lighthouseApiKey: cfg.ipfs.lighthouseApiKey }
+    { pinataJwt: cfg.ipfs.pinataJwt }
   );
   const methodologyPin = await pinYieldMap(
     { kind: 'scout-scoring-methodology', version: 'v1', body: methodologyMd },
-    { lighthouseApiKey: cfg.ipfs.lighthouseApiKey }
+    { pinataJwt: cfg.ipfs.pinataJwt }
   );
 
   process.stdout.write(JSON.stringify({

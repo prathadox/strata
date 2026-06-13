@@ -13,7 +13,7 @@ export interface GateOrchestratorDeps {
   policyResolver: PolicyResolver;
   publisher: { publishReceipt: (draft: any) => Promise<{ receiptCid: string; receipt: any; txHash?: `0x${string}` }> };
   pinEvidence: (data: string, apiKey: string) => Promise<string>;
-  lighthouseApiKey: string;
+  pinataJwt: string;
   publisherAddress: string;
   identityNFT: string;
   methodologyHash: string;
@@ -109,12 +109,12 @@ export class GateOrchestrator {
 
     const evidenceCid = await this.deps.pinEvidence(
       serialized.toString('base64'),
-      this.deps.lighthouseApiKey
+      this.deps.pinataJwt
     );
 
     const sanctionsScreenCid = await this.deps.pinEvidence(
       JSON.stringify({ hash: sanctionsScreen.resultHash, screenedAtSec: sanctionsScreen.screenedAtSec }),
-      this.deps.lighthouseApiKey
+      this.deps.pinataJwt
     );
 
     const draft = buildReceipt({

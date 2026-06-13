@@ -16,7 +16,7 @@ const BUS_ABI = parseAbi([
 const ALLOCATION_PROPOSED = parseAbiItem('event AllocationProposed(uint256 indexed proposalId, address indexed agent, uint256 seniorBps, uint256 mezzBps, uint256 juniorBps, string reasoningHash)');
 
 const USDC = '0x09Bc4E0D864854c6aFB6eB9A9cdF58aC190D0dF9' as const;
-const GATEWAYS = ['https://gateway.lighthouse.storage/ipfs/', 'https://w3s.link/ipfs/', 'https://ipfs.io/ipfs/'];
+const GATEWAYS = ['https://gateway.pinata.cloud/ipfs/', 'https://gateway.lighthouse.storage/ipfs/', 'https://w3s.link/ipfs/', 'https://ipfs.io/ipfs/'];
 
 // Tranche enum: Senior=0, Mezzanine=1, Junior=2. Rating enum: None=0, Green=1, Yellow=2, Red=3.
 const TRANCHE_IDS = { senior: 0, mezzanine: 1, junior: 2 } as const;
@@ -35,11 +35,11 @@ async function pinJson(json: string, apiKey: string, name: string): Promise<stri
   const blob = new Blob([json], { type: 'application/json' });
   const form = new FormData();
   form.append('file', blob, `${name}.json`);
-  const res = await fetch('https://upload.lighthouse.storage/api/v0/add', {
+  const res = await fetch('https://api.pinata.cloud/pinning/pinFileToIPFS', {
     method: 'POST', headers: { Authorization: `Bearer ${apiKey}` }, body: form
   });
-  if (!res.ok) throw new Error(`lighthouse ${res.status}: ${await res.text()}`);
-  return (await res.json()).Hash;
+  if (!res.ok) throw new Error(`pinata ${res.status}: ${await res.text()}`);
+  return (await res.json()).IpfsHash;
 }
 
 function canonicalStringify(obj: unknown): string {
@@ -134,9 +134,9 @@ async function cycle() {
   const pk = process.env.SENTINEL_PRIVATE_KEY as `0x${string}`;
   const rpc = process.env.MANTLE_RPC_URL!;
   const bus = process.env.AGENT_EVENT_BUS_ADDRESS as `0x${string}`;
-  const lighthouseKey = process.env.LIGHTHOUSE_API_KEY!;
+  const pinataJwt = process.env.PINATA_JWT!;
   const architectAddress = (process.env.ARCHITECT_ADDRESS ?? '0xbFDb8d132358b2f46D3104Ef484048Bb916De714') as `0x${string}`;
-  if (!pk || !rpc || !bus || !lighthouseKey) throw new Error('missing env');
+  if (!pk || !rpc || !bus || !pinataJwt) throw new Error('missing env');
 
   const account = privateKeyToAccount(pk);
   const publicClient = createPublicClient({ chain: mantle, transport: http(rpc) });
@@ -184,8 +184,8 @@ async function cycle() {
     publishedAtSec: Math.floor(Date.now() / 1000)
   };
   const verdictSig = await account.signMessage({ message: { raw: keccak256(toBytes(canonicalStringify({ ...verdictDraft, signature: '' }))) } });
-  const verdictCid = await pinJson(canonicalStringify({ ...verdictDraft, signature: verdictSig }), lighthouseKey, 'verdict');
-  console.log(JSON.stringify({ agent: 'sentinel', stage: 'verdict-pinned', cid: verdictCid, gateway: `https://gateway.lighthouse.storage/ipfs/${verdictCid}` }));
+  const verdictCid = await pinJson(canonicalStringify({ ...verdictDraft, signature: verdictSig }), pinataJwt, 'verdict');
+  console.log(JSON.stringify({ agent: 'sentinel', stage: 'verdict-pinned', cid: verdictCid, gateway: `https://gateway.pinata.cloud/ipfs/${verdictCid}` }));
 
   const verdictTx = await walletClient.writeContract({
     address: bus, abi: BUS_ABI, functionName: 'issueRiskVerdict',
@@ -221,7 +221,7 @@ async function cycle() {
     rows: rows.map(r => ({ trancheId: r.trancheId, tranche: r.trancheName, asset: r.asset, rating: r.rating, adapters: r.adapters })),
     publishedAtSec: Math.floor(Date.now() / 1000)
   };
-  const ratingsCid = await pinJson(canonicalStringify(ratingsDraft), lighthouseKey, 'ratings');
+  const ratingsCid = await pinJson(canonicalStringify(ratingsDraft), pinataJwt, 'ratings');
   console.log(JSON.stringify({ agent: 'sentinel', stage: 'ratings-pinned', cid: ratingsCid, rowCount: rows.length }));
 
   for (const r of rows) {
@@ -244,7 +244,7 @@ async function cycle() {
     publishedAtSec: Math.floor(Date.now() / 1000)
   };
   const hedgeSig = await account.signMessage({ message: { raw: keccak256(toBytes(canonicalStringify({ ...hedgeDraft, signature: '' }))) } });
-  const hedgeCid = await pinJson(canonicalStringify({ ...hedgeDraft, signature: hedgeSig }), lighthouseKey, 'hedge-signal');
+  const hedgeCid = await pinJson(canonicalStringify({ ...hedgeDraft, signature: hedgeSig }), pinataJwt, 'hedge-signal');
   const hedgeTx = await walletClient.writeContract({
     address: bus, abi: BUS_ABI, functionName: 'emitHedgeSignal',
     args: [USDC, 1_000_000_000n, hedgeCid]

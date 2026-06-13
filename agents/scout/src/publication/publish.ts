@@ -13,7 +13,7 @@ export interface BuildPublisherArgs {
   wallet: WalletClient;
   publicClient: PublicClient;
   account: Account;
-  lighthouseApiKey: string;
+  pinataJwt: string;
   // publishOnChain is supplied by the caller (real impl in Task 26, stub in tests)
   publishOnChain: (args: { ipfsHash: string }) => Promise<`0x${string}`>;
 }
@@ -21,7 +21,7 @@ export interface BuildPublisherArgs {
 export function makePublisher(args: BuildPublisherArgs): Publisher {
   return {
     signYieldMap: (payload) => signYieldMap(payload, args.wallet, args.account),
-    pinYieldMap: (payload) => pinYieldMap(payload, { lighthouseApiKey: args.lighthouseApiKey }),
+    pinYieldMap: (payload) => pinYieldMap(payload, { pinataJwt: args.pinataJwt }),
     publishOnChain: args.publishOnChain
   };
 }

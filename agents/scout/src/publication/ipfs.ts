@@ -2,11 +2,11 @@
 import pRetry from 'p-retry';
 import { z } from 'zod';
 
-const LighthouseResponse = z.object({ Hash: z.string().min(1) });
+const PinataResponse = z.object({ IpfsHash: z.string().min(1) });
 
 export interface PinResult { cid: string; }
 
-async function pinLighthouseRawOnce(jsonString: string, apiKey: string, filename: string): Promise<string> {
+async function pinPinataRawOnce(jsonString: string, jwt: string, filename: string): Promise<string> {
   const boundary = `----strata${Date.now()}${Math.random().toString(36).slice(2)}`;
   const body =
     `--${boundary}\r\n` +
@@ -15,26 +15,26 @@ async function pinLighthouseRawOnce(jsonString: string, apiKey: string, filename
     jsonString + `\r\n` +
     `--${boundary}--\r\n`;
 
-  const res = await globalThis.fetch('https://upload.lighthouse.storage/api/v0/add', {
+  const res = await globalThis.fetch('https://api.pinata.cloud/pinning/pinFileToIPFS', {
     method: 'POST',
     headers: {
-      'Authorization': `Bearer ${apiKey}`,
+      'Authorization': `Bearer ${jwt}`,
       'Content-Type': `multipart/form-data; boundary=${boundary}`
     },
     body
   });
-  if (!res.ok) throw new Error(`lighthouse ${res.status}`);
+  if (!res.ok) throw new Error(`pinata ${res.status}`);
   const body_json = await res.json();
-  const parsed = LighthouseResponse.parse(body_json);
-  return parsed.Hash;
+  const parsed = PinataResponse.parse(body_json);
+  return parsed.IpfsHash;
 }
 
-async function pinLighthouseOnce(json: unknown, apiKey: string): Promise<string> {
-  return pinLighthouseRawOnce(JSON.stringify(json), apiKey, 'yield-map.json');
+async function pinPinataOnce(json: unknown, jwt: string): Promise<string> {
+  return pinPinataRawOnce(JSON.stringify(json), jwt, 'yield-map.json');
 }
 
-export async function pinYieldMap(json: unknown, cfg: { lighthouseApiKey: string }): Promise<PinResult> {
-  const cid = await pRetry(() => pinLighthouseOnce(json, cfg.lighthouseApiKey), {
+export async function pinYieldMap(json: unknown, cfg: { pinataJwt: string }): Promise<PinResult> {
+  const cid = await pRetry(() => pinPinataOnce(json, cfg.pinataJwt), {
     retries: 2,
     minTimeout: 1000,
     maxTimeout: 4000
@@ -42,10 +42,10 @@ export async function pinYieldMap(json: unknown, cfg: { lighthouseApiKey: string
   return { cid };
 }
 
-// Generic Lighthouse pin for a pre-stringified JSON body. Used by Sentinel and Operator
+// Generic Pinata pin for a pre-stringified JSON body. Used by Sentinel and Operator
 // to pin signed artifacts whose canonical string form is already computed.
-export async function pinJsonToLighthouse(jsonString: string, apiKey: string): Promise<string> {
-  return pRetry(() => pinLighthouseRawOnce(jsonString, apiKey, 'artifact.json'), {
+export async function pinJsonToPinata(jsonString: string, jwt: string): Promise<string> {
+  return pRetry(() => pinPinataRawOnce(jsonString, jwt, 'artifact.json'), {
     retries: 2,
     minTimeout: 1000,
     maxTimeout: 4000

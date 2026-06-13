@@ -46,7 +46,7 @@ const makeDeps = (dryRun: boolean) => ({
   wallet: {} as any,
   publicClient: {} as any,
   account: {} as any,
-  lighthouseApiKey: 'lh-key',
+  pinataJwt: 'lh-key',
   eventBus: EVENT_BUS,
   dryRun,
   geminiModel: 'gemini-2.5-flash'
@@ -73,7 +73,7 @@ describe('makePublisher - publishProposal', () => {
     // pin called with the signed proposal (signature filled in)
     const expectedProposal: AllocationProposal = { ...unsigned, signature: '0xdeadbeef' };
     expect(pinMock).toHaveBeenCalledOnce();
-    expect(pinMock).toHaveBeenCalledWith(expectedProposal, { lighthouseApiKey: 'lh-key' });
+    expect(pinMock).toHaveBeenCalledWith(expectedProposal, { pinataJwt: 'lh-key' });
 
     // onchain called with correct bigints and reasoningHash=cid
     expect(onchainMock).toHaveBeenCalledOnce();

@@ -11,19 +11,19 @@ async function pinFile(content: string, filename: string, apiKey: string): Promi
   const blob = new Blob([content], { type: 'text/markdown' });
   const form = new FormData();
   form.append('file', blob, filename);
-  const res = await fetch('https://upload.lighthouse.storage/api/v0/add', {
+  const res = await fetch('https://api.pinata.cloud/pinning/pinFileToIPFS', {
     method: 'POST',
     headers: { Authorization: `Bearer ${apiKey}` },
     body: form
   });
-  if (!res.ok) throw new Error(`lighthouse ${res.status}: ${await res.text()}`);
-  const { Hash } = await res.json();
+  if (!res.ok) throw new Error(`pinata ${res.status}: ${await res.text()}`);
+  const { IpfsHash: Hash } = await res.json();
   return Hash;
 }
 
 async function main() {
-  const apiKey = process.env.LIGHTHOUSE_API_KEY;
-  if (!apiKey) throw new Error('missing env: LIGHTHOUSE_API_KEY');
+  const apiKey = process.env.PINATA_JWT;
+  if (!apiKey) throw new Error('missing env: PINATA_JWT');
 
   const targets = [
     { file: 'strategy-v1.md', hash: false },

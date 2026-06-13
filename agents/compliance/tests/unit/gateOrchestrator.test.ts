@@ -105,7 +105,7 @@ function makeDeps(overrides?: Partial<GateOrchestratorDeps>): GateOrchestratorDe
     },
     publisher: makeMockPublisher(),
     pinEvidence: makePinEvidence(),
-    lighthouseApiKey: 'test-api-key',
+    pinataJwt: 'test-api-key',
     publisherAddress: '0x3333333333333333333333333333333333333333',
     identityNFT: 'strata-identity-42',
     methodologyHash: METHODOLOGY_HASH,
