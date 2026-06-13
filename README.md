@@ -388,6 +388,20 @@ Each cycle prints one structured JSON line per stage: `pinned` (Lighthouse CID),
 - **Frontend**: Next.js 14 app live at [`apps/web`](apps/web). Landing + KYC/deposit flow + agent dashboard reads real Mantle data (TVL via ERC-4626 `totalAssets`, activity from the static seed above, IPFS doc viewer in the Documents tab).
 - **Compliance**: registry deployed, verifier wallet active, one demo receipt minted. Privado / zkPass plumbing is the next pass.
 
+## Junior tranche — who holds it and why
+
+Junior is the highest-variance tranche: first-loss position, last on yield distribution, residual upside after senior and mezzanine are paid. In traditional finance this slice is hard to place. In Strata it has four natural buyers.
+
+**Yield maximisers** who understand DeFi risk and want uncapped upside. Junior holds leveraged yield, LP rewards, perp basis from Operator's hedging book, and the residual after waterfall distribution. For a degen who has read the Sentinel track record and trusts the risk management, junior is the highest-conviction position.
+
+**Strategy competitors** in Battle mode. Architect periodically generates two or three competing allocation variants. Users can fork a strategy with their own capital and run it head-to-head against the protocol default. Winning forks earn a share of fees. This makes junior capital the most active and most social capital in the protocol — and gives users a reason to post, share, and come back daily.
+
+**Crypto-native protocols and treasuries** who need verifiable yield management they can put in front of a governance vote. Every allocation decision is on-chain with a reasoning hash. Sentinel's full risk history is queryable. A DAO can audit the protocol the same way it would audit a smart contract before committing treasury capital.
+
+**Informed retail outside US restrictions** who want yield that is better than a savings account and are willing to accept variance if the risk is explained clearly. The autonomy toggle (semi-auto multisig confirmation on large rebalances) lets junior holders keep a human hand on big moves while still benefiting from agent management. After deposit, users receive a shareable scorecard — tranche, amount, projected yield range — sized for X and Farcaster.
+
+Junior is not the tranche nobody wants. It is the tranche where the most interesting things happen — and where the protocol generates its distribution.
+
 ## License and disclaimers
 
 Not investment advice. The mortgage CMO sleeve in the Junior tranche is a labeled demo, seeded with realistic prepayment behavior for stress testing. Real RWA integrations come in v2.
